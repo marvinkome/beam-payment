@@ -21,6 +21,8 @@
         "react-native-reanimated": "^1.13.1",
         "react-native-safe-area-context": "^3.1.8",
         "react-native-screens": "^2.11.0",
+        "react-native-svg": "^12.1.0",
+        "react-native-svg-transformer": "^0.14.3",
         "react-native-vector-icons": "^7.1.0"
     },
     "devDependencies": {
@@ -44,8 +46,15 @@
     "jest": {
         "preset": "react-native",
         "setupFilesAfterEnv": [
-            "@testing-library/jest-native/extend-expect"
+            "@testing-library/jest-native/extend-expect",
+            "./node_modules/react-native-gesture-handler/jestSetup.js"
         ],
+        "transformIgnorePatterns": [
+            "node_modules/(?!(jest-)?react-native|@react-native-community|@react-navigation)"
+        ],
+        "moduleNameMapper": {
+            "\\.svg": "<rootDir>/mocks/svgMock.js"
+        },
         "moduleFileExtensions": [
             "ts",
             "tsx",

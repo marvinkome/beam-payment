@@ -2,6 +2,9 @@ import React from "react"
 import { View, Text } from "react-native"
 import { createStackNavigator } from "@react-navigation/stack"
 
+// screens
+import { SignUp } from "screens/SignUp"
+
 const EmptyScreen = () => (
     <View>
         <Text>Empty screen</Text>
@@ -12,7 +15,7 @@ const PublicStack = createStackNavigator()
 function PublicStackNavigator() {
     return (
         <PublicStack.Navigator headerMode="none">
-            <PublicStack.Screen name="SignUpPage" component={EmptyScreen} />
+            <PublicStack.Screen name="SignUp" component={SignUp} />
         </PublicStack.Navigator>
     )
 }

@@ -8,12 +8,13 @@
         "sourceMap": true,
         "strict": true,
         "outDir": "./dist",
-        "baseUrl": ".",
+        "baseUrl": "./src",
         "esModuleInterop": true,
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
         "lib": ["esnext.asynciterable", "es5", "es2015", "dom"],
         "typeRoots": ["./types"],
+        "types": ["mocha", "node"],
         "paths": {
             "src": ["src/*"],
             "@libs/*": ["src/libs/*"],
@@ -22,5 +23,5 @@
         }
     },
     "include": ["./**/*.ts"],
-    "exclude": ["node_modules"]
+    "exclude": ["node_modules", "./dist/"]
 }

@@ -1,11 +1,19 @@
-import express from 'express'
-import bodyParser from 'body-parser'
+import express from "express"
+import loaders from "loaders"
+import config from "config"
+import Logger from "loaders/logger"
 
-export default function createApp() {
+function startApp() {
     const app = express()
 
-    app.use(bodyParser.json())
-    app.use(bodyParser.urlencoded({ extended: false }))
+    loaders({ app })
 
-    return { app }
+    app.listen(config.port, () => {
+        Logger.info(`🛡️  Server listening on port: ${config.port} 🛡️`)
+    }).on("error", (err) => {
+        Logger.error(err)
+        process.exit(1)
+    })
 }
+
+startApp()

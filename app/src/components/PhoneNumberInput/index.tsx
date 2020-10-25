@@ -7,6 +7,9 @@ import { colorTheme } from "styles/theme"
 type IProps = {
     withIcon?: boolean
     containerStyle?: ViewStyle
+    placeholder?: string
+    value: string
+    onChange: (text: string) => void
 }
 export function PhoneNumberInput(props: IProps) {
     const LeftIcon = (
@@ -20,9 +23,12 @@ export function PhoneNumberInput(props: IProps) {
         <Input
             inputContainerStyle={{ ...props.containerStyle }}
             leftIcon={LeftIcon}
-            inputStyle={{ paddingLeft: 0 }}
+            inputStyle={{ paddingLeft: 0, alignItems: "center" }}
             keyboardType="number-pad"
-            placeholder="Enter phone number"
+            placeholder={props.placeholder || "Enter phone number"}
+            renderErrorMessage={false}
+            value={props.value}
+            onChangeText={props.onChange}
         />
     )
 }
@@ -31,5 +37,6 @@ const styles = StyleSheet.create({
     leftIconContainer: {
         flexDirection: "row",
         alignItems: "center",
+        marginTop: -1,
     },
 })

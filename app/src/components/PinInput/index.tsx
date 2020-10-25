@@ -1,11 +1,12 @@
 import React from "react"
-import CodeInput from "react-native-confirmation-code-input"
+import CodeInput, { CodeInputProps } from "react-native-confirmation-code-input"
 import { StyleSheet, View } from "react-native"
 import { fonts } from "styles/fonts"
 import { colorTheme } from "styles/theme"
 
 type IProps = {
     codeLength: number
+    secure?: boolean
     testID?: string
 }
 
@@ -14,6 +15,7 @@ export function PinInput(props: IProps) {
         <View testID={props.testID}>
             <CodeInput
                 codeLength={props.codeLength}
+                secureTextEntry={props.secure}
                 onFulfill={() => null}
                 keyboardType="numeric"
                 autoFocus={false}

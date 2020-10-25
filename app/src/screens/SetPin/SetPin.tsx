@@ -7,7 +7,7 @@ export function SetPinScreen() {
     return (
         <ScrollView contentContainerStyle={styles.container}>
             {/* input mask */}
-            <PinInput testID="codeInput" codeLength={4} />
+            <PinInput testID="codeInput" codeLength={4} secure />
 
             {/* continue button */}
             <Button containerStyle={styles.buttonContainer} disabled title="Continue" />

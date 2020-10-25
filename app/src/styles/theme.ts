@@ -1,4 +1,5 @@
 import { Theme } from "react-native-elements"
+import { DefaultTheme } from "@react-navigation/native"
 import { fonts } from "./fonts"
 
 export const colorTheme = {
@@ -50,8 +51,8 @@ export const ElementsTheme: Theme = {
         },
 
         titleStyle: {
-            fontSize: 16,
-            fontFamily: "SourceSansPro-SemiBold",
+            ...fonts.semiBold,
+            textTransform: "uppercase",
             letterSpacing: 1,
         },
 
@@ -79,5 +80,13 @@ export const ElementsTheme: Theme = {
             paddingLeft: 10,
             ...fonts.regular,
         },
+    },
+}
+
+export const NavigationTheme = {
+    ...DefaultTheme,
+    colors: {
+        ...DefaultTheme.colors,
+        background: colorTheme.backgroud,
     },
 }

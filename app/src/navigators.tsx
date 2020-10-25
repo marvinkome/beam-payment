@@ -1,9 +1,11 @@
 import React from "react"
 import { View, Text } from "react-native"
 import { createStackNavigator } from "@react-navigation/stack"
+import { fonts } from "styles/fonts"
 
 // screens
 import { SignUp } from "screens/SignUp"
+import { VerifyPhone } from "screens/VerifyPhone"
 
 const EmptyScreen = () => (
     <View>
@@ -13,9 +15,26 @@ const EmptyScreen = () => (
 
 const PublicStack = createStackNavigator()
 function PublicStackNavigator() {
+    const options = {
+        headerStyle: {
+            elevation: 0,
+            height: 70,
+        },
+        headerTitleStyle: {
+            letterSpacing: 0.8,
+            fontSize: 22,
+            ...fonts.semiBold,
+        },
+    }
+
     return (
-        <PublicStack.Navigator headerMode="none">
-            <PublicStack.Screen name="SignUp" component={SignUp} />
+        <PublicStack.Navigator screenOptions={options}>
+            <PublicStack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }} />
+            <PublicStack.Screen
+                name="VerifyPhone"
+                component={VerifyPhone}
+                options={{ title: "Verify number" }}
+            />
         </PublicStack.Navigator>
     )
 }

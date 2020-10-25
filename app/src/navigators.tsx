@@ -6,6 +6,7 @@ import { fonts } from "styles/fonts"
 // screens
 import { SignUp } from "screens/SignUp"
 import { VerifyPhone } from "screens/VerifyPhone"
+import { SetPin } from "screens/SetPin"
 
 const EmptyScreen = () => (
     <View>
@@ -34,6 +35,11 @@ function PublicStackNavigator() {
                 name="VerifyPhone"
                 component={VerifyPhone}
                 options={{ title: "Verify number" }}
+            />
+            <PublicStack.Screen
+                name="SetPin"
+                component={SetPin}
+                options={{ title: "Set your pin" }}
             />
         </PublicStack.Navigator>
     )

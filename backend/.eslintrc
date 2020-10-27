@@ -16,6 +16,7 @@
         "semi": 0,
         "@typescript-eslint/explicit-module-boundary-types": 0,
         "@typescript-eslint/no-explicit-any": 0,
+        "@typescript-eslint/no-non-null-assertion": 0,
         "trailing-comma": 0,
         "no-var-requires": 0,
         "only-arrow-functions": 0,

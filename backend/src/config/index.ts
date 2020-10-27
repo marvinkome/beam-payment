@@ -9,6 +9,12 @@ export default {
     // encryption and session
     jwtSecret: process.env.SECRET_KEY,
 
+    // firebase
+    serviceAccount:
+        process.env.NODE_ENV === "production"
+            ? require("/opt/firebase/firebase_secret.json")
+            : require("../../firebase_secret.json"),
+
     // logs
     logs: {
         level: process.env.LOG_LEVEL || "silly",

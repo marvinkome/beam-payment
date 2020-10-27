@@ -1,12 +1,12 @@
 import React from "react"
 import auth from "@react-native-firebase/auth"
-import { smsConfirmationObj } from "store/globalStore"
+import { smsConfirmationObj } from "store/authStore"
 import { render, fireEvent, act } from "@testing-library/react-native"
 import { SignUp } from "./index"
 import { SignUpScreen } from "./SignUp"
 
 jest.mock("react-native/Libraries/Animated/src/NativeAnimatedHelper")
-jest.mock("store/globalStore")
+jest.mock("store/authStore")
 
 describe("SignUp page tests", () => {
     test("full component", async () => {
@@ -17,7 +17,7 @@ describe("SignUp page tests", () => {
 
         await act(() => Promise.resolve())
 
-        expect(auth().verifyPhoneNumber).toHaveBeenCalledWith("+2347037276587")
+        expect(auth().signInWithPhoneNumber).toHaveBeenCalledWith("+2347037276587")
         expect(smsConfirmationObj).toHaveBeenCalledWith({
             confirmation: {},
             phoneNumber: "+2347037276587",

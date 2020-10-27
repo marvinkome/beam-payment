@@ -1,5 +1,5 @@
-const verifyPhoneNumber = jest.fn(() => Promise.resolve({}))
+const signInWithPhoneNumber = jest.fn(() => Promise.resolve({}))
 
 export default jest.fn(() => ({
-    verifyPhoneNumber,
+    signInWithPhoneNumber,
 }))

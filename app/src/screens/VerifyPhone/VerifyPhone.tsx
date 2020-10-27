@@ -4,16 +4,29 @@ import { Button, Text } from "react-native-elements"
 import { PinInput } from "components/PinInput"
 import { colorTheme } from "styles/theme"
 
-export function VerifyPhoneScreen() {
+type IProps = {
+    loading: boolean
+    code: string
+    phoneNumber: string | null
+    setCode: (code: string) => void
+    onVerify: () => void
+}
+export function VerifyPhoneScreen(props: IProps) {
     return (
         <ScrollView contentContainerStyle={styles.container}>
             {/* phone text */}
             <Text style={styles.phoneText} h2>
-                Sent code to {"\n"}+234913498619
+                Sent code to {"\n"}
+                {props.phoneNumber}
             </Text>
 
             {/* input mask */}
-            <PinInput testID="codeInput" codeLength={5} />
+            <PinInput
+                value={props.code}
+                onChange={props.setCode}
+                testID="codeInput"
+                codeLength={6}
+            />
 
             {/* resend button */}
             <Text style={styles.resend}>
@@ -22,7 +35,12 @@ export function VerifyPhoneScreen() {
             </Text>
 
             {/* continue button */}
-            <Button disabled title="Continue" />
+            <Button
+                onPress={props.onVerify}
+                disabled={!props.code.length}
+                loading={props.loading}
+                title="Continue"
+            />
         </ScrollView>
     )
 }
@@ -35,7 +53,7 @@ const styles = StyleSheet.create({
 
     phoneText: {
         marginTop: 10,
-        marginBottom: 20,
+        marginBottom: 40,
         textAlign: "center",
         letterSpacing: 0.8,
         lineHeight: 37,

@@ -1,11 +1,9 @@
 import React, { useState } from "react"
 import { ToastAndroid } from "react-native"
 import { smsConfirmationObj } from "store/authStore"
-import { useNavigation } from "@react-navigation/native"
 import { VerifyPhoneScreen } from "./VerifyPhone"
 
 export function VerifyPhone() {
-    const { navigate } = useNavigation()
     const [code, setCode] = useState("")
     const [verifingCode, setVerifingCode] = useState(false)
     const { confirmation, phoneNumber } = smsConfirmationObj()
@@ -14,11 +12,11 @@ export function VerifyPhone() {
         setVerifingCode(true)
 
         try {
-            await confirmation?.confirm(code)
+            const cred = await confirmation?.confirm(code)
+            const idToken = await cred?.user.getIdToken()
 
             setVerifingCode(false)
             setCode("")
-            navigate("SetPin")
         } catch (e) {
             setVerifingCode(false)
             ToastAndroid.show("Invalid code", ToastAndroid.SHORT)

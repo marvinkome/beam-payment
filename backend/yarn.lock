@@ -1470,6 +1470,13 @@ apollo-server-plugin-base@^0.10.1:
   dependencies:
     apollo-server-types "^0.6.0"
 
+apollo-server-testing@^2.18.2:
+  version "2.18.2"
+  resolved "https://registry.yarnpkg.com/apollo-server-testing/-/apollo-server-testing-2.18.2.tgz#7b72e73d6ea21b5a6e24fac6e07b5408daa728fa"
+  integrity sha512-4qoJ8AYUKolqV397G7XXRjOCM1ADQB66ReL/B5NxdoROWTvxIOW2m1NOrmvMX1w6AmpSUD5APRM27I7fC3f65g==
+  dependencies:
+    apollo-server-core "^2.18.2"
+
 apollo-server-types@^0.6.0:
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/apollo-server-types/-/apollo-server-types-0.6.0.tgz#6085f8389881b79911384dab6c0e8a8b91c0e1a2"
@@ -4986,6 +4993,11 @@ mocha@^8.2.0:
     yargs "13.3.2"
     yargs-parser "13.1.2"
     yargs-unparser "2.0.0"
+
+mockingoose@^2.13.2:
+  version "2.13.2"
+  resolved "https://registry.yarnpkg.com/mockingoose/-/mockingoose-2.13.2.tgz#32a23f4dd39542673ce7954583d89946be8abf7c"
+  integrity sha512-KP+rweeXjP5P1SMoBQTS7NQG4xIZLbrlJ24dKDjuRRX3kzn+pCAg4w1e+Er6UQEoBtqjbXDM9PTbQkXUk4S7iw==
 
 module-alias@^2.2.2:
   version "2.2.2"

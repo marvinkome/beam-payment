@@ -12,8 +12,6 @@ export interface IContext {
     currentUser: IUser | null
 }
 export default function apolloLoader({ app }: { app: express.Application }) {
-    const schema = makeExecutableSchema({ typeDefs, resolvers })
-
     const context: ApolloServerExpressConfig["context"] = async (ctx): Promise<IContext> => {
         const authToken = getTokenFromHeaders(ctx.req)
         const currentUser = await getUserFromToken(authToken || "")
@@ -21,7 +19,7 @@ export default function apolloLoader({ app }: { app: express.Application }) {
         return { currentUser }
     }
 
-    const apolloServer = new ApolloServer({ schema, context })
+    const apolloServer = new ApolloServer({ typeDefs, resolvers, context })
     apolloServer.applyMiddleware({ app })
 
     return apolloServer

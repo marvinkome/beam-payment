@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Mutation authenticateUser success: false state 1`] = `
+Object {
+  "data": Object {
+    "authenticateUser": Object {
+      "responseMessage": "Error creating user",
+      "success": false,
+      "token": null,
+      "user": null,
+    },
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
+exports[`Mutation authenticateUser success: true state 1`] = `
+Object {
+  "data": Object {
+    "authenticateUser": Object {
+      "success": true,
+      "token": "token",
+      "user": Object {
+        "id": "userId",
+      },
+    },
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;

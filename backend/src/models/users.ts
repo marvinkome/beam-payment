@@ -11,7 +11,7 @@ export interface IUser extends Document {
 const userSchema: Schema<IUser> = new Schema({
     phoneNumber: {
         type: String,
-        maxlength: 13,
+        maxlength: 14,
     },
 
     firebaseId: String,

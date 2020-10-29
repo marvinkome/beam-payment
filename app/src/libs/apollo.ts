@@ -4,15 +4,14 @@ import { onError } from "@apollo/client/link/error"
 import { setContext } from "@apollo/client/link/context"
 import { API_URL, AUTH_TOKEN } from "./keys"
 import { navigate } from "./navigator"
+import { authToken } from "store/authStore"
 
 export async function apolloSetup() {
     const errorLink = onError(({ graphQLErrors }) => {
         if (graphQLErrors) {
             const err = graphQLErrors[0].message
             if (err === "Unauthenticated") {
-                AsyncStorage.removeItem(AUTH_TOKEN).then(() => {
-                    navigate("SignUp")
-                })
+                navigate("SignUp")
             }
         }
     })
@@ -21,7 +20,7 @@ export async function apolloSetup() {
     })
     const authLink = setContext(async (_, { headers }) => {
         // get the authentication token from local storage if it exists
-        const token = await AsyncStorage.getItem(AUTH_TOKEN)
+        const token = authToken()
 
         // return the headers to the context so httpLink can read them
         return {

@@ -4,7 +4,7 @@ import { MockedProvider } from "@apollo/client/testing"
 import { ToastAndroid } from "react-native"
 import { AUTH_TOKEN } from "libs/keys"
 import { fireEvent, render, waitFor } from "@testing-library/react-native"
-import { smsConfirmationObj } from "store/authStore"
+import { authToken, smsConfirmationObj } from "store/authStore"
 import { AUTH_USER_MUT } from "hooks/login"
 import { navigate } from "libs/navigator"
 import { VerifyPhone } from "./index"
@@ -47,10 +47,11 @@ describe("Verify phone page tests", () => {
                         authenticateUser: {
                             success: true,
                             responseMessage: null,
-                            isNewAccount: true,
                             token: "token",
                             user: {
                                 id: "user_id",
+                                isNewAccount: true,
+                                accountSetupState: "SET_PIN",
                             },
                         },
                     },
@@ -73,7 +74,7 @@ describe("Verify phone page tests", () => {
             })
 
             expect(confirm).toHaveBeenCalledWith("202020")
-            expect(AsyncStorage.setItem).toHaveBeenCalledWith(AUTH_TOKEN, "token")
+            expect(authToken).toHaveBeenCalledWith("token")
             expect(ToastAndroid.show).not.toHaveBeenCalled()
         })
 
@@ -90,11 +91,8 @@ describe("Verify phone page tests", () => {
                         authenticateUser: {
                             success: false,
                             responseMessage: "Error authenticating account",
-                            isNewAccount: true,
-                            token: "token",
-                            user: {
-                                id: "user_id",
-                            },
+                            token: null,
+                            user: null,
                         },
                     },
                 },

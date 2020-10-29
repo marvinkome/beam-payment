@@ -14,12 +14,8 @@ describe("Auth service tests", () => {
             firebaseId: "090101",
         })
 
-        const { user, token, isNewAccount } = await findOrCreateUserAccount(
-            "+2349087573383",
-            "090101"
-        )
+        const { user, token } = await findOrCreateUserAccount("+2349087573383", "090101")
 
-        expect(isNewAccount).toBe(true)
         expect(user.phoneNumber).toBe("+2349087573383")
         expect(token).toBe("token")
     })

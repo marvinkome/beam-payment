@@ -12,7 +12,6 @@ describe("Mutation", () => {
             authenticateUser.mockImplementationOnce(() => ({
                 success: true,
                 token: "token",
-                isNewAccount: true,
                 user: {
                     id: "userId",
                     phoneNumber: "phoneNumber",
@@ -28,10 +27,11 @@ describe("Mutation", () => {
                         authenticateUser(idToken: $idToken) {
                             success
                             responseMessage
-                            isNewAccount
                             token
                             user {
                                 id
+                                isNewAccount
+                                accountSetupState
                             }
                         }
                     }
@@ -41,6 +41,8 @@ describe("Mutation", () => {
 
             expect(response.errors).toBeUndefined()
             expect(response.data?.authenticateUser.token).toBe("token")
+            expect(response.data?.authenticateUser.user.isNewAccount).toBe(true)
+            expect(response.data?.authenticateUser.user.accountSetupState).toBe("SET_PIN")
             expect(response).toMatchSnapshot()
         })
 
@@ -60,7 +62,6 @@ describe("Mutation", () => {
                         authenticateUser(idToken: $idToken) {
                             success
                             responseMessage
-                            isNewAccount
                             token
                             user {
                                 id

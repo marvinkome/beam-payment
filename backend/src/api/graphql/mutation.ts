@@ -12,7 +12,6 @@ export const mutationTypeDef = gql`
         success: Boolean!
         responseMessage: String
         token: String
-        isNewAccount: Boolean
         user: User
     }
 

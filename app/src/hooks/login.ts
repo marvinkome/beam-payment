@@ -1,24 +1,25 @@
-import AsyncStorage from "@react-native-async-storage/async-storage"
-import { useContext, useState } from "react"
+import { useContext } from "react"
 import { AuthContext } from "libs/auth-context"
 import { gql, useMutation } from "@apollo/client"
 import { ToastAndroid } from "react-native"
-import { AUTH_TOKEN } from "libs/keys"
 import { navigate } from "libs/navigator"
+import { authToken } from "store/authStore"
 
 export const AUTH_USER_MUT = gql`
     mutation AuthenticateUser($idToken: String!) {
         authenticateUser(idToken: $idToken) {
             success
             responseMessage
-            isNewAccount
             token
             user {
                 id
+                isNewAccount
+                accountSetupState
             }
         }
     }
 `
+
 export function useAuthentication() {
     const authContext = useContext(AuthContext)
     const [authenticateUserMutation] = useMutation(AUTH_USER_MUT)
@@ -36,7 +37,7 @@ export function useAuthentication() {
             return ToastAndroid.show("Failed to sign in", ToastAndroid.SHORT)
         }
 
-        const { token, success, responseMessage, isNewAccount } = loginResp?.data?.authenticateUser
+        const { token, success, responseMessage, user } = loginResp?.data?.authenticateUser
 
         if (!success) {
             // TODO:: sentry - track failed signup
@@ -44,12 +45,12 @@ export function useAuthentication() {
         }
 
         // setup user data
-        await AsyncStorage.setItem(AUTH_TOKEN, token)
+        await authToken(token)
 
         // TODO:: Add user to analytics
         // TODO:: Track successful sign up
 
-        if (isNewAccount) {
+        if (user.isNewAccount && user.accountSetupState === "SET_PIN") {
             // continue to set pin page
             navigate("SetPin")
         } else {

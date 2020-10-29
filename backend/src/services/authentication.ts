@@ -3,7 +3,6 @@ import { generateToken } from "libs/auth"
 
 export async function findOrCreateUserAccount(phoneNumber: string, firebaseToken?: string) {
     let user = await User.findOne({ phoneNumber })
-    let isNewAccount = false
 
     if (!user) {
         user = new User()
@@ -11,9 +10,7 @@ export async function findOrCreateUserAccount(phoneNumber: string, firebaseToken
         user.firebaseId = firebaseToken
 
         await user.save()
-
-        isNewAccount = true
     }
 
-    return { user, token: generateToken(user), isNewAccount }
+    return { user, token: generateToken(user) }
 }

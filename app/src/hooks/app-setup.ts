@@ -1,6 +1,4 @@
-import AsyncStorage from "@react-native-async-storage/async-storage"
 import { useEffect, useState } from "react"
-import { AUTH_TOKEN } from "libs/keys"
 import { apolloSetup } from "libs/apollo"
 
 export function useAppSetup() {
@@ -11,12 +9,6 @@ export function useAppSetup() {
     useEffect(() => {
         // run async tasks
         const init = async () => {
-            // AsyncStorage.clear()
-
-            // check auth state
-            const token = await AsyncStorage.getItem(AUTH_TOKEN)
-            setLoggedIn(!!token)
-
             // setup apollo
             const { client } = await apolloSetup()
 

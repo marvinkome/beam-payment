@@ -10,3 +10,5 @@ export const smsConfirmationObj = makeVar<SmsConfirmation>({
     confirmation: null,
     phoneNumber: null,
 })
+
+export const authToken = makeVar<string>("")

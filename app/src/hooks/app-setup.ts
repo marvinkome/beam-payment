@@ -29,7 +29,7 @@ export function useAppSetup() {
 
     const authContext = {
         signIn: () => setLoggedIn(true),
-        signOut: () => setLoggedIn(false),
+        signOut: () => setLoggedIn(false), // TODO:: remove token after sign out
         isLoggedIn,
     }
 

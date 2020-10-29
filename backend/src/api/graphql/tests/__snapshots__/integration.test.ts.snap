@@ -4,6 +4,7 @@ exports[`Mutation authenticateUser success: false state 1`] = `
 Object {
   "data": Object {
     "authenticateUser": Object {
+      "isNewAccount": null,
       "responseMessage": "Error creating user",
       "success": false,
       "token": null,
@@ -24,6 +25,8 @@ exports[`Mutation authenticateUser success: true state 1`] = `
 Object {
   "data": Object {
     "authenticateUser": Object {
+      "isNewAccount": true,
+      "responseMessage": null,
       "success": true,
       "token": "token",
       "user": Object {

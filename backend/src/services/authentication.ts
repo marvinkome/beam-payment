@@ -1,13 +1,19 @@
 import User from "models/users"
 import { generateToken } from "libs/auth"
 
-export async function createUserAccount(phoneNumber: string, firebaseToken?: string) {
-    const user = new User()
+export async function findOrCreateUserAccount(phoneNumber: string, firebaseToken?: string) {
+    let user = await User.findOne({ phoneNumber })
+    let isNewAccount = false
 
-    user.phoneNumber = phoneNumber
-    user.firebaseId = firebaseToken
+    if (!user) {
+        user = new User()
+        user.phoneNumber = phoneNumber
+        user.firebaseId = firebaseToken
 
-    await user.save()
+        await user.save()
 
-    return { user, token: generateToken(user) }
+        isNewAccount = true
+    }
+
+    return { user, token: generateToken(user), isNewAccount }
 }

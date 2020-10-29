@@ -12,6 +12,7 @@ describe("Mutation", () => {
             authenticateUser.mockImplementationOnce(() => ({
                 success: true,
                 token: "token",
+                isNewAccount: true,
                 user: {
                     id: "userId",
                     phoneNumber: "phoneNumber",
@@ -26,6 +27,8 @@ describe("Mutation", () => {
                     mutation AuthenticateUser($idToken: String!) {
                         authenticateUser(idToken: $idToken) {
                             success
+                            responseMessage
+                            isNewAccount
                             token
                             user {
                                 id
@@ -57,6 +60,7 @@ describe("Mutation", () => {
                         authenticateUser(idToken: $idToken) {
                             success
                             responseMessage
+                            isNewAccount
                             token
                             user {
                                 id

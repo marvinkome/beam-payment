@@ -1,12 +1,13 @@
-import React from "react"
+import React, { useContext } from "react"
 import { View, Text } from "react-native"
 import { createStackNavigator } from "@react-navigation/stack"
+import { AuthContext } from "libs/auth-context"
 import { fonts } from "styles/fonts"
 
 // screens
-import { SignUp } from "screens/SignUp"
-import { VerifyPhone } from "screens/VerifyPhone"
-import { SetPin } from "screens/SetPin"
+import { SignUp } from "screens/authentication/SignUp"
+import { VerifyPhone } from "screens/authentication/VerifyPhone"
+import { SetPin } from "screens/authentication/SetPin"
 
 const EmptyScreen = () => (
     <View>
@@ -47,11 +48,11 @@ function PublicStackNavigator() {
 
 const RootStack = createStackNavigator()
 export function RootNavigator() {
-    const isLoggedIn = false
+    const authContext = useContext(AuthContext)
 
     return (
         <RootStack.Navigator headerMode="none">
-            {isLoggedIn ? (
+            {authContext?.isLoggedIn ? (
                 <RootStack.Screen name="Main" component={EmptyScreen} />
             ) : (
                 <RootStack.Screen name="PublicPage" component={PublicStackNavigator} />

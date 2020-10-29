@@ -10,10 +10,6 @@ import { navigate } from "libs/navigator"
 import { VerifyPhone } from "./index"
 import { VerifyPhoneScreen } from "./VerifyPhone"
 
-// mocks
-ToastAndroid.show = jest.fn()
-ToastAndroid.SHORT = 0
-
 let confirm: any = jest.fn(() => Promise.resolve())
 // @ts-ignore
 smsConfirmationObj.mockImplementation(() => ({
@@ -50,7 +46,7 @@ describe("Verify phone page tests", () => {
                     data: {
                         authenticateUser: {
                             success: true,
-                            responseMessage: "Heyy",
+                            responseMessage: null,
                             isNewAccount: true,
                             token: "token",
                             user: {

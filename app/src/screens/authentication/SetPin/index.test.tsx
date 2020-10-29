@@ -1,18 +1,87 @@
 import React from "react"
-import { act, fireEvent, render } from "@testing-library/react-native"
-import { SetPin } from "./index"
+import { AuthContext } from "libs/auth-context"
+import { ToastAndroid } from "react-native"
+import { MockedProvider } from "@apollo/client/testing"
+import { act, fireEvent, render, waitFor } from "@testing-library/react-native"
+import { SAVE_PIN, SetPin } from "./index"
 import { SetPinScreen } from "./SetPin"
 
 jest.mock("react-native/Libraries/Animated/src/NativeAnimatedHelper")
 
 describe("SetPin page tests", () => {
-    test("full component", async () => {
-        const queries = render(<SetPin />)
+    describe("integration tests", () => {
+        test("success test", async () => {
+            const mock = {
+                request: {
+                    query: SAVE_PIN,
+                    variables: {
+                        pin: "2020",
+                    },
+                },
+                result: {
+                    data: {
+                        setPin: {
+                            success: true,
+                            responseMessage: null,
+                            user: {
+                                id: "user_id",
+                            },
+                        },
+                    },
+                },
+            }
 
-        fireEvent.changeText(queries.getByTestId("codeInput"), "2020")
-        fireEvent.press(queries.getByText("Continue"))
+            const signIn = jest.fn()
 
-        await act(() => Promise.resolve())
+            const queries = render(
+                // @ts-ignore
+                <AuthContext.Provider value={{ signIn }}>
+                    <MockedProvider mocks={[mock]} addTypename={false}>
+                        <SetPin />
+                    </MockedProvider>
+                </AuthContext.Provider>,
+            )
+
+            fireEvent.changeText(queries.getByTestId("codeInput"), "2020")
+            fireEvent.press(queries.getByText("Continue"))
+
+            await waitFor(() => {
+                expect(signIn).toBeCalled()
+            })
+        })
+
+        test("error test", async () => {
+            const mock = {
+                request: {
+                    query: SAVE_PIN,
+                    variables: {
+                        pin: "2020",
+                    },
+                },
+                result: {
+                    data: {
+                        setPin: {
+                            success: false,
+                            responseMessage: "Error saving pin. Please try again",
+                            user: null,
+                        },
+                    },
+                },
+            }
+
+            const queries = render(
+                <MockedProvider mocks={[mock]} addTypename={false}>
+                    <SetPin />
+                </MockedProvider>,
+            )
+
+            fireEvent.changeText(queries.getByTestId("codeInput"), "2020")
+            fireEvent.press(queries.getByText("Continue"))
+
+            await waitFor(() => {
+                expect(ToastAndroid.show).toBeCalledWith("Error saving pin. Please try again", 0)
+            })
+        })
     })
 
     test("view component", () => {

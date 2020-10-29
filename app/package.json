@@ -53,7 +53,8 @@
         "preset": "react-native",
         "setupFilesAfterEnv": [
             "@testing-library/jest-native/extend-expect",
-            "./node_modules/react-native-gesture-handler/jestSetup.js"
+            "./node_modules/react-native-gesture-handler/jestSetup.js",
+            "./__mocks__/setup.ts"
         ],
         "transformIgnorePatterns": [
             "node_modules/(?!(jest-)?react-native|@react-native-community|@react-navigation|@react-native-firebase)"

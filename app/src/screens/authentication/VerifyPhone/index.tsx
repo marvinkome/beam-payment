@@ -23,6 +23,7 @@ export function VerifyPhone() {
             }
 
             await signIn(idToken)
+            setVerifingCode(false)
         } catch (e) {
             setVerifingCode(false)
             ToastAndroid.show("Invalid code", ToastAndroid.SHORT)

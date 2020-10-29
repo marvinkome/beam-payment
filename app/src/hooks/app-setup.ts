@@ -11,6 +11,8 @@ export function useAppSetup() {
     useEffect(() => {
         // run async tasks
         const init = async () => {
+            // AsyncStorage.clear()
+
             // check auth state
             const token = await AsyncStorage.getItem(AUTH_TOKEN)
             setLoggedIn(!!token)

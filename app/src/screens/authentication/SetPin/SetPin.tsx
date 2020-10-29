@@ -5,6 +5,7 @@ import { Button } from "react-native-elements"
 
 type IProps = {
     pin: string
+    loading?: boolean
     setPin: (pin: string) => void
     onContinue: () => void
 }
@@ -25,6 +26,7 @@ export function SetPinScreen(props: IProps) {
                 containerStyle={styles.buttonContainer}
                 disabled={props.pin.length !== 4}
                 onPress={props.onContinue}
+                loading={props.loading}
                 title="Continue"
             />
         </ScrollView>

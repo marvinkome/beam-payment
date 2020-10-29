@@ -77,4 +77,34 @@ describe("Mutation", () => {
             expect(response).toMatchSnapshot()
         })
     })
+
+    describe("setPin", () => {
+        test("success", async () => {
+            const server = constructTestServer({
+                context: () => ({
+                    currentUser: { id: 0, save: jest.fn() },
+                }),
+            })
+
+            const { mutate } = createTestClient(server)
+
+            const response = await mutate({
+                mutation: gql`
+                    mutation SetPin($pin: String!) {
+                        setPin(pin: $pin) {
+                            success
+                            responseMessage
+                            user {
+                                id
+                            }
+                        }
+                    }
+                `,
+                variables: { pin: "1234" },
+            })
+
+            expect(response.errors).toBeUndefined()
+            expect(response).toMatchSnapshot()
+        })
+    })
 })

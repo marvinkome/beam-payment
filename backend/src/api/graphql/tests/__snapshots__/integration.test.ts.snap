@@ -43,3 +43,24 @@ Object {
   },
 }
 `;
+
+exports[`Mutation setPin success 1`] = `
+Object {
+  "data": Object {
+    "setPin": Object {
+      "responseMessage": null,
+      "success": true,
+      "user": Object {
+        "id": "0",
+      },
+    },
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;

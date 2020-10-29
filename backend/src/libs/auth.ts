@@ -1,8 +1,9 @@
 import config from "config"
 import Logger from "loaders/logger"
+import User, { IUser } from "models/users"
 import { Request } from "express"
 import { verify, sign } from "jsonwebtoken"
-import User, { IUser } from "models/users"
+import { IContext } from "loaders/apollo"
 
 export function generateToken(user: IUser) {
     const today = new Date()
@@ -39,4 +40,14 @@ export async function getUserFromToken(token: string): Promise<IUser | null> {
     }
 
     return await User.findById(payload.id)
+}
+
+export function authenticated(next: (...args: any[]) => any) {
+    return (root: any, args: any, context: IContext, info: any) => {
+        if (!context.currentUser) {
+            throw new Error("Unauthenticated")
+        }
+
+        return next(root, args, context, info)
+    }
 }

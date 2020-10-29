@@ -7,7 +7,7 @@ export default {
     databaseUrl: process.env.DB_URL || "",
 
     // encryption and session
-    jwtSecret: process.env.SECRET_KEY || "",
+    jwtSecret: process.env.APP_KEY || "",
 
     // firebase
     serviceAccount:

@@ -1,4 +1,5 @@
 import { auth } from "firebase-admin"
+import Logger from "loaders/logger"
 import { findOrCreateUserAccount } from "services/authentication"
 
 export async function authenticateUser(data: { idToken: string }) {
@@ -15,6 +16,8 @@ export async function authenticateUser(data: { idToken: string }) {
             isNewAccount,
         }
     } catch (e) {
+        // TODO:: use sentry
+        Logger.error(e)
         return {
             success: false,
             responseMessage: "Error creating account",

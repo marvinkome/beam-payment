@@ -1,4 +1,5 @@
 import config from "config"
+import Logger from "loaders/logger"
 import { Request } from "express"
 import { verify, sign } from "jsonwebtoken"
 import User, { IUser } from "models/users"
@@ -33,6 +34,7 @@ export async function getUserFromToken(token: string): Promise<IUser | null> {
     try {
         payload = verify(token, config.jwtSecret)
     } catch (e) {
+        Logger.error(e)
         return null
     }
 

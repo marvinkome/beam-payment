@@ -1,7 +1,7 @@
 import React from "react"
 import { PinInput } from "components/PinInput"
 import { StyleSheet, ScrollView } from "react-native"
-import { Button } from "react-native-elements"
+import { Button, Text } from "react-native-elements"
 
 type IProps = {
     pin: string
@@ -12,6 +12,10 @@ type IProps = {
 export function SetPinScreen(props: IProps) {
     return (
         <ScrollView contentContainerStyle={styles.container}>
+            <Text h3 style={styles.mainText}>
+                Set your pin
+            </Text>
+
             {/* input mask */}
             <PinInput
                 secure
@@ -35,7 +39,13 @@ export function SetPinScreen(props: IProps) {
 
 const styles = StyleSheet.create({
     container: {
-        paddingVertical: 100,
+        paddingVertical: 60,
+    },
+
+    mainText: {
+        marginBottom: 45,
+        textAlign: "center",
+        letterSpacing: 0.8,
     },
 
     buttonContainer: {

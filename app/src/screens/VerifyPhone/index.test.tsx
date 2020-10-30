@@ -1,12 +1,10 @@
 import React from "react"
-import AsyncStorage from "@react-native-async-storage/async-storage"
 import { MockedProvider } from "@apollo/client/testing"
 import { ToastAndroid } from "react-native"
-import { AUTH_TOKEN } from "libs/keys"
+import { AuthContext } from "libs/auth-context"
 import { fireEvent, render, waitFor } from "@testing-library/react-native"
 import { authToken, smsConfirmationObj } from "store/authStore"
 import { AUTH_USER_MUT } from "hooks/login"
-import { navigate } from "libs/navigator"
 import { VerifyPhone } from "./index"
 import { VerifyPhoneScreen } from "./VerifyPhone"
 
@@ -19,9 +17,6 @@ smsConfirmationObj.mockImplementation(() => ({
     },
 }))
 
-// @ts-ignore
-navigate.mockImplementation()
-
 // auto mocks
 jest.mock("react-native/Libraries/Animated/src/NativeAnimatedHelper")
 jest.mock("store/authStore")
@@ -29,11 +24,6 @@ jest.mock("libs/navigator")
 
 describe("Verify phone page tests", () => {
     describe("Verify phone integration tests", () => {
-        beforeEach(() => {
-            // @ts-ignore
-            AsyncStorage.setItem.mockClear()
-        })
-
         test("registration success case", async () => {
             const mock = {
                 request: {
@@ -58,10 +48,15 @@ describe("Verify phone page tests", () => {
                 },
             }
 
+            const signIn = jest.fn()
+
             const queries = render(
-                <MockedProvider mocks={[mock]} addTypename={false}>
-                    <VerifyPhone />
-                </MockedProvider>,
+                // @ts-ignore
+                <AuthContext.Provider value={{ signIn }}>
+                    <MockedProvider mocks={[mock]} addTypename={false}>
+                        <VerifyPhone />
+                    </MockedProvider>
+                </AuthContext.Provider>,
             )
 
             expect(smsConfirmationObj).toHaveBeenCalled()
@@ -70,7 +65,7 @@ describe("Verify phone page tests", () => {
             fireEvent.press(queries.getByText("Continue"))
 
             await waitFor(() => {
-                expect(navigate).toBeCalledWith("SetPin")
+                expect(signIn).toBeCalled()
             })
 
             expect(confirm).toHaveBeenCalledWith("202020")
@@ -114,7 +109,6 @@ describe("Verify phone page tests", () => {
             })
 
             expect(confirm).toHaveBeenCalledWith("202020")
-            expect(AsyncStorage.setItem).not.toHaveBeenCalled()
         })
     })
 

@@ -2,7 +2,6 @@ import "react-native-gesture-handler"
 import React from "react"
 import { ApolloProvider } from "@apollo/client"
 import { NavigationContainer } from "@react-navigation/native"
-import { StatusBar } from "react-native"
 import { ThemeProvider } from "react-native-elements"
 import { RootNavigator } from "navigators"
 import { Loader } from "components/Loader"
@@ -21,8 +20,6 @@ export default function BeamApp() {
 
     return (
         <ThemeProvider theme={ElementsTheme}>
-            <StatusBar barStyle="dark-content" />
-
             <ApolloProvider client={appData.apolloClient}>
                 <AuthContext.Provider value={appData.authContext}>
                     <NavigationContainer theme={NavigationTheme} ref={navigationRef}>

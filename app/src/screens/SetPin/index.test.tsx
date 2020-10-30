@@ -2,7 +2,7 @@ import React from "react"
 import { AuthContext } from "libs/auth-context"
 import { ToastAndroid } from "react-native"
 import { MockedProvider } from "@apollo/client/testing"
-import { act, fireEvent, render, waitFor } from "@testing-library/react-native"
+import { fireEvent, render, waitFor } from "@testing-library/react-native"
 import { SAVE_PIN, SetPin } from "./index"
 import { SetPinScreen } from "./SetPin"
 

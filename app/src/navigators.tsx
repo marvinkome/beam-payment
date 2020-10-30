@@ -1,19 +1,52 @@
 import React, { useContext } from "react"
 import { View, Text } from "react-native"
-import { createStackNavigator } from "@react-navigation/stack"
+import { Header } from "components/Header"
+import { createStackNavigator, StackNavigationOptions } from "@react-navigation/stack"
 import { AuthContext } from "libs/auth-context"
 import { fonts } from "styles/fonts"
 
 // screens
-import { SignUp } from "screens/authentication/SignUp"
-import { VerifyPhone } from "screens/authentication/VerifyPhone"
-import { SetPin } from "screens/authentication/SetPin"
+import { SignUp } from "screens/SignUp"
+import { VerifyPhone } from "screens/VerifyPhone"
+import { SetPin } from "screens/SetPin"
+import { AddMoney } from "screens/AddMoney"
 
 const EmptyScreen = () => (
     <View>
         <Text>Empty screen</Text>
     </View>
 )
+
+const OnboardingStack = createStackNavigator()
+function OnboardingStackNavigator() {
+    const options: StackNavigationOptions = {
+        header: (props) => <Header />,
+    }
+
+    return (
+        <OnboardingStack.Navigator
+            screenOptions={options}
+            headerMode="screen"
+            initialRouteName="AddMoney">
+            <OnboardingStack.Screen name="SetPin" component={SetPin} />
+            <OnboardingStack.Screen name="AddMoney" component={AddMoney} />
+        </OnboardingStack.Navigator>
+    )
+}
+
+const MainStack = createStackNavigator()
+function MainStackNavigator() {
+    return (
+        <MainStack.Navigator headerMode="none">
+            <MainStack.Screen name="OnboardingStack" component={OnboardingStackNavigator} />
+            <MainStack.Screen name="TransferTab" component={EmptyScreen} />
+            <MainStack.Screen name="DepositWithdraw" component={EmptyScreen} />
+            <MainStack.Screen name="AddMoney" component={EmptyScreen} />
+            <MainStack.Screen name="Withdraw" component={EmptyScreen} />
+            <MainStack.Screen name="WithdrawSettings" component={EmptyScreen} />
+        </MainStack.Navigator>
+    )
+}
 
 const PublicStack = createStackNavigator()
 function PublicStackNavigator() {
@@ -37,11 +70,6 @@ function PublicStackNavigator() {
                 component={VerifyPhone}
                 options={{ title: "Verify number" }}
             />
-            <PublicStack.Screen
-                name="SetPin"
-                component={SetPin}
-                options={{ title: "Set your pin" }}
-            />
         </PublicStack.Navigator>
     )
 }
@@ -53,7 +81,7 @@ export function RootNavigator() {
     return (
         <RootStack.Navigator headerMode="none">
             {authContext?.isLoggedIn ? (
-                <RootStack.Screen name="Main" component={EmptyScreen} />
+                <RootStack.Screen name="Main" component={MainStackNavigator} />
             ) : (
                 <RootStack.Screen name="PublicPage" component={PublicStackNavigator} />
             )}

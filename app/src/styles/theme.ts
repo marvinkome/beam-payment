@@ -35,6 +35,7 @@ export const ElementsTheme: Theme = {
 
         h3Style: {
             fontSize: 20,
+            letterSpacing: 0.8,
             ...fonts.semiBold,
         },
     },

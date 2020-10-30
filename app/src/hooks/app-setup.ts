@@ -3,7 +3,7 @@ import { apolloSetup } from "libs/apollo"
 
 export function useAppSetup() {
     const [isLoading, setLoading] = useState(true)
-    const [isLoggedIn, setLoggedIn] = useState(false)
+    const [isLoggedIn, setLoggedIn] = useState(true)
     const [apolloClient, setApolloClient] = useState<any>(null)
 
     useEffect(() => {

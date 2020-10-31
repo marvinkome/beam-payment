@@ -1,4 +1,6 @@
 import React from "react"
+import { View } from "react-native"
+import { PayWithFlutterwave } from "flutterwave-react-native"
 import { render, within, fireEvent } from "@testing-library/react-native"
 
 // components
@@ -32,12 +34,22 @@ describe("AddMoney", () => {
         const onSelectAmount = jest.fn()
         const onContinue = jest.fn()
 
+        // @ts-ignore
+        PayWithFlutterwave.mockImplementation(({ customButton }: any) => {
+            return <View>{customButton({ disabled: false, onPress: onContinue })}</View>
+        })
+
+        const renderContinueBtn = (renderButton: (props: any) => any) => (
+            // @ts-ignore
+            <PayWithFlutterwave customButton={renderButton} />
+        )
+
         const query = render(
             <AddMoneyScreen
                 loading={false}
                 selectedAmount="500"
                 onSelectAmount={onSelectAmount}
-                onContinue={onContinue}
+                renderContinueBtn={renderContinueBtn}
             />,
         )
 
@@ -46,6 +58,8 @@ describe("AddMoney", () => {
 
         fireEvent.press(query.getByText("NGN 1,500"))
         expect(onSelectAmount).toHaveBeenCalledWith("1500")
+
+        expect(query.getByText("Continue")).toBeTruthy()
 
         fireEvent.press(query.getByText("Continue"))
         expect(onContinue).toHaveBeenCalled()
@@ -56,5 +70,11 @@ describe("AddMoney", () => {
 
         const selectedCheckbox = within(query.getByA11yState({ checked: true }))
         expect(selectedCheckbox.getByText("NGN 500")).toBeTruthy()
+
+        const props = query.UNSAFE_getByType(PayWithFlutterwave).props
+
+        expect(props.options).toHaveProperty("tx_ref", "a-short-id")
+        expect(props.options).toHaveProperty("amount", 500)
+        expect(props.options).toHaveProperty("currency", "NGN")
     })
 })

@@ -1,4 +1,5 @@
 import React from "react"
+import { CustomButtonProps } from "flutterwave-react-native/dist/PaywithFlutterwaveBase"
 import { ScrollView, View } from "react-native"
 import { Button, Text } from "react-native-elements"
 import { Amounts } from "./index"
@@ -8,7 +9,7 @@ type IProps = {
     loading: boolean
     selectedAmount: Amounts
     onSelectAmount: (amount: Amounts) => void
-    onContinue: () => void
+    renderContinueBtn: (renderButton: (props: CustomButtonProps) => React.ReactNode) => JSX.Element
 }
 export function AddMoneyScreen(props: IProps) {
     return (
@@ -27,12 +28,13 @@ export function AddMoneyScreen(props: IProps) {
             </View>
 
             <View style={{ flex: 1, justifyContent: "flex-end" }}>
-                <Button
-                    disabled={!props.selectedAmount}
-                    onPress={props.onContinue}
-                    loading={props.loading}
-                    title="Continue"
-                />
+                {props.renderContinueBtn((btnProps) => (
+                    <Button
+                        disabled={!props.selectedAmount || btnProps.disabled}
+                        onPress={btnProps.onPress}
+                        title="Continue"
+                    />
+                ))}
             </View>
         </ScrollView>
     )

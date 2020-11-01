@@ -10,6 +10,7 @@ import { SignUp } from "screens/SignUp"
 import { VerifyPhone } from "screens/VerifyPhone"
 import { SetPin } from "screens/SetPin"
 import { AddMoney } from "screens/AddMoney"
+import { Login } from "screens/Login"
 
 const EmptyScreen = () => (
     <View>
@@ -50,6 +51,7 @@ function MainStackNavigator() {
 
 const PublicStack = createStackNavigator()
 function PublicStackNavigator() {
+    const authContext = useContext(AuthContext)
     const options = {
         headerStyle: {
             elevation: 0,
@@ -64,12 +66,27 @@ function PublicStackNavigator() {
 
     return (
         <PublicStack.Navigator screenOptions={options}>
-            <PublicStack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }} />
-            <PublicStack.Screen
-                name="VerifyPhone"
-                component={VerifyPhone}
-                options={{ title: "Verify number" }}
-            />
+            {authContext?.hasPublicDetails ? (
+                <PublicStack.Screen
+                    name="Login"
+                    component={Login}
+                    options={{ headerShown: false }}
+                />
+            ) : (
+                <>
+                    <PublicStack.Screen
+                        name="SignUp"
+                        component={SignUp}
+                        options={{ headerShown: false }}
+                    />
+
+                    <PublicStack.Screen
+                        name="VerifyPhone"
+                        component={VerifyPhone}
+                        options={{ title: "Verify number" }}
+                    />
+                </>
+            )}
         </PublicStack.Navigator>
     )
 }

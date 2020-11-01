@@ -1,4 +1,5 @@
 import React from "react"
+import AsyncStorage from "@react-native-async-storage/async-storage"
 import { MockedProvider } from "@apollo/client/testing"
 import { ToastAndroid } from "react-native"
 import { AuthContext } from "libs/auth-context"
@@ -7,6 +8,7 @@ import { authToken, smsConfirmationObj } from "store/authStore"
 import { AUTH_USER_MUT } from "hooks/login"
 import { VerifyPhone } from "./index"
 import { VerifyPhoneScreen } from "./VerifyPhone"
+import { USER_PUB_DETAIL } from "libs/keys"
 
 let confirm: any = jest.fn(() => Promise.resolve())
 // @ts-ignore
@@ -24,6 +26,11 @@ jest.mock("libs/navigator")
 
 describe("Verify phone page tests", () => {
     describe("Verify phone integration tests", () => {
+        beforeEach(() => {
+            // @ts-ignore
+            AsyncStorage.setItem.mockClear()
+        })
+
         test("registration success case", async () => {
             const mock = {
                 request: {
@@ -70,6 +77,7 @@ describe("Verify phone page tests", () => {
 
             expect(confirm).toHaveBeenCalledWith("202020")
             expect(authToken).toHaveBeenCalledWith("token")
+            expect(AsyncStorage.setItem).toHaveBeenCalledWith(USER_PUB_DETAIL, "+234913498619")
             expect(ToastAndroid.show).not.toHaveBeenCalled()
         })
 
@@ -109,6 +117,7 @@ describe("Verify phone page tests", () => {
             })
 
             expect(confirm).toHaveBeenCalledWith("202020")
+            expect(AsyncStorage.setItem).not.toHaveBeenCalledWith(USER_PUB_DETAIL, "+234913498619")
         })
     })
 

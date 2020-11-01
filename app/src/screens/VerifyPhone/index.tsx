@@ -22,7 +22,7 @@ export function VerifyPhone() {
                 throw new Error()
             }
 
-            await signIn(idToken)
+            await signIn(idToken, phoneNumber!)
             setVerifingCode(false)
         } catch (e) {
             setVerifingCode(false)

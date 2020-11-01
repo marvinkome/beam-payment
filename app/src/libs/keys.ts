@@ -4,6 +4,7 @@ function getConfig(dev: string, prod?: string) {
 }
 
 export const AUTH_TOKEN = getConfig("Beam_Auth_Token_Dev", "Beam_Auth_Token_Prod")
+export const USER_PUB_DETAIL = getConfig("Beam_User_Dev", "Beam_User_Prod")
 
 // APP URLS
 export const WEB_URL = getConfig("https://usebeam.chat")

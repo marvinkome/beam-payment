@@ -28,6 +28,8 @@ export function AddMoneyScreen(props: IProps) {
             </View>
 
             <View style={{ flex: 1, justifyContent: "flex-end" }}>
+                <Text style={{ textAlign: "center", marginBottom: 15 }}>+2% deposit fee </Text>
+
                 {props.renderContinueBtn((btnProps) => (
                     <Button
                         disabled={!props.selectedAmount || btnProps.disabled}

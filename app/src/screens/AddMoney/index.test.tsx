@@ -1,12 +1,13 @@
 import React from "react"
-import { View } from "react-native"
+import { ToastAndroid, View } from "react-native"
 import { PayWithFlutterwave } from "flutterwave-react-native"
-import { render, within, fireEvent } from "@testing-library/react-native"
+import { render, within, fireEvent, waitFor } from "@testing-library/react-native"
+import { MockedProvider } from "@apollo/client/testing"
 
 // components
 import { Amount } from "./Amount"
 import { AddMoneyScreen } from "./AddMoney"
-import { AddMoney } from "./index"
+import { AddMoney, ADD_MONEY } from "./index"
 
 describe("AddMoney", () => {
     test("<Amount />", () => {
@@ -35,7 +36,7 @@ describe("AddMoney", () => {
         const onContinue = jest.fn()
 
         // @ts-ignore
-        PayWithFlutterwave.mockImplementation(({ customButton }: any) => {
+        PayWithFlutterwave.mockImplementationOnce(({ customButton }: any) => {
             return <View>{customButton({ disabled: false, onPress: onContinue })}</View>
         })
 
@@ -65,8 +66,34 @@ describe("AddMoney", () => {
         expect(onContinue).toHaveBeenCalled()
     })
 
-    test("<AddMoney />", () => {
-        const query = render(<AddMoney />)
+    test("<AddMoney />", async () => {
+        const mock = {
+            request: {
+                query: ADD_MONEY,
+                variables: {
+                    addMoneyInput: {
+                        tx_ref: "a-short-id",
+                        tx_id: "a-transaction-id",
+                        amount: 500,
+                    },
+                },
+            },
+            result: {
+                data: {
+                    addMoney: {
+                        success: false,
+                        responseMessage: "Error crediting user account",
+                        user: null,
+                    },
+                },
+            },
+        }
+
+        const query = render(
+            <MockedProvider mocks={[mock]} addTypename={false}>
+                <AddMoney />
+            </MockedProvider>,
+        )
 
         const selectedCheckbox = within(query.getByA11yState({ checked: true }))
         expect(selectedCheckbox.getByText("NGN 500")).toBeTruthy()
@@ -74,7 +101,13 @@ describe("AddMoney", () => {
         const props = query.UNSAFE_getByType(PayWithFlutterwave).props
 
         expect(props.options).toHaveProperty("tx_ref", "a-short-id")
-        expect(props.options).toHaveProperty("amount", 500)
+        expect(props.options).toHaveProperty("amount", 510)
         expect(props.options).toHaveProperty("currency", "NGN")
+
+        fireEvent.press(query.getByText("Continue"))
+
+        await waitFor(() => {
+            expect(ToastAndroid.show).toBeCalledWith("Error crediting user account", 0)
+        })
     })
 })

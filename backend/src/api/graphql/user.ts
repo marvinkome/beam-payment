@@ -11,7 +11,8 @@ export const userTypeDef = gql`
     type User {
         id: ID
         isNewAccount: Boolean
-        accountSetupState: String
+        accountSetupState: AccountSetupState
+        accountBalance: Float
     }
 `
 

@@ -6,11 +6,12 @@ import { PayWithFlutterwave } from "flutterwave-react-native"
 import { CustomButtonProps } from "flutterwave-react-native/dist/PaywithFlutterwaveBase"
 import { RedirectParams } from "flutterwave-react-native/dist/PayWithFlutterwave"
 import { FLUTTERWAVE_KEY, EMAIL_URL } from "libs/keys"
+import { DEPOSIT_FEE } from "libs/constants"
 import { AddMoneyScreen } from "./AddMoney"
 
 export const ADD_MONEY = gql`
-    mutation AddMoney($transactionId: String!) {
-        addMoney(transactionId: $transactionId) {
+    mutation AddMoney($addMoneyInput: AddMoneyInput) {
+        addMoney(data: $addMoneyInput) {
             success
             responseMessage
             user {
@@ -26,19 +27,35 @@ export function useAddMoneyToUserAccount() {
 
     return {
         addingMoney,
-        addMoney: async (transId: string) => {
+        addMoney: async (params: RedirectParams, amount: string) => {
+            if (params.status !== "successful") {
+                return ToastAndroid.show("Transaction failed. Please try again", ToastAndroid.SHORT)
+            }
+
             setAddingMoney(true)
 
             try {
-                const addMoneyResp = await addMoney({ variables: { transactionId: transId } })
+                const addMoneyResp = await addMoney({
+                    variables: {
+                        addMoneyInput: {
+                            tx_id: params.transaction_id,
+                            tx_ref: params.tx_ref,
+                            amount: parseInt(amount, 10),
+                        },
+                    },
+                })
+
                 const { success, responseMessage } = addMoneyResp?.data?.addMoney
 
                 if (!success) {
+                    setAddingMoney(false)
                     return ToastAndroid.show(responseMessage, ToastAndroid.SHORT)
                 }
 
-                // continue forever
+                setAddingMoney(false)
+                // handle redirect
             } catch (err) {
+                setAddingMoney(false)
                 return ToastAndroid.show("Failed to credit account", ToastAndroid.SHORT)
             }
         },
@@ -50,24 +67,16 @@ export function AddMoney() {
     const [amount, setAmount] = useState<Amounts>("500")
     const { addingMoney, addMoney } = useAddMoneyToUserAccount()
 
-    const onContinue = async (params: RedirectParams) => {
-        if (params.status !== "successful") {
-            return ToastAndroid.show("Transaction failed. Please try again", ToastAndroid.SHORT)
-        }
-
-        await addMoney(params.transaction_id!)
-    }
-
     const payWithFlutterWaveBtn = (renderButton: (props: CustomButtonProps) => React.ReactNode) => (
         <PayWithFlutterwave
-            onRedirect={onContinue}
+            onRedirect={(params: RedirectParams) => addMoney(params, amount)}
             customButton={renderButton}
             options={{
                 tx_ref: shortid.generate(),
                 currency: "NGN",
                 authorization: FLUTTERWAVE_KEY,
                 customer: { email: EMAIL_URL },
-                amount: parseInt(amount, 10),
+                amount: parseInt(amount, 10) + parseInt(amount, 10) * DEPOSIT_FEE,
             }}
         />
     )

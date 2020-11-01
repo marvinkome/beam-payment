@@ -5,18 +5,29 @@ export interface IUser extends Document {
     phoneNumber: string
     firebaseId?: string // only available if user signed up using firebase number verification
     pin?: string
+    accountBalance?: number
     verify_pin: (pin: string) => Promise<boolean>
 }
 
-const userSchema: Schema<IUser> = new Schema({
-    phoneNumber: {
-        type: String,
-        maxlength: 14,
-    },
+const userSchema: Schema<IUser> = new Schema(
+    {
+        phoneNumber: {
+            type: String,
+            maxlength: 14,
+        },
 
-    firebaseId: String,
-    pin: String,
-})
+        accountBalance: {
+            min: 0,
+            type: Number,
+        },
+
+        firebaseId: String,
+        pin: String,
+    },
+    {
+        timestamps: true,
+    }
+)
 
 userSchema.pre("save", async function (next) {
     if (!this.isModified("pin")) {

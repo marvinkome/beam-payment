@@ -1,4 +1,15 @@
+import mockingoose from "mockingoose"
+import User from "models/users"
 import { getTokenFromHeaders, getUserFromToken } from "../auth"
+
+jest.mock("config", () => {
+    return {
+        jwtSecret: "token-secret",
+        logs: {
+            level: "silly",
+        },
+    }
+})
 
 const mockAuthHeader = (authorization?: string) => {
     return {
@@ -23,8 +34,10 @@ describe("Auth lib tests", () => {
 
     describe("getUserFromToken", () => {
         it("returns null when you send a fake token", async () => {
-            const res = await getUserFromToken("")
-            expect(res).toBe(null)
+            mockingoose(User).toReturn({ _id: "user_id" }, "findOne")
+
+            const res = await getUserFromToken("token")
+            expect(res).toBeDefined()
         })
     })
 })

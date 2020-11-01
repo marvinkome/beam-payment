@@ -11,6 +11,7 @@
         "test": "jest"
     },
     "devDependencies": {
+        "@shelf/jest-mongodb": "^1.2.3",
         "@types/bcrypt": "^3.0.0",
         "@types/body-parser": "^1.19.0",
         "@types/chai": "^4.2.14",
@@ -40,6 +41,7 @@
         "dotenv": "^8.2.0",
         "express": "^4.17.1",
         "firebase-admin": "^9.3.0",
+        "flutterwave-node-v3": "^1.0.6",
         "graphql": "^15.4.0",
         "jsonwebtoken": "^8.5.1",
         "module-alias": "^2.2.2",

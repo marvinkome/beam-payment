@@ -15,6 +15,15 @@ export default {
             ? require("/opt/firebase/firebase_secret.json")
             : require("../../firebase_secret.json"),
 
+    // flutterwave
+    flutterwavePublicKey: process.env.FLUTTERWAVE_KEY || "",
+    flutterwaveSecretKey: process.env.FLUTTERWAVE_SECRET_KEY || "",
+
+    // transaction fees
+    transactionFees: {
+        depositFee: 0.02,
+    },
+
     // logs
     logs: {
         level: process.env.LOG_LEVEL || "silly",

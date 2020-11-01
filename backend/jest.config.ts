@@ -2,7 +2,6 @@
  * For a detailed explanation regarding each configuration property and type check, visit:
  * https://jestjs.io/docs/en/configuration.html
  */
-
 module.exports = {
     // All imported modules in your tests should be mocked automatically
     // automock: false,
@@ -54,10 +53,10 @@ module.exports = {
     // forceCoverageMatch: [],
 
     // A path to a module which exports an async function that is triggered once before all test suites
-    // globalSetup: undefined,
+    globalSetup: "./node_modules/@shelf/jest-mongodb/setup.js",
 
     // A path to a module which exports an async function that is triggered once after all test suites
-    // globalTeardown: undefined,
+    globalTeardown: "./node_modules/@shelf/jest-mongodb/teardown.js",
 
     // A set of global variables that need to be available in all test environments
     // globals: {},
@@ -115,9 +114,7 @@ module.exports = {
     // rootDir: undefined,
 
     // A list of paths to directories that Jest should use to search for files in
-    // roots: [
-    //   "<rootDir>"
-    // ],
+    roots: ["<rootDir>"],
 
     // Allows you to use a custom runner instead of Jest's default test runner
     // runner: "jest-runner",

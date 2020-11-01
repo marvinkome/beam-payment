@@ -20,12 +20,14 @@ export const userResolver = {
     User: {
         isNewAccount: (user: IUser) => {
             if (!user.pin) return true
+            if (!user.accountBalance) return true
 
             return false
         },
 
         accountSetupState: (user: IUser) => {
             if (!user.pin) return "SET_PIN"
+            if (!user.accountBalance) return "ADD_MONEY"
 
             return "COMPLETE"
         },

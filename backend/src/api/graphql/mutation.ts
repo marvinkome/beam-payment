@@ -1,8 +1,9 @@
 import { gql } from "apollo-server-express"
 import { authenticateUser } from "controllers/authentication"
 import { addMoney, setPin } from "controllers/users"
-import { authenticated } from "libs/auth"
+import { authenticated, generateToken } from "libs/auth"
 import { IContext } from "loaders/apollo"
+import User from "models/users"
 
 export const mutationTypeDef = gql`
     # Inputs
@@ -30,6 +31,9 @@ export const mutationTypeDef = gql`
         # AUTH
         authenticateUser(idToken: String!): AuthenticationMutationResponse
 
+        # REMOVE!!!!!!
+        fakeToken(userPhone: String!): AuthenticationMutationResponse
+
         # USERS
         setPin(pin: String!): UserMutationResponse
         addMoney(data: AddMoneyInput): UserMutationResponse
@@ -41,6 +45,17 @@ export const mutationResolver = {
         /* AUTHENTICATION */
         authenticateUser: async (_: any, data: { idToken: string }) => {
             return authenticateUser(data)
+        },
+
+        // REMOVE!!!!!!
+        fakeToken: async (_: any, data: { userPhone: string }) => {
+            const user = await User.findOne({ phoneNumber: data.userPhone })
+
+            return {
+                success: true,
+                user,
+                token: generateToken(user!),
+            }
         },
 
         /* USERS */

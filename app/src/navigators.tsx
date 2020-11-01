@@ -1,8 +1,11 @@
 import React, { useContext } from "react"
 import { View, Text } from "react-native"
 import { Header } from "components/Header"
+import { Loader } from "components/Loader"
 import { createStackNavigator, StackNavigationOptions } from "@react-navigation/stack"
 import { AuthContext } from "libs/auth-context"
+import { useMainSetup, useOnboardingStep } from "hooks/onboarding"
+
 import { fonts } from "styles/fonts"
 
 // screens
@@ -20,15 +23,22 @@ const EmptyScreen = () => (
 
 const OnboardingStack = createStackNavigator()
 function OnboardingStackNavigator() {
+    const { loading, onboardingStep } = useOnboardingStep()
+    if (loading) {
+        return <Loader />
+    }
+
     const options: StackNavigationOptions = {
         header: (props) => <Header />,
     }
 
+    let initalRoute = "SetPin"
+    if (onboardingStep === "ADD_MONEY") {
+        initalRoute = "AddMoney"
+    }
+
     return (
-        <OnboardingStack.Navigator
-            screenOptions={options}
-            headerMode="screen"
-            initialRouteName="AddMoney">
+        <OnboardingStack.Navigator screenOptions={options} initialRouteName={initalRoute}>
             <OnboardingStack.Screen name="SetPin" component={SetPin} />
             <OnboardingStack.Screen name="AddMoney" component={AddMoney} />
         </OnboardingStack.Navigator>
@@ -37,8 +47,15 @@ function OnboardingStackNavigator() {
 
 const MainStack = createStackNavigator()
 function MainStackNavigator() {
+    const { loading, isNewAccount } = useMainSetup()
+
+    if (loading) {
+        return <Loader />
+    }
+
+    const initalRoute = isNewAccount ? "OnboardingStack" : "TransferTab"
     return (
-        <MainStack.Navigator headerMode="none">
+        <MainStack.Navigator headerMode="none" initialRouteName={initalRoute}>
             <MainStack.Screen name="OnboardingStack" component={OnboardingStackNavigator} />
             <MainStack.Screen name="TransferTab" component={EmptyScreen} />
             <MainStack.Screen name="DepositWithdraw" component={EmptyScreen} />

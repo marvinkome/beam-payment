@@ -1,5 +1,6 @@
+import User from "models/users"
 import mongoose from "mongoose"
-import { findOrCreateUserAccount } from "services/authentication"
+import { findOrCreateUserAccount, findAndVerifyAccount } from "services/authentication"
 
 describe("Auth service tests", () => {
     beforeAll(async () => {
@@ -15,12 +16,47 @@ describe("Auth service tests", () => {
         )
     })
 
+    beforeEach(async () => {
+        await User.deleteMany({})
+    })
+
     test("findOrCreateUserAccount", async () => {
         const { user, token } = await findOrCreateUserAccount("+2349087573383", "090101")
 
         expect(user._id).toBeDefined()
         expect(user.phoneNumber).toBe("+2349087573383")
         expect(token).toBe("token")
+    })
+
+    describe("findAndVerifyAccount", () => {
+        beforeEach(async () => {
+            const user = new User({ phoneNumber: "+2349087573383", pin: "2020" })
+            await user.save()
+        })
+
+        test("should work correctly", async () => {
+            const resp1 = await findAndVerifyAccount("+2349087573383", "2020")
+
+            expect(resp1.user?._id).toBeDefined()
+            expect(resp1.user?.phoneNumber).toBe("+2349087573383")
+            expect(resp1.token).toBe("token")
+        })
+
+        test("test wrong phone number", async () => {
+            try {
+                await findAndVerifyAccount("+2349087573393", "2020")
+            } catch (e) {
+                expect(e).toBeDefined()
+            }
+        })
+
+        test("test wrong pin", async () => {
+            try {
+                await findAndVerifyAccount("+2349087573383", "2021")
+            } catch (e) {
+                expect(e).toBeDefined()
+            }
+        })
     })
 
     afterAll(async () => {

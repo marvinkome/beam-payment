@@ -80,6 +80,36 @@ describe("Mutation", () => {
         })
     })
 
+    describe("loginUser", () => {
+        test("successful login", async () => {
+            const user = new User({ phoneNumber: "+2349087573383", pin: "2020" })
+            await user.save()
+
+            const server = constructTestServer()
+            const { mutate } = createTestClient(server)
+
+            const response = await mutate({
+                mutation: gql`
+                    mutation LoginUser($phoneNumber: String!, $pin: String!) {
+                        loginUser(phoneNumber: $phoneNumber, pin: $pin) {
+                            success
+                            responseMessage
+                            token
+                            user {
+                                id
+                            }
+                        }
+                    }
+                `,
+                variables: { phoneNumber: "+2349087573383", pin: "2020" },
+            })
+
+            expect(response.errors).toBeUndefined()
+            expect(response.data?.loginUser.success).toBeTruthy()
+            expect(response.data?.loginUser.token).toBe("token")
+        })
+    })
+
     describe("setPin", () => {
         test("success", async () => {
             const server = constructTestServer({
@@ -153,10 +183,10 @@ describe("Mutation", () => {
 })
 
 describe("Query", () => {
-    describe("me", async () => {
+    test("me", async () => {
         const server = constructTestServer({
-            context: () => ({
-                currentUser: new User({ phoneNumber: "+2349087573383" }),
+            context: async () => ({
+                currentUser: await new User({ phoneNumber: "+2349087573383" }).save(),
             }),
         })
 
@@ -164,7 +194,7 @@ describe("Query", () => {
 
         const response = await query({
             query: gql`
-                query Me() {
+                query Me {
                     me {
                         isNewAccount
                         accountBalance

@@ -14,3 +14,13 @@ export async function findOrCreateUserAccount(phoneNumber: string, firebaseToken
 
     return { user, token: generateToken(user) }
 }
+
+export async function findAndVerifyAccount(phoneNumber: string, pin: string) {
+    const user = await User.findOne({ phoneNumber })
+
+    if (!user || !(await user.verify_pin(pin))) {
+        return { error: "Invalid pin" }
+    }
+
+    return { user, token: generateToken(user) }
+}

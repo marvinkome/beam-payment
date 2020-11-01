@@ -1,7 +1,7 @@
 import { ApolloServer } from "apollo-server-express"
 import { typeDefs, resolvers } from "api/graphql"
 
-const defaultContext = () => ({
+const defaultContext: any = () => ({
     currentUser: null as any,
 })
 

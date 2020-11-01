@@ -1,6 +1,6 @@
 import { auth } from "firebase-admin"
 import Logger from "loaders/logger"
-import { findOrCreateUserAccount } from "services/authentication"
+import { findAndVerifyAccount, findOrCreateUserAccount } from "services/authentication"
 
 export async function authenticateUser(data: { idToken: string }) {
     try {
@@ -20,6 +20,29 @@ export async function authenticateUser(data: { idToken: string }) {
         return {
             success: false,
             responseMessage: "Error creating account",
+        }
+    }
+}
+
+export async function loginUser(data: { phoneNumber: string; pin: string }) {
+    try {
+        // find user and return jwt
+        const { user, token, error } = await findAndVerifyAccount(data.phoneNumber, data.pin)
+        if (error) {
+            throw new Error(error)
+        }
+
+        return {
+            success: true,
+            user,
+            token,
+        }
+    } catch (e) {
+        // TODO:: use sentry
+        Logger.error(e)
+        return {
+            success: false,
+            responseMessage: "Invalid pin. Please try again",
         }
     }
 }

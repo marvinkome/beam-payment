@@ -1,5 +1,5 @@
 import { gql } from "apollo-server-express"
-import { authenticateUser } from "controllers/authentication"
+import { authenticateUser, loginUser } from "controllers/authentication"
 import { addMoney, setPin } from "controllers/users"
 import { authenticated, generateToken } from "libs/auth"
 import { IContext } from "loaders/apollo"
@@ -30,6 +30,7 @@ export const mutationTypeDef = gql`
     type Mutation {
         # AUTH
         authenticateUser(idToken: String!): AuthenticationMutationResponse
+        loginUser(phoneNumber: String!, pin: String!): AuthenticationMutationResponse
 
         # REMOVE!!!!!!
         fakeToken(userPhone: String!): AuthenticationMutationResponse
@@ -45,6 +46,10 @@ export const mutationResolver = {
         /* AUTHENTICATION */
         authenticateUser: async (_: any, data: { idToken: string }) => {
             return authenticateUser(data)
+        },
+
+        loginUser: async (_: any, data: { phoneNumber: string; pin: string }) => {
+            return loginUser(data)
         },
 
         // REMOVE!!!!!!

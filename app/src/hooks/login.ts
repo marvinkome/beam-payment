@@ -35,6 +35,7 @@ export function useAuthentication() {
             })
         } catch (err) {
             // TODO:: sentry - track failed signup
+            console.log(err)
             return ToastAndroid.show("Failed to sign in", ToastAndroid.SHORT)
         }
 
@@ -47,6 +48,60 @@ export function useAuthentication() {
 
         // setup user data
         await AsyncStorage.setItem(USER_PUB_DETAIL, phoneNumber)
+        await authToken(token)
+
+        // TODO:: Add user to analytics
+        // TODO:: Track successful sign up
+
+        // finish auth here
+        return authContext?.signIn()
+    }
+
+    return { signIn }
+}
+
+export const LOGIN_MUT = gql`
+    mutation LoginUser($phoneNumber: String!, $pin: String!) {
+        loginUser(phoneNumber: $phoneNumber, pin: $pin) {
+            success
+            responseMessage
+            token
+            user {
+                id
+                isNewAccount
+                accountSetupState
+            }
+        }
+    }
+`
+
+export function useLogin() {
+    const authContext = useContext(AuthContext)
+    const [loginMutation] = useMutation(LOGIN_MUT)
+
+    const signIn = async (pin: string) => {
+        // TODO:: sentry breadcrumb - request started
+        let loginResp = null
+        const phoneNumber = await AsyncStorage.getItem(USER_PUB_DETAIL)
+
+        try {
+            loginResp = await loginMutation({
+                variables: { phoneNumber, pin },
+            })
+        } catch (err) {
+            // TODO:: sentry - track failed signup
+            console.log(err)
+            return ToastAndroid.show("Failed to sign in", ToastAndroid.SHORT)
+        }
+
+        const { token, success, responseMessage } = loginResp?.data?.loginUser
+
+        if (!success) {
+            // TODO:: sentry - track failed signup
+            return ToastAndroid.show(responseMessage, ToastAndroid.SHORT)
+        }
+
+        // setup user data
         await authToken(token)
 
         // TODO:: Add user to analytics

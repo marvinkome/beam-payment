@@ -16,6 +16,8 @@ export const routes = {
         },
         transferTab: {
             index: "TransferTab",
+            transfer: "Transfer",
+            transactionHistory: "TransactionHistory",
         },
     },
     public: {

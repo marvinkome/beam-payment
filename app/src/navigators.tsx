@@ -1,8 +1,11 @@
 import React, { useContext } from "react"
 import { View, Text } from "react-native"
+import { TabBar } from "components/TabBar"
 import { Header } from "components/Header"
 import { Loader } from "components/Loader"
+import { Icon } from "react-native-elements"
 import { createStackNavigator, StackNavigationOptions } from "@react-navigation/stack"
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs"
 import { AuthContext } from "libs/auth-context"
 import { useMainSetup, useOnboardingStep } from "hooks/onboarding"
 import { routes } from "libs/navigator"
@@ -21,6 +24,35 @@ const EmptyScreen = () => (
     </View>
 )
 
+const TransferTab = createMaterialTopTabNavigator()
+function TransferTabNavigator() {
+    return (
+        <TransferTab.Navigator tabBar={(props) => <TabBar {...props} />}>
+            <TransferTab.Screen
+                name={routes.main.transferTab.transfer}
+                component={EmptyScreen}
+                options={{
+                    title: "Transfer",
+                    tabBarIcon: ({ color }) => (
+                        <Icon name="swap" type="antdesign" size={20} color={color} />
+                    ),
+                }}
+            />
+
+            <TransferTab.Screen
+                name={routes.main.transferTab.transactionHistory}
+                component={EmptyScreen}
+                options={{
+                    title: "History",
+                    tabBarIcon: ({ color }) => (
+                        <Icon name="clockcircleo" type="antdesign" size={18} color={color} />
+                    ),
+                }}
+            />
+        </TransferTab.Navigator>
+    )
+}
+
 const OnboardingStack = createStackNavigator()
 function OnboardingStackNavigator() {
     const { loading, onboardingStep } = useOnboardingStep()
@@ -28,17 +60,13 @@ function OnboardingStackNavigator() {
         return <Loader />
     }
 
-    const options: StackNavigationOptions = {
-        header: (props) => <Header />,
-    }
-
-    let initalRoute = routes.main.onboarding.setPin
+    let initalRoute: string = routes.main.onboarding.setPin
     if (onboardingStep === "ADD_MONEY") {
         initalRoute = routes.main.onboarding.addMoney
     }
 
     return (
-        <OnboardingStack.Navigator screenOptions={options} initialRouteName={initalRoute}>
+        <OnboardingStack.Navigator headerMode="none" initialRouteName={initalRoute}>
             <OnboardingStack.Screen name={routes.main.onboarding.setPin} component={SetPin} />
             <OnboardingStack.Screen name={routes.main.onboarding.addMoney} component={AddMoney} />
         </OnboardingStack.Navigator>
@@ -53,16 +81,23 @@ function MainStackNavigator() {
         return <Loader />
     }
 
-    const initalRoute = isNewAccount ? routes.main.onboarding.index : "TransferTab"
+    const options: StackNavigationOptions = {
+        header: (props) => <Header />,
+    }
+
+    const initialRoute = isNewAccount ? routes.main.onboarding.index : "TransferTab"
     return (
-        <MainStack.Navigator headerMode="none" initialRouteName={initalRoute}>
+        <MainStack.Navigator screenOptions={options} initialRouteName={initialRoute}>
             <MainStack.Screen
                 name={routes.main.onboarding.index}
                 component={OnboardingStackNavigator}
             />
-            <MainStack.Screen name={routes.main.transferTab.index} component={EmptyScreen} />
+            <MainStack.Screen
+                name={routes.main.transferTab.index}
+                component={TransferTabNavigator}
+            />
             <MainStack.Screen name="DepositWithdraw" component={EmptyScreen} />
-            <MainStack.Screen name="AddMoney" component={EmptyScreen} />
+            <MainStack.Screen name="AddMoney" component={AddMoney} />
             <MainStack.Screen name="Withdraw" component={EmptyScreen} />
             <MainStack.Screen name="WithdrawSettings" component={EmptyScreen} />
         </MainStack.Navigator>
@@ -117,7 +152,7 @@ export function RootNavigator() {
 
     return (
         <RootStack.Navigator headerMode="none">
-            {authContext?.isLoggedIn ? (
+            {!authContext?.isLoggedIn ? (
                 <RootStack.Screen name={routes.main.index} component={MainStackNavigator} />
             ) : (
                 <RootStack.Screen name={routes.public.index} component={PublicStackNavigator} />

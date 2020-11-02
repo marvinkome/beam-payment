@@ -2,7 +2,7 @@ import { gql, useQuery } from "@apollo/client"
 
 export function useMainSetup() {
     const { data, loading } = useQuery(gql`
-        query User {
+        query isNewAccount {
             me {
                 id
                 isNewAccount
@@ -14,7 +14,7 @@ export function useMainSetup() {
 
 export function useOnboardingStep() {
     const { data, loading } = useQuery(gql`
-        query User {
+        query AccountSetupState {
             me {
                 id
                 accountSetupState

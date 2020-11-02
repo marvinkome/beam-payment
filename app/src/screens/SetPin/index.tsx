@@ -1,9 +1,9 @@
-import React, { useContext, useState } from "react"
+import React, { useState } from "react"
 import { useNavigation } from "@react-navigation/native"
 import { gql, useMutation } from "@apollo/client"
 import { SetPinScreen } from "./SetPin"
 import { ToastAndroid } from "react-native"
-import { AuthContext } from "libs/auth-context"
+import { routes } from "libs/navigator"
 
 export const SAVE_PIN = gql`
     mutation SetPin($pin: String!) {
@@ -18,14 +18,15 @@ export const SAVE_PIN = gql`
 `
 
 function useSavePin() {
-    const authContext = useContext(AuthContext)
     const [savePin] = useMutation(SAVE_PIN)
     const [savingPin, setSavingPin] = useState(false)
+    const { navigate } = useNavigation()
 
     return {
         savingPin,
         savePin: async (pin: string) => {
             setSavingPin(true)
+
             try {
                 const savePinResp = await savePin({ variables: { pin } })
                 const { success, responseMessage } = savePinResp?.data?.setPin
@@ -34,7 +35,7 @@ function useSavePin() {
                     return ToastAndroid.show(responseMessage, ToastAndroid.SHORT)
                 }
 
-                authContext?.signIn()
+                navigate(routes.main.onboarding.addMoney)
             } catch (e) {
                 console.log(e)
                 ToastAndroid.show("Error saving pin. Try again", ToastAndroid.SHORT)

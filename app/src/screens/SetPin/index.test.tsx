@@ -1,4 +1,5 @@
 import React from "react"
+import { useNavigation } from "@react-navigation/native"
 import { AuthContext } from "libs/auth-context"
 import { ToastAndroid } from "react-native"
 import { MockedProvider } from "@apollo/client/testing"
@@ -46,7 +47,7 @@ describe("SetPin page tests", () => {
             fireEvent.press(queries.getByText("Continue"))
 
             await waitFor(() => {
-                expect(signIn).toBeCalled()
+                expect(useNavigation().navigate).toBeCalledWith("AddMoney__Onboarding")
             })
         })
 

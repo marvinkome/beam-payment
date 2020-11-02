@@ -5,3 +5,23 @@ export const navigationRef = createRef<NavigationContainerRef>()
 export function navigate(name: string, params?: any) {
     navigationRef.current?.navigate(name, params)
 }
+
+export const routes = {
+    main: {
+        index: "Main",
+        onboarding: {
+            index: "OnboardingStack",
+            setPin: "SetPin",
+            addMoney: "AddMoney__Onboarding",
+        },
+        transferTab: {
+            index: "TransferTab",
+        },
+    },
+    public: {
+        index: "Public",
+        login: "Login",
+        signUp: "SignUp",
+        verifyPhone: "VerifyPhone",
+    },
+} as const

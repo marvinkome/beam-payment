@@ -1,5 +1,6 @@
 import React from "react"
-import { ToastAndroid, View } from "react-native"
+import { useRoute, useNavigation } from "@react-navigation/native"
+import { View } from "react-native"
 import { PayWithFlutterwave } from "flutterwave-react-native"
 import { render, within, fireEvent, waitFor } from "@testing-library/react-native"
 import { MockedProvider } from "@apollo/client/testing"
@@ -66,7 +67,12 @@ describe("AddMoney", () => {
         expect(onContinue).toHaveBeenCalled()
     })
 
-    test("<AddMoney />", async () => {
+    test("<AddMoney /> - onboarding screen", async () => {
+        // @ts-ignore
+        useRoute.mockImplementation(() => ({
+            name: "AddMoney__Onboarding",
+        }))
+
         const mock = {
             request: {
                 query: ADD_MONEY,
@@ -81,9 +87,12 @@ describe("AddMoney", () => {
             result: {
                 data: {
                     addMoney: {
-                        success: false,
-                        responseMessage: "Error crediting user account",
-                        user: null,
+                        success: true,
+                        responseMessage: null,
+                        user: {
+                            id: "user_id",
+                            accountBalance: 500,
+                        },
                     },
                 },
             },
@@ -107,7 +116,60 @@ describe("AddMoney", () => {
         fireEvent.press(query.getByText("Continue"))
 
         await waitFor(() => {
-            expect(ToastAndroid.show).toBeCalledWith("Error crediting user account", 0)
+            expect(useNavigation().navigate).toBeCalledWith("TransferTab")
+        })
+    })
+
+    test("<AddMoney /> - main screen", async () => {
+        // @ts-ignore
+        useRoute.mockImplementation(() => ({
+            name: "AddMoney",
+        }))
+
+        const mock = {
+            request: {
+                query: ADD_MONEY,
+                variables: {
+                    addMoneyInput: {
+                        tx_ref: "a-short-id",
+                        tx_id: "a-transaction-id",
+                        amount: 500,
+                    },
+                },
+            },
+            result: {
+                data: {
+                    addMoney: {
+                        success: true,
+                        responseMessage: null,
+                        user: {
+                            id: "user_id",
+                            accountBalance: 500,
+                        },
+                    },
+                },
+            },
+        }
+
+        const query = render(
+            <MockedProvider mocks={[mock]} addTypename={false}>
+                <AddMoney />
+            </MockedProvider>,
+        )
+
+        const selectedCheckbox = within(query.getByA11yState({ checked: true }))
+        expect(selectedCheckbox.getByText("NGN 500")).toBeTruthy()
+
+        const props = query.UNSAFE_getByType(PayWithFlutterwave).props
+
+        expect(props.options).toHaveProperty("tx_ref", "a-short-id")
+        expect(props.options).toHaveProperty("amount", 510)
+        expect(props.options).toHaveProperty("currency", "NGN")
+
+        fireEvent.press(query.getByText("Continue"))
+
+        await waitFor(() => {
+            expect(useNavigation().goBack).toBeCalled()
         })
     })
 })

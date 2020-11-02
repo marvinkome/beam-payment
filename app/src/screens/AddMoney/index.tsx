@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import shortid from "shortid"
 import { gql, useMutation } from "@apollo/client"
+import { useNavigation, useRoute } from "@react-navigation/native"
 import { ToastAndroid } from "react-native"
 import { PayWithFlutterwave } from "flutterwave-react-native"
 import { CustomButtonProps } from "flutterwave-react-native/dist/PaywithFlutterwaveBase"
@@ -8,6 +9,7 @@ import { RedirectParams } from "flutterwave-react-native/dist/PayWithFlutterwave
 import { FLUTTERWAVE_KEY, EMAIL_URL } from "libs/keys"
 import { DEPOSIT_FEE } from "libs/constants"
 import { AddMoneyScreen } from "./AddMoney"
+import { routes } from "libs/navigator"
 
 export const ADD_MONEY = gql`
     mutation AddMoney($addMoneyInput: AddMoneyInput) {
@@ -16,6 +18,7 @@ export const ADD_MONEY = gql`
             responseMessage
             user {
                 id
+                accountBalance
             }
         }
     }
@@ -24,6 +27,8 @@ export const ADD_MONEY = gql`
 export function useAddMoneyToUserAccount() {
     const [addingMoney, setAddingMoney] = useState(false)
     const [addMoney] = useMutation(ADD_MONEY)
+    const navigation = useNavigation()
+    const route = useRoute()
 
     return {
         addingMoney,
@@ -53,7 +58,15 @@ export function useAddMoneyToUserAccount() {
                 }
 
                 setAddingMoney(false)
+
                 // handle redirect
+                // if it's onboarding
+                if (route.name === routes.main.onboarding.addMoney) {
+                    navigation.navigate(routes.main.transferTab.index)
+                    // TODO:: use routes const
+                } else if (route.name === "AddMoney") {
+                    navigation.goBack()
+                }
             } catch (err) {
                 setAddingMoney(false)
                 return ToastAndroid.show("Failed to credit account", ToastAndroid.SHORT)

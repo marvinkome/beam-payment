@@ -1,7 +1,8 @@
 import React from "react"
 import auth from "@react-native-firebase/auth"
+import { useNavigation } from "@react-navigation/native"
 import { smsConfirmationObj } from "store/authStore"
-import { render, fireEvent, act } from "@testing-library/react-native"
+import { render, fireEvent, waitFor } from "@testing-library/react-native"
 import { SignUp } from "./index"
 import { SignUpScreen } from "./SignUp"
 
@@ -15,7 +16,9 @@ describe("SignUp page tests", () => {
         fireEvent.changeText(queries.getByPlaceholderText("Your phone number"), "07037276587")
         fireEvent.press(queries.getByText("Continue"))
 
-        await act(() => Promise.resolve())
+        await waitFor(() => {
+            expect(useNavigation().navigate).toBeCalledWith("VerifyPhone")
+        })
 
         expect(auth().signInWithPhoneNumber).toHaveBeenCalledWith("+2347037276587")
         expect(smsConfirmationObj).toHaveBeenCalledWith({

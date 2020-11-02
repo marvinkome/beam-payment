@@ -32,6 +32,7 @@ export function AddMoneyScreen(props: IProps) {
 
                 {props.renderContinueBtn((btnProps) => (
                     <Button
+                        loading={props.loading}
                         disabled={!props.selectedAmount || btnProps.disabled}
                         onPress={btnProps.onPress}
                         title="Continue"

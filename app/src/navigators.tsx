@@ -5,7 +5,7 @@ import { Loader } from "components/Loader"
 import { createStackNavigator, StackNavigationOptions } from "@react-navigation/stack"
 import { AuthContext } from "libs/auth-context"
 import { useMainSetup, useOnboardingStep } from "hooks/onboarding"
-
+import { routes } from "libs/navigator"
 import { fonts } from "styles/fonts"
 
 // screens
@@ -32,15 +32,15 @@ function OnboardingStackNavigator() {
         header: (props) => <Header />,
     }
 
-    let initalRoute = "SetPin"
+    let initalRoute = routes.main.onboarding.setPin
     if (onboardingStep === "ADD_MONEY") {
-        initalRoute = "AddMoney"
+        initalRoute = routes.main.onboarding.addMoney
     }
 
     return (
         <OnboardingStack.Navigator screenOptions={options} initialRouteName={initalRoute}>
-            <OnboardingStack.Screen name="SetPin" component={SetPin} />
-            <OnboardingStack.Screen name="AddMoney" component={AddMoney} />
+            <OnboardingStack.Screen name={routes.main.onboarding.setPin} component={SetPin} />
+            <OnboardingStack.Screen name={routes.main.onboarding.addMoney} component={AddMoney} />
         </OnboardingStack.Navigator>
     )
 }
@@ -53,11 +53,14 @@ function MainStackNavigator() {
         return <Loader />
     }
 
-    const initalRoute = isNewAccount ? "OnboardingStack" : "TransferTab"
+    const initalRoute = isNewAccount ? routes.main.onboarding.index : "TransferTab"
     return (
         <MainStack.Navigator headerMode="none" initialRouteName={initalRoute}>
-            <MainStack.Screen name="OnboardingStack" component={OnboardingStackNavigator} />
-            <MainStack.Screen name="TransferTab" component={EmptyScreen} />
+            <MainStack.Screen
+                name={routes.main.onboarding.index}
+                component={OnboardingStackNavigator}
+            />
+            <MainStack.Screen name={routes.main.transferTab.index} component={EmptyScreen} />
             <MainStack.Screen name="DepositWithdraw" component={EmptyScreen} />
             <MainStack.Screen name="AddMoney" component={EmptyScreen} />
             <MainStack.Screen name="Withdraw" component={EmptyScreen} />
@@ -85,20 +88,20 @@ function PublicStackNavigator() {
         <PublicStack.Navigator screenOptions={options}>
             {authContext?.hasPublicDetails ? (
                 <PublicStack.Screen
-                    name="Login"
+                    name={routes.public.login}
                     component={Login}
                     options={{ headerShown: false }}
                 />
             ) : (
                 <>
                     <PublicStack.Screen
-                        name="SignUp"
+                        name={routes.public.signUp}
                         component={SignUp}
                         options={{ headerShown: false }}
                     />
 
                     <PublicStack.Screen
-                        name="VerifyPhone"
+                        name={routes.public.verifyPhone}
                         component={VerifyPhone}
                         options={{ title: "Verify number" }}
                     />
@@ -115,9 +118,9 @@ export function RootNavigator() {
     return (
         <RootStack.Navigator headerMode="none">
             {authContext?.isLoggedIn ? (
-                <RootStack.Screen name="Main" component={MainStackNavigator} />
+                <RootStack.Screen name={routes.main.index} component={MainStackNavigator} />
             ) : (
-                <RootStack.Screen name="PublicPage" component={PublicStackNavigator} />
+                <RootStack.Screen name={routes.public.index} component={PublicStackNavigator} />
             )}
         </RootStack.Navigator>
     )

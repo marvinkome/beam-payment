@@ -5,6 +5,7 @@ import { useNavigation } from "@react-navigation/native"
 import { escapePhoneNumber } from "libs/helpers"
 import { smsConfirmationObj } from "store/authStore"
 import { SignUpScreen } from "./SignUp"
+import { routes } from "libs/navigator"
 
 export function SignUp() {
     const { navigate } = useNavigation()
@@ -24,7 +25,8 @@ export function SignUp() {
             // move to next screen
             setSendingSms(false)
             setPhoneNumber("")
-            navigate("VerifyPhone")
+
+            navigate(routes.public.verifyPhone)
         } catch (e) {
             setSendingSms(false)
             ToastAndroid.show("Please use a correct phone number", ToastAndroid.SHORT)

@@ -12,11 +12,12 @@ import { routes } from "libs/navigator"
 import { fonts } from "styles/fonts"
 
 // screens
+import { Login } from "screens/Login"
 import { SignUp } from "screens/SignUp"
 import { VerifyPhone } from "screens/VerifyPhone"
 import { SetPin } from "screens/SetPin"
 import { AddMoney } from "screens/AddMoney"
-import { Login } from "screens/Login"
+import { Transfer } from "screens/Transfer"
 
 const EmptyScreen = () => (
     <View>
@@ -30,7 +31,7 @@ function TransferTabNavigator() {
         <TransferTab.Navigator tabBar={(props) => <TabBar {...props} />}>
             <TransferTab.Screen
                 name={routes.main.transferTab.transfer}
-                component={EmptyScreen}
+                component={Transfer}
                 options={{
                     title: "Transfer",
                     tabBarIcon: ({ color }) => (

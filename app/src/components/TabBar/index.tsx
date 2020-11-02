@@ -62,10 +62,10 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: "row",
         backgroundColor: colorTheme.grey,
-        width: "92%",
         alignSelf: "center",
         borderRadius: 50,
         marginTop: 25,
+        marginHorizontal: 15,
         overflow: "hidden",
     },
 
@@ -74,8 +74,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "center",
-        paddingVertical: 20,
-        paddingHorizontal: 20,
+        padding: 15,
     },
     selectedTab: {
         backgroundColor: colorTheme.primary,

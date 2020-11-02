@@ -81,6 +81,13 @@ export const ElementsTheme: Theme = {
             paddingLeft: 10,
             ...fonts.regular,
         },
+
+        labelStyle: {
+            color: colorTheme.black,
+            fontSize: 16,
+            marginBottom: 20,
+            ...fonts.semiBold,
+        },
     },
 }
 

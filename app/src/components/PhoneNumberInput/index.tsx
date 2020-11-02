@@ -8,6 +8,7 @@ type IProps = {
     withIcon?: boolean
     containerStyle?: ViewStyle
     placeholder?: string
+    label?: string
     value: string
     onChange: (text: string) => void
 }
@@ -25,6 +26,7 @@ export function PhoneNumberInput(props: IProps) {
             leftIcon={LeftIcon}
             inputStyle={{ paddingLeft: 0, alignItems: "center" }}
             keyboardType="number-pad"
+            label={props.label}
             placeholder={props.placeholder || "Enter phone number"}
             renderErrorMessage={false}
             value={props.value}

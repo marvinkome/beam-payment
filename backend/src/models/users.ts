@@ -6,6 +6,7 @@ export interface IUser extends Document {
     firebaseId?: string // only available if user signed up using firebase number verification
     pin?: string
     accountBalance?: number
+    notificationToken?: string
     verify_pin: (pin: string) => Promise<boolean>
 }
 
@@ -23,6 +24,7 @@ const userSchema: Schema<IUser> = new Schema(
 
         firebaseId: String,
         pin: String,
+        notificationToken: String,
     },
     {
         timestamps: true,

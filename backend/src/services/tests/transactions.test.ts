@@ -21,7 +21,6 @@ describe("User service tests", () => {
             transaction_id: "123455",
             amountPaid: 1500,
             amountRecieved: 1508.58,
-            transactionType: "credit",
             fromFlutterWave: true,
             to: new User({ phoneNumber: "+2349087573383" }),
         })
@@ -30,6 +29,7 @@ describe("User service tests", () => {
     })
 
     afterAll(async () => {
+        await User.deleteMany({})
         await mongoose.disconnect()
     })
 })

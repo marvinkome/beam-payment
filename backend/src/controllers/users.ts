@@ -1,23 +1,23 @@
-import config from "config"
+import Logger from "loaders/logger"
 import { IUser } from "models/users"
-import { storeTransaction } from "services/transactions"
-import { addMoneyToAccount, setUserPin } from "services/user"
-
-const Flutterwave = require("flutterwave-node-v3")
-const flw = new Flutterwave(config.flutterwavePublicKey, config.flutterwaveSecretKey)
+import { findOrCreateUserAccount } from "services/authentication"
+import { UserService } from "services/user"
 
 export async function setPin(data: { pin: string }, user: IUser | null) {
     // set pin and return user
     if (!user) return
+    const userService = new UserService(user)
 
     try {
-        const newUser = await setUserPin(data.pin, user)
+        const updatedUser = await userService.setPin(data.pin)
+
         return {
             success: true,
-            user: newUser,
+            user: updatedUser,
         }
     } catch (e) {
         // todo:: add sentry
+
         return {
             success: false,
             responseMessage: "Error saving pin. Please try again",
@@ -30,50 +30,49 @@ export async function addMoney(
     user: IUser | null
 ) {
     if (!user) return
-
-    // verify transaction
-    const flwResp = await flw.Transaction.verify({
-        id: data.tx_id,
-    })
-
-    const isInvalid =
-        flwResp.status !== "success" &&
-        flwResp.data?.status !== "successful" &&
-        flwResp.data?.tx_ref !== data.tx_ref &&
-        flwResp.data?.currency !== "NGN"
-
-    if (isInvalid) {
-        console.log("error", flwResp)
-        return {
-            success: false,
-            responseMessage: flwResp.message,
-        }
-    }
+    const userService = new UserService(user)
 
     try {
-        // add money to user account
-        const newUser = await addMoneyToAccount(data.amount, user)
-
-        // create new credit transaction
-        await storeTransaction({
-            transaction_id: `${flwResp.data?.id}`,
-            amountPaid: data.amount,
-            amountRecieved: flwResp.data?.amount_settled,
-            transactionType: "credit",
-            fromFlutterWave: true,
-            to: newUser,
-        })
+        const updatedUser = await userService.addMoney(data)
 
         return {
             success: true,
-            user: newUser,
+            user: updatedUser,
         }
     } catch (err) {
-        // todo:: add sentry
-        console.log(err)
+        Logger.error("🔥 error: %o", err)
+
         return {
             success: false,
             responseMessage: "Something went wrong while adding money to your account",
+        }
+    }
+}
+
+export async function transferMoney(
+    data: { amount: number; receiverNumber: string },
+    user: IUser | null
+) {
+    if (!user) return
+    const userService = new UserService(user)
+
+    const { user: receiver } = await findOrCreateUserAccount(data.receiverNumber)
+
+    // transfer money to receiver
+    try {
+        const updatedUser = await userService.transferMoneyToAccount(data.amount, receiver)
+
+        // handle all after transaction events
+        return {
+            success: true,
+            user: updatedUser,
+        }
+    } catch (err) {
+        Logger.error("🔥 error: %o", err)
+
+        return {
+            success: false,
+            responseMessage: err.message,
         }
     }
 }

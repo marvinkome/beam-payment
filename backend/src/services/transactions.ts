@@ -5,7 +5,6 @@ type TransactionDataType = {
     transaction_id: string
     amountRecieved: number
     amountPaid: number
-    transactionType: "credit" | "debit"
     from?: IUser
     fromFlutterWave?: boolean
     to?: IUser
@@ -17,7 +16,6 @@ export function storeTransaction(data: TransactionDataType) {
     tx.flutterwave_txId = data.transaction_id
     tx.amount = data.amountRecieved
     tx.fees = parseFloat((data.amountRecieved - data.amountPaid).toFixed(2))
-    tx.transactionType = data.transactionType
 
     if (data.fromFlutterWave) {
         tx.fromFlutterWave = data.fromFlutterWave

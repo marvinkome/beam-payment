@@ -16,10 +16,6 @@ describe("Auth service tests", () => {
         )
     })
 
-    beforeEach(async () => {
-        await User.deleteMany({})
-    })
-
     test("findOrCreateUserAccount", async () => {
         const { user, token } = await findOrCreateUserAccount("+2349087573383", "090101")
 
@@ -57,6 +53,14 @@ describe("Auth service tests", () => {
                 expect(e).toBeDefined()
             }
         })
+
+        afterEach(async () => {
+            await User.deleteMany({})
+        })
+    })
+
+    afterEach(async () => {
+        await User.deleteMany({})
     })
 
     afterAll(async () => {

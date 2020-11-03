@@ -1,16 +1,7 @@
 import User from "models/users"
 import mongoose from "mongoose"
-import { addMoney } from "controllers/users"
+import { addMoney, setPin, transferMoney } from "controllers/users"
 import { storeTransaction } from "services/transactions"
-
-jest.mock("services/authentication", () => ({
-    findOrCreateUserAccount: jest.fn(() =>
-        Promise.resolve({
-            user: { id: 0, phoneNumber: "+2349087573383" },
-            token: "token",
-        })
-    ),
-}))
 
 jest.mock("services/transactions", () => ({
     storeTransaction: jest.fn(() => Promise.resolve({})),
@@ -30,15 +21,23 @@ describe("User controller test", () => {
         )
     })
 
+    test("setPin", async () => {
+        const currentUser = new User({ phoneNumber: "+2349087573381" })
+        const resp = await setPin({ pin: "2020" }, currentUser)
+
+        expect(resp?.success).toBeTruthy()
+        expect(resp?.user?.pin).toBeDefined()
+    })
+
     test("addMoney", async () => {
-        const resp = await addMoney(
-            {
-                tx_id: "123456",
-                tx_ref: "a-ref-1234",
-                amount: 3000,
-            },
-            new User({ phoneNumber: "+2349087573383" })
-        )
+        const currentUser = new User({ phoneNumber: "+2349087573383" })
+        const data = {
+            tx_id: "123456",
+            tx_ref: "a-ref-1234",
+            amount: 3000,
+        }
+
+        const resp = await addMoney(data, currentUser)
 
         expect(resp?.success).toBeTruthy()
         expect(resp?.user?.accountBalance).toBe(3000)
@@ -50,9 +49,38 @@ describe("User controller test", () => {
             transaction_id: "123456",
             amountPaid: 3000,
             amountRecieved: 3017.16,
-            transactionType: "credit",
             fromFlutterWave: true,
         })
+    })
+
+    test("transferMoney", async () => {
+        expect.assertions(2)
+
+        // with no user
+        const currentUser = new User({ phoneNumber: "+2349087573381", accountBalance: 550 })
+        const data = { amount: 500, receiverNumber: "+2349087573383" }
+
+        const resp = await transferMoney(data, currentUser)
+
+        expect(resp?.success).toBeTruthy()
+        expect(resp?.user?.accountBalance).toBe(45)
+    })
+
+    test("transferMoney - error", async () => {
+        expect.assertions(2)
+
+        // with no user
+        const currentUser = new User({ phoneNumber: "+2349087573381", accountBalance: 450 })
+        const data = { amount: 500, receiverNumber: "+2349087573383" }
+
+        const resp = await transferMoney(data, currentUser)
+
+        expect(resp?.success).toBeFalsy()
+        expect(resp?.responseMessage).toBe("Insufficient funds")
+    })
+
+    afterEach(async () => {
+        await User.deleteMany({})
     })
 
     afterAll(async () => {

@@ -7,7 +7,6 @@ export interface ITransaction extends Document {
     fromFlutterWave?: boolean
     to?: string | Schema.Types.ObjectId | IUser // user
     toBank?: string
-    transactionType: "credit" | "debit"
     amount: number
     fees: number
 }
@@ -28,12 +27,6 @@ const transactionSchema: Schema<ITransaction> = new Schema(
         fees: {
             min: 0,
             type: Number,
-            required: true,
-        },
-
-        transactionType: {
-            type: String,
-            enum: ["credit", "debit"],
             required: true,
         },
 

@@ -180,6 +180,75 @@ describe("Mutation", () => {
             expect(response.data?.addMoney.user.accountBalance).toBe(500)
         })
     })
+
+    describe("transferMoney", () => {
+        test("success", async () => {
+            const server = constructTestServer({
+                context: () => ({
+                    currentUser: new User({ phoneNumber: "+2349087573383", accountBalance: 550 }),
+                }),
+            })
+
+            const { mutate } = createTestClient(server)
+
+            const response = await mutate({
+                mutation: gql`
+                    mutation TransferMoney($amount: Float!, $receiverNumber: String!) {
+                        transferMoney(amount: $amount, receiverNumber: $receiverNumber) {
+                            success
+                            responseMessage
+                            user {
+                                id
+                                accountBalance
+                            }
+                        }
+                    }
+                `,
+                variables: {
+                    amount: 500,
+                    receiverNumber: "+2349087673383",
+                },
+            })
+
+            expect(response.errors).toBeUndefined()
+            expect(response.data?.transferMoney.success).toBeTruthy()
+            expect(response.data?.transferMoney.responseMessage).toBe(null)
+            expect(response.data?.transferMoney.user.accountBalance).toBe(45)
+        })
+
+        test("error", async () => {
+            const server = constructTestServer({
+                context: () => ({
+                    currentUser: new User({ phoneNumber: "+2349087573384", accountBalance: 550 }),
+                }),
+            })
+
+            const { mutate } = createTestClient(server)
+
+            const response = await mutate({
+                mutation: gql`
+                    mutation TransferMoney($amount: Float!, $receiverNumber: String!) {
+                        transferMoney(amount: $amount, receiverNumber: $receiverNumber) {
+                            success
+                            responseMessage
+                            user {
+                                id
+                                accountBalance
+                            }
+                        }
+                    }
+                `,
+                variables: {
+                    amount: 600,
+                    receiverNumber: "+2349087573389",
+                },
+            })
+
+            expect(response.errors).toBeUndefined()
+            expect(response.data?.transferMoney.success).toBeFalsy()
+            expect(response.data?.transferMoney.responseMessage).toBe("Insufficient funds")
+        })
+    })
 })
 
 describe("Query", () => {
@@ -212,5 +281,6 @@ describe("Query", () => {
 })
 
 afterAll(async () => {
+    await User.deleteMany({})
     await mongoose.disconnect()
 })

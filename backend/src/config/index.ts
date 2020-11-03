@@ -22,6 +22,7 @@ export default {
     // transaction fees
     transactionFees: {
         depositFee: 0.02,
+        smsFee: 5,
     },
 
     // logs

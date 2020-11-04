@@ -76,6 +76,7 @@ sandbox
 .env.development.local
 .env.test.local
 .env.production.local
+globalConfig.json
 
 npm-debug.log*
 yarn-debug.log*

@@ -7,7 +7,4 @@ export const transferEvent = new EventEmitter()
 transferEvent.on("transfer", async (sender: IUser, receiver: IUser, amount: number) => {
     // sent credit alert to receiver
     await NotificationService.sendCreditAlert(receiver, amount, sender)
-
-    // send debit alert to sender
-    await NotificationService.sendDebitAlert(sender, amount, receiver)
 })

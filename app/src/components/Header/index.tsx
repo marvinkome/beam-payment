@@ -33,7 +33,9 @@ export function Header() {
                 <Coin width={20} />
 
                 <Text testID="accountBalance" h3 style={styles.accountBalanceText}>
-                    {loading ? 0 : formatCurrency(data?.me?.accountBalance) || 0}
+                    {loading || !data?.me?.accountBalance
+                        ? 0
+                        : formatCurrency(data?.me?.accountBalance)}
                 </Text>
             </View>
         </View>

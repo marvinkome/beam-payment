@@ -10,6 +10,9 @@ export const colorTheme = {
     black: "#32294D",
     textLight: "hsla(255, 31%, 23%, 0.5)",
     grey: "#E8EAED",
+
+    green: "#44CC00",
+    red: "#DB7E75",
 }
 
 export const ElementsTheme: Theme = {

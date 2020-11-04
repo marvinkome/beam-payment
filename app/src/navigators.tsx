@@ -18,6 +18,7 @@ import { VerifyPhone } from "screens/VerifyPhone"
 import { SetPin } from "screens/SetPin"
 import { AddMoney } from "screens/AddMoney"
 import { Transfer } from "screens/Transfer"
+import { TransactionHistory } from "screens/TransactionHistory"
 
 const EmptyScreen = () => (
     <View>
@@ -28,7 +29,9 @@ const EmptyScreen = () => (
 const TransferTab = createMaterialTopTabNavigator()
 function TransferTabNavigator() {
     return (
-        <TransferTab.Navigator tabBar={(props) => <TabBar {...props} />}>
+        <TransferTab.Navigator
+            initialRouteName={routes.main.transferTab.transactionHistory}
+            tabBar={(props) => <TabBar {...props} />}>
             <TransferTab.Screen
                 name={routes.main.transferTab.transfer}
                 component={Transfer}
@@ -42,7 +45,7 @@ function TransferTabNavigator() {
 
             <TransferTab.Screen
                 name={routes.main.transferTab.transactionHistory}
-                component={EmptyScreen}
+                component={TransactionHistory}
                 options={{
                     title: "History",
                     tabBarIcon: ({ color }) => (
@@ -153,7 +156,7 @@ export function RootNavigator() {
 
     return (
         <RootStack.Navigator headerMode="none">
-            {authContext?.isLoggedIn ? (
+            {!authContext?.isLoggedIn ? (
                 <RootStack.Screen name={routes.main.index} component={MainStackNavigator} />
             ) : (
                 <RootStack.Screen name={routes.public.index} component={PublicStackNavigator} />

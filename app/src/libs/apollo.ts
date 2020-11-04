@@ -1,17 +1,16 @@
-import AsyncStorage from "@react-native-async-storage/async-storage"
 import { ApolloClient, InMemoryCache, createHttpLink, from } from "@apollo/client"
 import { onError } from "@apollo/client/link/error"
 import { setContext } from "@apollo/client/link/context"
-import { API_URL, AUTH_TOKEN } from "./keys"
-import { navigate } from "./navigator"
+import { API_URL } from "./keys"
 import { authToken } from "store/authStore"
 
-export async function apolloSetup() {
+export async function apolloSetup(signOut: () => void) {
     const errorLink = onError(({ graphQLErrors }) => {
         if (graphQLErrors) {
             const err = graphQLErrors[0].message
             if (err === "Unauthenticated") {
-                navigate("SignUp")
+                console.log(err)
+                signOut()
             }
         }
     })

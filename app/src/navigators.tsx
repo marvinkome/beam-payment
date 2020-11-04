@@ -153,7 +153,7 @@ export function RootNavigator() {
 
     return (
         <RootStack.Navigator headerMode="none">
-            {!authContext?.isLoggedIn ? (
+            {authContext?.isLoggedIn ? (
                 <RootStack.Screen name={routes.main.index} component={MainStackNavigator} />
             ) : (
                 <RootStack.Screen name={routes.public.index} component={PublicStackNavigator} />

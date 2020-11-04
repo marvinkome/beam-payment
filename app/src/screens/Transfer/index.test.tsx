@@ -1,6 +1,9 @@
 import React from "react"
-import { fireEvent, render } from "@testing-library/react-native"
+import { MockedProvider } from "@apollo/client/testing"
+import { Alert } from "react-native"
+import { fireEvent, render, waitFor } from "@testing-library/react-native"
 import { TransferScreen } from "./Transfer"
+import { Transfer, TRANSER_MONEY } from "./index"
 
 describe("Transfer", () => {
     test("<TranserScreen />", () => {
@@ -27,6 +30,9 @@ describe("Transfer", () => {
         fireEvent.changeText(queries.getByPlaceholderText("Enter phone number"), "07037276587")
         expect(onChangeReceiverNumber).toHaveBeenCalled()
 
+        fireEvent.press(queries.getByText("Send money"))
+        expect(onContinue).not.toHaveBeenCalled()
+
         queries.update(
             <TransferScreen
                 loading={false}
@@ -41,5 +47,45 @@ describe("Transfer", () => {
         // test submit
         fireEvent.press(queries.getByText("Send money"))
         expect(onContinue).toHaveBeenCalled()
+    })
+
+    test("<Transfer />", async () => {
+        const mock = {
+            request: {
+                query: TRANSER_MONEY,
+                variables: {
+                    amount: 500,
+                    receiverNumber: "+2349087573383",
+                },
+            },
+            result: {
+                data: {
+                    transferMoney: {
+                        success: true,
+                        responseMessage: null,
+                        user: {
+                            id: "user_id",
+                            accountBalance: 400,
+                        },
+                    },
+                },
+            },
+        }
+
+        const queries = render(
+            <MockedProvider mocks={[mock]} addTypename={false}>
+                <Transfer />
+            </MockedProvider>,
+        )
+
+        fireEvent.changeText(queries.getByPlaceholderText("Enter amount"), "500")
+
+        fireEvent.changeText(queries.getByPlaceholderText("Enter phone number"), "09087573383")
+
+        fireEvent.press(queries.getByText("Send money"))
+
+        await waitFor(() => {
+            expect(Alert.alert).toBeCalledWith("Success!", "Money has been sent to +2349087573383")
+        })
     })
 })

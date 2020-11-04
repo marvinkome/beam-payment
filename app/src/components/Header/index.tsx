@@ -7,6 +7,7 @@ import { StackHeaderProps } from "@react-navigation/stack"
 import { Text } from "react-native-elements"
 import { colorTheme } from "styles/theme"
 import { fonts } from "styles/fonts"
+import { formatCurrency } from "libs/helpers"
 
 export const GET_ACCOUNT_BALANCE = gql`
     query AccountBalance {
@@ -32,7 +33,7 @@ export function Header() {
                 <Coin width={20} />
 
                 <Text testID="accountBalance" h3 style={styles.accountBalanceText}>
-                    {loading ? 0 : data?.me?.accountBalance || 0}
+                    {loading ? 0 : formatCurrency(data?.me?.accountBalance) || 0}
                 </Text>
             </View>
         </View>

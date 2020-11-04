@@ -9,6 +9,15 @@ export function useAppSetup() {
     const [hasPublicDetails, setHasPublicDetails] = useState(false)
     const [apolloClient, setApolloClient] = useState<any>(null)
 
+    const authContext = {
+        signIn: () => setLoggedIn(true),
+        signOut: () => {
+            setLoggedIn(false)
+        }, // TODO:: remove token and public details after sign out
+        isLoggedIn,
+        hasPublicDetails,
+    }
+
     useEffect(() => {
         // run async tasks
         const init = async () => {
@@ -18,7 +27,7 @@ export function useAppSetup() {
             }
 
             // setup apollo
-            const { client } = await apolloSetup()
+            const { client } = await apolloSetup(authContext.signOut)
 
             setApolloClient(client)
 
@@ -28,13 +37,6 @@ export function useAppSetup() {
 
         init()
     }, [])
-
-    const authContext = {
-        signIn: () => setLoggedIn(true),
-        signOut: () => setLoggedIn(false), // TODO:: remove token and public details after sign out
-        isLoggedIn,
-        hasPublicDetails,
-    }
 
     return {
         isLoading,

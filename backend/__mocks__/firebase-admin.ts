@@ -5,10 +5,18 @@ const verifyIdToken = jest.fn(() => {
     })
 })
 
+const sendNotif = jest.fn(() => {
+    return Promise.resolve()
+})
+
 const firebaseAdmin = jest.createMockFromModule<any>("firebase-admin")
 
 firebaseAdmin.auth = jest.fn(() => {
     return { verifyIdToken }
+})
+
+firebaseAdmin.messaging = jest.fn(() => {
+    return { send: sendNotif }
 })
 
 module.exports = firebaseAdmin

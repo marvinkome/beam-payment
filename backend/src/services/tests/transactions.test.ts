@@ -2,7 +2,7 @@ import User from "models/users"
 import mongoose from "mongoose"
 import { storeTransaction } from "services/transactions"
 
-describe("User service tests", () => {
+describe("Transactions tests", () => {
     beforeAll(async () => {
         await mongoose.connect(
             process.env.MONGO_URL || "",

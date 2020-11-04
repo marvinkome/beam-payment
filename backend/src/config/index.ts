@@ -19,6 +19,11 @@ export default {
     flutterwavePublicKey: process.env.FLUTTERWAVE_KEY || "",
     flutterwaveSecretKey: process.env.FLUTTERWAVE_SECRET_KEY || "",
 
+    // africastalking
+    africasTalkingAPIKey: process.env.AFRICASTALKING_API_KEY || "",
+    africasTalkingUsername: process.env.AFRICASTALKING_USERNAME || "",
+    africasTalkingSender: "Beam",
+
     // transaction fees
     transactionFees: {
         depositFee: 0.02,

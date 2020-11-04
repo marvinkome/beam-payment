@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { useNavigation } from "@react-navigation/native"
 import { gql, useMutation } from "@apollo/client"
 import { SetPinScreen } from "./SetPin"
-import { ToastAndroid } from "react-native"
+import { Alert } from "react-native"
 import { routes } from "libs/navigator"
 
 export const SAVE_PIN = gql`
@@ -32,13 +32,13 @@ function useSavePin() {
                 const { success, responseMessage } = savePinResp?.data?.setPin
 
                 if (!success) {
-                    return ToastAndroid.show(responseMessage, ToastAndroid.SHORT)
+                    return Alert.alert("Error!", responseMessage)
                 }
 
                 navigate(routes.main.onboarding.addMoney)
             } catch (e) {
                 console.log(e)
-                ToastAndroid.show("Error saving pin. Try again", ToastAndroid.SHORT)
+                Alert.alert("Error!", "Error saving pin. Try again")
             }
         },
     }

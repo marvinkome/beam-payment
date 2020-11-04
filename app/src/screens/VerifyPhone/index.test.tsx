@@ -1,7 +1,7 @@
 import React from "react"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { MockedProvider } from "@apollo/client/testing"
-import { ToastAndroid } from "react-native"
+import { Alert } from "react-native"
 import { AuthContext } from "libs/auth-context"
 import { fireEvent, render, waitFor } from "@testing-library/react-native"
 import { authToken, smsConfirmationObj } from "store/authStore"
@@ -78,7 +78,7 @@ describe("Verify phone page tests", () => {
             expect(confirm).toHaveBeenCalledWith("202020")
             expect(authToken).toHaveBeenCalledWith("token")
             expect(AsyncStorage.setItem).toHaveBeenCalledWith(USER_PUB_DETAIL, "+234913498619")
-            expect(ToastAndroid.show).not.toHaveBeenCalled()
+            expect(Alert.alert).not.toHaveBeenCalled()
         })
 
         test("registration error case", async () => {
@@ -113,7 +113,7 @@ describe("Verify phone page tests", () => {
             fireEvent.press(queries.getByText("Continue"))
 
             await waitFor(() => {
-                expect(ToastAndroid.show).toBeCalledWith("Error authenticating account", 0)
+                expect(Alert.alert).toBeCalledWith("Error!", "Error authenticating account")
             })
 
             expect(confirm).toHaveBeenCalledWith("202020")

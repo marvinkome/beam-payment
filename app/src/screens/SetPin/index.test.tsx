@@ -1,7 +1,7 @@
 import React from "react"
 import { useNavigation } from "@react-navigation/native"
 import { AuthContext } from "libs/auth-context"
-import { ToastAndroid } from "react-native"
+import { Alert } from "react-native"
 import { MockedProvider } from "@apollo/client/testing"
 import { fireEvent, render, waitFor } from "@testing-library/react-native"
 import { SAVE_PIN, SetPin } from "./index"
@@ -80,7 +80,7 @@ describe("SetPin page tests", () => {
             fireEvent.press(queries.getByText("Continue"))
 
             await waitFor(() => {
-                expect(ToastAndroid.show).toBeCalledWith("Error saving pin. Please try again", 0)
+                expect(Alert.alert).toBeCalledWith("Error!", "Error saving pin. Please try again")
             })
         })
     })

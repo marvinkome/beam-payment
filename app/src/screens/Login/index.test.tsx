@@ -5,7 +5,7 @@ import { LOGIN_MUT } from "hooks/login"
 import { USER_PUB_DETAIL } from "libs/keys"
 import { MockedProvider } from "@apollo/client/testing"
 import { AuthContext } from "libs/auth-context"
-import { ToastAndroid } from "react-native"
+import { Alert } from "react-native"
 import { authToken } from "store/authStore"
 import { LoginScreen } from "./Login"
 import { Login } from "./index"
@@ -65,7 +65,7 @@ describe("Login page", () => {
             })
 
             expect(authToken).toHaveBeenCalledWith("token")
-            expect(ToastAndroid.show).not.toHaveBeenCalled()
+            expect(Alert.alert).not.toHaveBeenCalled()
         })
 
         test("login error case", async () => {
@@ -99,7 +99,7 @@ describe("Login page", () => {
             fireEvent.press(queries.getByText("Continue"))
 
             await waitFor(() => {
-                expect(ToastAndroid.show).toBeCalledWith("Invalid code. Please try again.", 0)
+                expect(Alert.alert).toBeCalledWith("Error!", "Invalid code. Please try again.")
             })
         })
     })

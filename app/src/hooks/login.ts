@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
 import { useContext } from "react"
 import { AuthContext } from "libs/auth-context"
 import { gql, useMutation } from "@apollo/client"
-import { ToastAndroid } from "react-native"
+import { Alert } from "react-native"
 import { authToken } from "store/authStore"
 import { USER_PUB_DETAIL } from "libs/keys"
 
@@ -36,14 +36,14 @@ export function useAuthentication() {
         } catch (err) {
             // TODO:: sentry - track failed signup
             console.log(err)
-            return ToastAndroid.show("Failed to sign in", ToastAndroid.SHORT)
+            return Alert.alert("Error!", "Failed to sign in")
         }
 
         const { token, success, responseMessage } = loginResp?.data?.authenticateUser
 
         if (!success) {
             // TODO:: sentry - track failed signup
-            return ToastAndroid.show(responseMessage, ToastAndroid.SHORT)
+            return Alert.alert("Error!", responseMessage)
         }
 
         // setup user data
@@ -91,14 +91,14 @@ export function useLogin() {
         } catch (err) {
             // TODO:: sentry - track failed signup
             console.log(err)
-            return ToastAndroid.show("Failed to sign in", ToastAndroid.SHORT)
+            return Alert.alert("Error!", "Failed to sign in")
         }
 
         const { token, success, responseMessage } = loginResp?.data?.loginUser
 
         if (!success) {
             // TODO:: sentry - track failed signup
-            return ToastAndroid.show(responseMessage, ToastAndroid.SHORT)
+            return Alert.alert("Error!", responseMessage)
         }
 
         // setup user data

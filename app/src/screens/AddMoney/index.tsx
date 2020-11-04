@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import shortid from "shortid"
 import { gql, useMutation } from "@apollo/client"
 import { useNavigation, useRoute } from "@react-navigation/native"
-import { ToastAndroid } from "react-native"
+import { Alert } from "react-native"
 import { PayWithFlutterwave } from "flutterwave-react-native"
 import { CustomButtonProps } from "flutterwave-react-native/dist/PaywithFlutterwaveBase"
 import { RedirectParams } from "flutterwave-react-native/dist/PayWithFlutterwave"
@@ -34,7 +34,7 @@ export function useAddMoneyToUserAccount() {
         addingMoney,
         addMoney: async (params: RedirectParams, amount: string) => {
             if (params.status !== "successful") {
-                return ToastAndroid.show("Transaction failed. Please try again", ToastAndroid.SHORT)
+                return Alert.alert("Error!", "Transaction failed. Please try again")
             }
 
             setAddingMoney(true)
@@ -54,7 +54,7 @@ export function useAddMoneyToUserAccount() {
 
                 if (!success) {
                     setAddingMoney(false)
-                    return ToastAndroid.show(responseMessage, ToastAndroid.SHORT)
+                    return Alert.alert("Error!", responseMessage)
                 }
 
                 setAddingMoney(false)
@@ -69,7 +69,7 @@ export function useAddMoneyToUserAccount() {
                 }
             } catch (err) {
                 setAddingMoney(false)
-                return ToastAndroid.show("Failed to credit account", ToastAndroid.SHORT)
+                return Alert.alert("Error!", "Failed to credit account")
             }
         },
     }

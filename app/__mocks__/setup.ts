@@ -1,7 +1,4 @@
-import { ToastAndroid, Alert } from "react-native"
-
-ToastAndroid.SHORT = 0
-ToastAndroid.show = jest.fn()
+import { Alert } from "react-native"
 
 Alert.alert = jest.fn()
 

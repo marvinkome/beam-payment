@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import auth from "@react-native-firebase/auth"
-import { ToastAndroid } from "react-native"
+import { Alert } from "react-native"
 import { smsConfirmationObj } from "store/authStore"
 import { useAuthentication } from "hooks/login"
 import { VerifyPhoneScreen } from "./VerifyPhone"
@@ -26,7 +26,7 @@ export function VerifyPhone() {
             setVerifingCode(false)
         } catch (e) {
             setVerifingCode(false)
-            ToastAndroid.show("Invalid code", ToastAndroid.SHORT)
+            Alert.alert("Error!", "Invalid code")
         }
     }
 

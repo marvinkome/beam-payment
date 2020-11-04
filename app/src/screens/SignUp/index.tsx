@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import auth from "@react-native-firebase/auth"
-import { ToastAndroid } from "react-native"
+import { Alert } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { escapePhoneNumber } from "libs/helpers"
 import { smsConfirmationObj } from "store/authStore"
@@ -29,7 +29,7 @@ export function SignUp() {
             navigate(routes.public.verifyPhone)
         } catch (e) {
             setSendingSms(false)
-            ToastAndroid.show("Please use a correct phone number", ToastAndroid.SHORT)
+            Alert.alert("Error!", "Please use a correct phone number")
         }
     }
 

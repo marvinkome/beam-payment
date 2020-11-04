@@ -2,7 +2,7 @@ import { Schema, Document, model } from "mongoose"
 import { IUser } from "./users"
 
 export interface ITransaction extends Document {
-    flutterwave_txId: string
+    transactionId: string
     from?: string | Schema.Types.ObjectId | IUser // user
     fromFlutterWave?: boolean
     to?: string | Schema.Types.ObjectId | IUser // user
@@ -13,7 +13,7 @@ export interface ITransaction extends Document {
 
 const transactionSchema: Schema<ITransaction> = new Schema(
     {
-        flutterwave_txId: {
+        transactionId: {
             type: String,
             required: true,
         },

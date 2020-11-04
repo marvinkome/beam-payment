@@ -13,7 +13,7 @@ type TransactionDataType = {
 export function storeTransaction(data: TransactionDataType) {
     const tx = new Transaction()
 
-    tx.flutterwave_txId = data.transaction_id
+    tx.transactionId = data.transaction_id
     tx.amount = data.amountRecieved
     tx.fees = parseFloat((data.amountRecieved - data.amountPaid).toFixed(2))
 

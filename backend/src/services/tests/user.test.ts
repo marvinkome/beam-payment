@@ -77,6 +77,7 @@ describe("User service tests", () => {
     })
 
     afterAll(async () => {
+        await mongoose.connection.db.dropDatabase()
         await mongoose.disconnect()
     })
 })

@@ -29,7 +29,7 @@ describe("Transactions tests", () => {
     })
 
     afterAll(async () => {
-        await User.deleteMany({})
+        await mongoose.connection.db.dropDatabase()
         await mongoose.disconnect()
     })
 })

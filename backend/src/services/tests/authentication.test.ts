@@ -26,8 +26,7 @@ describe("Auth service tests", () => {
 
     describe("findAndVerifyAccount", () => {
         beforeEach(async () => {
-            const user = new User({ phoneNumber: "+2349087573383", pin: "2020" })
-            await user.save()
+            await new User({ phoneNumber: "+2349087573383", pin: "2020" }).save()
         })
 
         test("should work correctly", async () => {
@@ -60,7 +59,7 @@ describe("Auth service tests", () => {
     })
 
     afterEach(async () => {
-        await User.deleteMany({})
+        await mongoose.connection.db.dropDatabase()
     })
 
     afterAll(async () => {

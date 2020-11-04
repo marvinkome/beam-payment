@@ -73,11 +73,10 @@ describe("User service tests", () => {
     })
 
     afterEach(async () => {
-        await User.deleteMany({})
+        await mongoose.connection.db.dropDatabase()
     })
 
     afterAll(async () => {
-        await mongoose.connection.db.dropDatabase()
         await mongoose.disconnect()
     })
 })

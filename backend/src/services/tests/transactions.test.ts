@@ -28,8 +28,11 @@ describe("Transactions tests", () => {
         expect(tx.fees).toBe(8.58)
     })
 
-    afterAll(async () => {
+    afterEach(async () => {
         await mongoose.connection.db.dropDatabase()
+    })
+
+    afterAll(async () => {
         await mongoose.disconnect()
     })
 })

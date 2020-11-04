@@ -250,8 +250,11 @@ describe("Mutation", () => {
         })
     })
 
-    afterAll(async () => {
+    afterEach(async () => {
         await mongoose.connection.db.dropDatabase()
+    })
+
+    afterAll(async () => {
         await mongoose.disconnect()
     })
 })

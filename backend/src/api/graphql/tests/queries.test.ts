@@ -48,7 +48,7 @@ describe("Query", () => {
         expect(response.data?.me.accountSetupState).toBe("SET_PIN")
     })
 
-    test.only("transactionHistory", async () => {
+    test("transactionHistory", async () => {
         const currentUser = await new User({ phoneNumber: "+2349087573383" }).save()
         const user1 = await new User({ phoneNumber: "+2349087573393" }).save()
         const user2 = await new User({ phoneNumber: "+2349087573313" }).save()
@@ -123,8 +123,11 @@ describe("Query", () => {
         expect(response.data?.transactionHistory[2].between).toBe(null)
     })
 
-    afterAll(async () => {
+    afterEach(async () => {
         await mongoose.connection.db.dropDatabase()
+    })
+
+    afterAll(async () => {
         await mongoose.disconnect()
     })
 })

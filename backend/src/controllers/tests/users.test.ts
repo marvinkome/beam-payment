@@ -80,7 +80,7 @@ describe("User controller test", () => {
     })
 
     afterEach(async () => {
-        await User.deleteMany({})
+        await mongoose.connection.db.dropDatabase()
     })
 
     afterAll(async () => {

@@ -19,6 +19,7 @@ import { SetPin } from "screens/SetPin"
 import { AddMoney } from "screens/AddMoney"
 import { Transfer } from "screens/Transfer"
 import { TransactionHistory } from "screens/TransactionHistory"
+import { CashSettings } from "screens/CashSettings"
 
 const EmptyScreen = () => (
     <View>
@@ -87,7 +88,8 @@ function MainStackNavigator() {
         header: (props) => <Header />,
     }
 
-    const initialRoute = isNewAccount ? routes.main.onboarding.index : "TransferTab"
+    // const initialRoute = isNewAccount ? routes.main.onboarding.index : routes.main.transferTab.index
+    const initialRoute = routes.main.cashSettings
     return (
         <MainStack.Navigator screenOptions={options} initialRouteName={initialRoute}>
             <MainStack.Screen
@@ -98,7 +100,7 @@ function MainStackNavigator() {
                 name={routes.main.transferTab.index}
                 component={TransferTabNavigator}
             />
-            <MainStack.Screen name="DepositWithdraw" component={EmptyScreen} />
+            <MainStack.Screen name={routes.main.cashSettings} component={CashSettings} />
             <MainStack.Screen name="AddMoney" component={AddMoney} />
             <MainStack.Screen name="Withdraw" component={EmptyScreen} />
             <MainStack.Screen name="WithdrawSettings" component={EmptyScreen} />
@@ -154,7 +156,7 @@ export function RootNavigator() {
 
     return (
         <RootStack.Navigator headerMode="none">
-            {authContext?.isLoggedIn ? (
+            {!authContext?.isLoggedIn ? (
                 <RootStack.Screen name={routes.main.index} component={MainStackNavigator} />
             ) : (
                 <RootStack.Screen name={routes.public.index} component={PublicStackNavigator} />

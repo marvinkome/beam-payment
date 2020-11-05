@@ -8,7 +8,7 @@ import { colorTheme } from "styles/theme"
 type IProps = {
     id: string
     amount: number
-    between: string
+    between?: string
     type: "debit" | "credit"
     timestamp: string
 }
@@ -26,7 +26,9 @@ export function HistoryItem(props: IProps) {
                     style={{ ...styles.amountText, ...amountColor }}>
                     NGN {formatCurrency(props.amount)}
                 </Text>
-                <Text style={styles.phoneNumber}>{parsePhoneNumber(props.between)}</Text>
+                {props.between && (
+                    <Text style={styles.phoneNumber}>{parsePhoneNumber(props.between)}</Text>
+                )}
             </View>
 
             <Text style={{ color: colorTheme.textLight }}>{formatDate(props.timestamp)}</Text>

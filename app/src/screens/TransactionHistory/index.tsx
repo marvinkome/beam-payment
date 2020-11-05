@@ -32,7 +32,7 @@ export function TransactionHistory() {
         let item = {
             id: history.id,
             amount: history.amount,
-            between: history.between?.phoneNumber || "",
+            between: history.between?.phoneNumber,
             type: history.transactionType.toLowerCase(),
             timestamp: history.createdAt,
         }

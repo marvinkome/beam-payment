@@ -8,7 +8,7 @@
         "build": "yarn test && tsc",
         "start-prod": "node -r module-alias/register -r dotenv/config  ./dist/src/index.js",
         "start": "nodemon --exec ts-node -r dotenv/config -r tsconfig-paths/register src/index.ts",
-        "test": "jest"
+        "test": "jest --runInBand"
     },
     "devDependencies": {
         "@shelf/jest-mongodb": "^1.2.3",

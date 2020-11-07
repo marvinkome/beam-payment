@@ -5,6 +5,7 @@ import { Input, Text } from "react-native-elements"
 import { PickerHeader } from "./PickerHeader"
 import { fonts } from "styles/fonts"
 import { colorTheme } from "styles/theme"
+import { onChange } from "react-native-reanimated"
 
 function filterItems(items: any[], searchText: string) {
     return items.filter(
@@ -12,18 +13,21 @@ function filterItems(items: any[], searchText: string) {
     )
 }
 
+export type PickerValue = { Name: string; Value: string; Id: string }
+
 type IProps = {
     label?: string
     placeholder?: string
     searchPlaceholder?: string
     pickerHeaderTitle?: string
-    data: Array<{ Name: string; Value: string; Id: string }>
+    disabled?: boolean
+    data: Array<PickerValue>
+    value: PickerValue | null
+    onChange: (item: PickerValue) => void
 }
+
 export function Picker(props: IProps) {
     const [searchText, setSearchText] = useState("")
-    const [selected, setSelected] = useState<{ Name: string; Value: string; Id: string } | null>(
-        null,
-    )
     const [isOpen, setIsOpen] = useState(false)
 
     return (
@@ -32,15 +36,16 @@ export function Picker(props: IProps) {
             <Text style={styles.labelText}>{props.label}</Text>
 
             <PickerModal
+                autoSort={true}
+                showToTopButton={false}
                 items={filterItems(props.data, searchText)}
                 onSelected={(item: any) => {
                     setIsOpen(false)
-                    setSelected(item)
+                    props.onChange(item)
                     return item
                 }}
                 ModalProps={{ visible: isOpen, onRequestClose: () => setIsOpen(false) }}
-                autoSort={true}
-                showToTopButton={false}
+                keyExtractor={(item) => `${item.Id}`}
                 renderSearch={(_, close) => (
                     <PickerHeader
                         searchPlaceholder={props.searchPlaceholder}
@@ -52,11 +57,11 @@ export function Picker(props: IProps) {
                 )}
                 renderListItem={(_, item) => <Text style={styles.item}>{item.Name}</Text>}
                 renderSelectView={() => (
-                    <TouchableOpacity onPress={() => setIsOpen(true)}>
+                    <TouchableOpacity disabled={props.disabled} onPress={() => setIsOpen(true)}>
                         <Input
                             placeholder={props.placeholder || "Select item"}
                             editable={false}
-                            value={selected?.Name}
+                            value={props.value?.Name}
                         />
                     </TouchableOpacity>
                 )}

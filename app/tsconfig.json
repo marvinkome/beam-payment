@@ -12,6 +12,7 @@
       "lib": ["es6", "dom.iterable"],
       "jsx": "react-native",
       "moduleResolution": "node",
+      "resolveJsonModule": true,
       "baseUrl": ".",
       "paths": {
           "*": ["src/*"],

@@ -1,15 +1,27 @@
 import React from "react"
-import { StyleSheet, View } from "react-native"
+import { ActivityIndicator, StyleSheet, View } from "react-native"
 import { Button, Input, Text } from "react-native-elements"
-import { Picker } from "components/Picker"
+import { Picker, PickerValue } from "components/Picker"
 import { fonts } from "styles/fonts"
 import { colorTheme } from "styles/theme"
 
-const data = Array(50)
-    .fill(0)
-    .map((_, index) => ({ Name: `Index ${index}`, Value: `${index}`, Id: `${index}` }))
+const allBanksJson = require("assets/banks.json")
 
-export function AddBackAccountScreen() {
+type IProps = {
+    accountNumber: string
+    setAccountNumber: (accountNumber: string) => void
+    bank: PickerValue | null
+    setBank: (bank: PickerValue) => void
+
+    loadingAccountDetails?: boolean
+    accountName?: string
+
+    loading?: boolean
+    onContinue: () => void
+}
+export function AddBackAccountScreen(props: IProps) {
+    let buttonDisabled = !!props.accountNumber && props.bank && !!props.accountName
+
     return (
         <View style={styles.container}>
             <Text h2 style={styles.mainText}>
@@ -21,7 +33,9 @@ export function AddBackAccountScreen() {
                 label="Account number:"
                 placeholder="Enter account number"
                 keyboardType="number-pad"
-                value=""
+                value={props.accountNumber}
+                onChangeText={(text) => props.setAccountNumber(text)}
+                disabled={props.loadingAccountDetails}
             />
 
             <Picker
@@ -29,17 +43,35 @@ export function AddBackAccountScreen() {
                 placeholder="Select bank name"
                 pickerHeaderTitle="Select bank"
                 searchPlaceholder="Search bank"
-                data={data}
+                data={allBanksJson.data.map((bank: any) => ({
+                    Name: bank.name,
+                    Value: bank.code,
+                    Id: `${bank.id}`,
+                }))}
+                value={props.bank}
+                onChange={props.setBank}
+                disabled={props.loadingAccountDetails}
             />
 
-            <View style={styles.verificationCard}>
-                <Text style={styles.verificationText}>Bobby Lenny Johnson</Text>
-                <Text style={styles.verificationText}>Guaranty Trust Bank</Text>
-                <Text style={styles.verificationText}>04132546783</Text>
-            </View>
+            {(props.loadingAccountDetails || !!props.accountName) && (
+                <View style={styles.verificationCard}>
+                    {props.loadingAccountDetails ? (
+                        <ActivityIndicator size="small" color={colorTheme.black} />
+                    ) : (
+                        <>
+                            <Text style={styles.verificationText}>{props.accountName}</Text>
+                            <Text style={styles.verificationText}>{props.bank?.Name}</Text>
+                            <Text style={styles.verificationText}>{props.accountNumber}</Text>
+                        </>
+                    )}
+                </View>
+            )}
 
             <View style={styles.footer}>
                 <Button
+                    disabled={!buttonDisabled}
+                    loading={props.loading}
+                    onPress={props.onContinue}
                     titleStyle={{ textTransform: "none", letterSpacing: 0.4 }}
                     title="Add Account"
                 />

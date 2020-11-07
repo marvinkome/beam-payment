@@ -31,12 +31,19 @@ describe("Picker", () => {
     })
 
     test("it renders correctly", () => {
+        const onChange = jest.fn()
         const data = Array(10)
             .fill(0)
             .map((_, index) => ({ Name: `Index ${index}`, Value: `${index}`, Id: `${index}` }))
 
         const queries = render(
-            <Picker label="Test picker:" placeholder="Select item" data={data} />,
+            <Picker
+                label="Test picker:"
+                placeholder="Select item"
+                data={data}
+                value={null}
+                onChange={onChange}
+            />,
         )
 
         expect(queries.UNSAFE_getByType(Modal).props.visible).toBeFalsy()
@@ -45,11 +52,14 @@ describe("Picker", () => {
         fireEvent.press(queries.getByPlaceholderText("Select item"))
 
         expect(queries.UNSAFE_getByType(Modal).props.visible).toBeTruthy()
+        expect(queries.getAllByText(/Index/)).toHaveLength(10)
+        fireEvent.changeText(queries.getByPlaceholderText("Search..."), "Index 9")
+        expect(queries.getAllByText(/Index/)).toHaveLength(1)
 
         fireEvent.press(queries.getByText("Index 9"))
         fireEvent.press(queries.getByA11yLabel("closeBtn"))
 
         expect(queries.UNSAFE_getByType(Modal).props.visible).toBeFalsy()
-        expect(queries.getByDisplayValue("Index 9")).toBeTruthy()
+        expect(onChange).toBeCalledWith({ Name: `Index 9`, Value: `9`, Id: `9` })
     })
 })

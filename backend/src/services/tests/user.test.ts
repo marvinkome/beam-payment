@@ -72,6 +72,20 @@ describe("User service tests", () => {
         expect(receiver.accountBalance).toBe(500)
     })
 
+    test("storeAccountDetails", async () => {
+        const user = await userService?.storeAccountDetails({
+            accNumber: "1234567890",
+            bankName: "GTBank Plc",
+            bankCode: "123",
+        })
+
+        expect(user?.bankDetails).toMatchObject({
+            accountNumber: "1234567890",
+            bankName: "GTBank Plc",
+            bankCode: "123",
+        })
+    })
+
     afterEach(async () => {
         await mongoose.connection.db.dropDatabase()
     })

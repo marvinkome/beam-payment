@@ -1,6 +1,6 @@
 import User from "models/users"
 import mongoose from "mongoose"
-import { addMoney, setPin, transferMoney } from "controllers/users"
+import { addMoney, setPin, storeAccountDetails, transferMoney } from "controllers/users"
 import { storeTransaction } from "services/transactions"
 
 jest.mock("services/transactions", () => ({
@@ -77,6 +77,21 @@ describe("User controller test", () => {
 
         expect(resp?.success).toBeFalsy()
         expect(resp?.responseMessage).toBe("Insufficient funds")
+    })
+
+    test("storeAccountDetails", async () => {
+        const currentUser = new User({ phoneNumber: "+2349087573381" })
+        const resp = await storeAccountDetails(
+            { accNumber: "0123456789", bankCode: "123", bankName: "GTBank Plc" },
+            currentUser
+        )
+
+        expect(resp?.success).toBeTruthy()
+        expect(resp?.user?.bankDetails).toMatchObject({
+            accountNumber: "0123456789",
+            bankCode: "123",
+            bankName: "GTBank Plc",
+        })
     })
 
     afterEach(async () => {

@@ -1,5 +1,5 @@
-import { transferEvent } from "events/transfer"
 import Logger from "loaders/logger"
+import { transferEvent } from "events/transfer"
 import { IUser } from "models/users"
 import { findOrCreateUserAccount } from "services/authentication"
 import { UserService } from "services/user"
@@ -76,6 +76,29 @@ export async function transferMoney(
         return {
             success: false,
             responseMessage: err.message,
+        }
+    }
+}
+
+export async function storeAccountDetails(
+    data: { accNumber: string; bankName: string; bankCode: string },
+    user: IUser | null
+) {
+    if (!user) return
+    const userService = new UserService(user)
+
+    try {
+        const updatedUser = await userService.storeAccountDetails(data)
+        return {
+            success: true,
+            user: updatedUser,
+        }
+    } catch (err) {
+        Logger.error("🔥 error: %o", err)
+
+        return {
+            success: false,
+            responseMessage: "Something went wrong.",
         }
     }
 }

@@ -1,11 +1,9 @@
 import config from "config"
 import Logger from "loaders/logger"
+import Flutterwave from "loaders/flutterwave"
 import { IUser } from "models/users"
 import { nanoid } from "nanoid"
 import { storeTransaction } from "./transactions"
-
-const Flutterwave = require("flutterwave-node-v3")
-const flw = new Flutterwave(config.flutterwavePublicKey, config.flutterwaveSecretKey)
 
 export class UserService {
     user: IUser
@@ -21,7 +19,7 @@ export class UserService {
 
     async addMoney(data: { tx_id: string; tx_ref: string; amount: number }) {
         // verify transaction
-        const flwResp = await flw.Transaction.verify({ id: data.tx_id })
+        const flwResp = await Flutterwave.Transaction.verify({ id: data.tx_id })
 
         const isInvalid =
             flwResp.status !== "success" ||
@@ -82,5 +80,15 @@ export class UserService {
         })
 
         return this.user
+    }
+
+    async storeAccountDetails(details: { accNumber: string; bankName: string; bankCode: string }) {
+        this.user.bankDetails = {
+            accountNumber: details.accNumber,
+            bankName: details.bankName,
+            bankCode: details.bankCode,
+        }
+
+        return this.user.save()
     }
 }

@@ -8,12 +8,18 @@ export const userTypeDef = gql`
         COMPLETE
     }
 
+    type AccountDetails {
+        accountNumber: String
+        bankName: String
+    }
+
     type User {
         id: ID
         phoneNumber: String
         isNewAccount: Boolean
         accountSetupState: AccountSetupState
         accountBalance: Float
+        bankDetails: AccountDetails
     }
 `
 

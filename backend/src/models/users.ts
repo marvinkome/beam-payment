@@ -7,6 +7,11 @@ export interface IUser extends Document {
     pin?: string
     accountBalance?: number
     notificationToken?: string
+    bankDetails?: {
+        accountNumber: string
+        bankName: string
+        bankCode: string
+    }
     verify_pin: (pin: string) => Promise<boolean>
 }
 
@@ -20,6 +25,12 @@ const userSchema: Schema<IUser> = new Schema(
         accountBalance: {
             min: 0,
             type: Number,
+        },
+
+        bankDetails: {
+            accountNumber: String,
+            bankName: String,
+            bankCode: String,
         },
 
         firebaseId: String,

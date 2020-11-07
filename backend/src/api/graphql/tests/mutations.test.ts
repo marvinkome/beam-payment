@@ -250,6 +250,48 @@ describe("Mutation", () => {
         })
     })
 
+    describe("saveBankDetails", () => {
+        test("success", async () => {
+            const server = constructTestServer({
+                context: () => ({
+                    currentUser: new User({ phoneNumber: "+2349087573383" }),
+                }),
+            })
+
+            const { mutate } = createTestClient(server)
+
+            const response = await mutate({
+                mutation: gql`
+                    mutation SaveBankDetails($data: AccountDetailsInput!) {
+                        saveBankDetails(data: $data) {
+                            success
+                            responseMessage
+                            user {
+                                bankDetails {
+                                    accountNumber
+                                    bankName
+                                }
+                            }
+                        }
+                    }
+                `,
+                variables: {
+                    data: { accNumber: "0123456789", bankCode: "012", bankName: "GTBank Plc" },
+                },
+            })
+
+            expect(response.errors).toBeUndefined()
+            expect(response.data?.saveBankDetails.success).toBeTruthy()
+            expect(response.data?.saveBankDetails.responseMessage).toBe(null)
+            expect(response.data?.saveBankDetails.user).toMatchObject({
+                bankDetails: {
+                    accountNumber: "0123456789",
+                    bankName: "GTBank Plc",
+                },
+            })
+        })
+    })
+
     afterEach(async () => {
         await mongoose.connection.db.dropDatabase()
     })

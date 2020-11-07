@@ -28,7 +28,10 @@ const userSchema: Schema<IUser> = new Schema(
         },
 
         bankDetails: {
-            accountNumber: String,
+            accountNumber: {
+                type: String,
+                maxlength: 10,
+            },
             bankName: String,
             bankCode: String,
         },

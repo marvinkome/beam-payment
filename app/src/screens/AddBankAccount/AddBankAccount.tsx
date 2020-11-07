@@ -17,7 +17,7 @@ type IProps = {
     onContinue: () => void
 }
 export function AddBackAccountScreen(props: IProps) {
-    let buttonDisabled = !!props.accountNumber && props.bank
+    let buttonDisabled = !props.accountNumber && props.accountNumber.length !== 10 && !props.bank
 
     return (
         <View style={styles.container}>
@@ -50,7 +50,7 @@ export function AddBackAccountScreen(props: IProps) {
 
             <View style={styles.footer}>
                 <Button
-                    disabled={!buttonDisabled}
+                    disabled={buttonDisabled}
                     loading={props.loading}
                     onPress={props.onContinue}
                     titleStyle={{ textTransform: "none", letterSpacing: 0.4 }}

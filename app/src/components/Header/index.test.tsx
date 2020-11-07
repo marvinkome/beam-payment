@@ -20,7 +20,10 @@ test("Header", async () => {
 
     const query = render(
         <MockedProvider mocks={[mock]} addTypename={false}>
-            <Header />
+            <>
+                {/* @ts-ignore */}
+                <Header navigation={{ goBack: jest.fn(), previous: undefined }} />
+            </>
         </MockedProvider>,
     )
 

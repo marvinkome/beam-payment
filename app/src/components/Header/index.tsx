@@ -4,7 +4,7 @@ import Coin from "assets/icons/coin.svg"
 import { gql, useQuery } from "@apollo/client"
 import { View, StyleSheet } from "react-native"
 import { StackHeaderProps } from "@react-navigation/stack"
-import { Text } from "react-native-elements"
+import { Text, Icon } from "react-native-elements"
 import { colorTheme } from "styles/theme"
 import { fonts } from "styles/fonts"
 import { formatCurrency } from "libs/helpers"
@@ -21,13 +21,16 @@ function useAccountBalance() {
     return useQuery(GET_ACCOUNT_BALANCE)
 }
 
-// { navigation, previous }: StackHeaderProps
-export function Header() {
+export function Header({ navigation, previous }: StackHeaderProps) {
     const { loading, data } = useAccountBalance()
 
     return (
         <View style={styles.header}>
-            <BeamLogo width={100} />
+            {previous ? (
+                <Icon name="arrow-left" type="feather" size={30} onPress={navigation.goBack} />
+            ) : (
+                <BeamLogo width={100} />
+            )}
 
             <View style={styles.accountBalance}>
                 <Coin width={20} />

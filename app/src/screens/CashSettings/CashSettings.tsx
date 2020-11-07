@@ -1,24 +1,39 @@
 import React from "react"
-import { View, StyleSheet } from "react-native"
+import { useNavigation } from "@react-navigation/native"
+import { ScrollView, View, StyleSheet } from "react-native"
 import { Button, Text } from "react-native-elements"
 import { fonts } from "styles/fonts"
 import { colorTheme } from "styles/theme"
+import { routes } from "libs/navigator"
+import { formatCurrency } from "libs/helpers"
 
-export function CashSettingsScreen() {
+type IProps = {
+    accountBalance: number
+    bankDetails?: {
+        accountNumber: string
+        bankName: string
+    }
+
+    onWithdraw: () => void
+}
+export function CashSettingsScreen(props: IProps) {
+    const { navigate } = useNavigation()
+
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             <View style={styles.card}>
                 <Text h2 style={{ marginBottom: 15 }}>
                     Add money
                 </Text>
 
-                <Text style={styles.cardText}>NGN 20,000</Text>
+                <Text style={styles.cardText}>NGN {formatCurrency(props.accountBalance)}</Text>
 
                 <Button
                     containerStyle={styles.buttonContainer}
                     titleStyle={styles.buttonText}
                     icon={{ name: "plus", type: "feather", color: colorTheme.white, size: 20 }}
                     title="Add money"
+                    onPress={() => navigate(routes.main.addMoney)}
                 />
             </View>
 
@@ -28,9 +43,8 @@ export function CashSettingsScreen() {
                     Take out money
                 </Text>
 
-                <Text style={styles.cardText}>Mohammed Mukhtar</Text>
-                <Text style={styles.cardText}>Ecobank</Text>
-                <Text style={styles.cardText}>04132546783</Text>
+                <Text style={styles.cardText}>{props.bankDetails?.bankName}</Text>
+                <Text style={styles.cardText}>{props.bankDetails?.accountNumber}</Text>
 
                 <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                     <Button
@@ -46,6 +60,7 @@ export function CashSettingsScreen() {
                         }}
                         type="outline"
                         title="Withdraw"
+                        onPress={props.onWithdraw}
                     />
 
                     <Button
@@ -61,12 +76,13 @@ export function CashSettingsScreen() {
                         }}
                         type="outline"
                         title="Change"
+                        onPress={() => navigate(routes.main.addAccount)}
                     />
                 </View>
             </View>
 
             <Text style={styles.footerText}>Need help? Send an email to team@usebeam.com</Text>
-        </View>
+        </ScrollView>
     )
 }
 
@@ -81,9 +97,9 @@ const styles = StyleSheet.create({
         backgroundColor: colorTheme.grey,
         paddingHorizontal: 20,
         paddingVertical: 25,
-        marginBottom: 50,
+        marginBottom: 30,
         borderRadius: 20,
-        elevation: 5,
+        elevation: 3,
     },
 
     cardText: {
@@ -104,6 +120,8 @@ const styles = StyleSheet.create({
 
     footerText: {
         color: colorTheme.primary,
+        fontSize: 16,
+        marginTop: 15,
         ...fonts.semiBold,
     },
 })

@@ -79,11 +79,11 @@ function MainStackNavigator() {
     }
 
     const options: StackNavigationOptions = {
-        header: (props) => <Header />,
+        header: (props) => <Header {...props} />,
     }
 
     // const initialRoute = isNewAccount ? routes.main.onboarding.index : routes.main.transferTab.index
-    const initialRoute = routes.main.addAccount
+    const initialRoute = routes.main.cashSettings
     return (
         <MainStack.Navigator screenOptions={options} initialRouteName={initialRoute}>
             <MainStack.Screen

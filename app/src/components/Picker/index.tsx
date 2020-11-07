@@ -1,54 +1,71 @@
-import React, { useCallback, useMemo, useRef } from "react"
-import BottomSheet, { BottomSheetFlatList } from "@gorhom/bottom-sheet"
+import React, { useState } from "react"
+import PickerModal from "react-native-picker-modal-view"
 import { StyleSheet, TouchableOpacity, View } from "react-native"
 import { Input, Text } from "react-native-elements"
+import { PickerHeader } from "./PickerHeader"
 import { fonts } from "styles/fonts"
 import { colorTheme } from "styles/theme"
 
-const data = Array(50)
-    .fill(0)
-    .map((_, index) => `index-${index}`)
-
-export function usePicker() {
-    const sheetRef = useRef<BottomSheet>(null)
-    const snapPoints = useMemo(() => ["1%", "60%", "90%"], [])
-
-    const PickerAction = () => {
-        return (
-            <View style={styles.pickerActionContainer}>
-                {/* label */}
-                <Text style={styles.labelText}>Bank name:</Text>
-
-                {/* input */}
-                <TouchableOpacity onPress={() => sheetRef.current?.snapTo(1)}>
-                    <Input placeholder="Select bank name" editable={false} />
-                </TouchableOpacity>
-            </View>
-        )
-    }
-
-    const Picker = () => (
-        <View style={{ elevation: 999 }}>
-            <BottomSheet ref={sheetRef} initialSnapIndex={-1} snapPoints={snapPoints}>
-                <BottomSheetFlatList
-                    data={data}
-                    keyExtractor={(i) => i}
-                    contentContainerStyle={{ elevation: 5, backgroundColor: "green" }}
-                    renderItem={({ item }) => (
-                        <View style={{ elevation: 4 }}>
-                            <Text>{item}</Text>
-                        </View>
-                    )}
-                />
-            </BottomSheet>
-        </View>
+function filterItems(items: any[], searchText: string) {
+    return items.filter(
+        (l) => l.Name.toLocaleLowerCase().indexOf(searchText.toLocaleLowerCase()) > -1,
     )
-
-    return { PickerAction, Picker }
 }
 
-export function Picker() {
-    return null
+type IProps = {
+    label?: string
+    placeholder?: string
+    searchPlaceholder?: string
+    pickerHeaderTitle?: string
+    data: Array<{ Name: string; Value: string; Id: string }>
+}
+export function Picker(props: IProps) {
+    const [searchText, setSearchText] = useState("")
+    const [selected, setSelected] = useState<{ Name: string; Value: string; Id: string } | null>(
+        null,
+    )
+    const [isOpen, setIsOpen] = useState(false)
+
+    return (
+        <View style={styles.pickerActionContainer}>
+            {/* label */}
+            <Text style={styles.labelText}>{props.label}</Text>
+
+            <PickerModal
+                items={filterItems(props.data, searchText)}
+                onSelected={(item: any) => {
+                    setIsOpen(false)
+                    setSelected(item)
+                    return item
+                }}
+                ModalProps={{ visible: isOpen, onRequestClose: () => setIsOpen(false) }}
+                autoSort={true}
+                showToTopButton={false}
+                renderSearch={(_, close) => (
+                    <PickerHeader
+                        searchPlaceholder={props.searchPlaceholder}
+                        headerTitle={props.pickerHeaderTitle}
+                        searchText={searchText}
+                        setSearchText={setSearchText}
+                        onClose={close}
+                    />
+                )}
+                renderListItem={(_, item) => <Text style={styles.item}>{item.Name}</Text>}
+                renderSelectView={() => (
+                    <TouchableOpacity onPress={() => setIsOpen(true)}>
+                        <Input
+                            placeholder={props.placeholder || "Select item"}
+                            editable={false}
+                            value={selected?.Name}
+                        />
+                    </TouchableOpacity>
+                )}
+                onClosed={() => setIsOpen(false)}
+                onBackButtonPressed={() => setIsOpen(false)}
+                onEndReached={() => null}
+            />
+        </View>
+    )
 }
 
 const styles = StyleSheet.create({
@@ -61,5 +78,11 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         marginHorizontal: 10,
         ...fonts.semiBold,
+    },
+    item: {
+        paddingHorizontal: 15,
+        paddingVertical: 18,
+        borderBottomWidth: 1,
+        borderBottomColor: colorTheme.grey,
     },
 })

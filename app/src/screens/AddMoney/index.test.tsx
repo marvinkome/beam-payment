@@ -9,6 +9,7 @@ import { MockedProvider } from "@apollo/client/testing"
 import { Amount } from "./Amount"
 import { AddMoneyScreen } from "./AddMoney"
 import { AddMoney, ADD_MONEY } from "./index"
+import { routes } from "libs/navigator"
 
 describe("AddMoney", () => {
     test("<Amount />", () => {
@@ -123,7 +124,7 @@ describe("AddMoney", () => {
     test("<AddMoney /> - main screen", async () => {
         // @ts-ignore
         useRoute.mockImplementation(() => ({
-            name: "AddMoney",
+            name: routes.main.addMoney,
         }))
 
         const mock = {

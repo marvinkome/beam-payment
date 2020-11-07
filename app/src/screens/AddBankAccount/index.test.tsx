@@ -1,27 +1,47 @@
 import React from "react"
-import axios from "axios"
-import { fireEvent, render } from "@testing-library/react-native"
+import { Alert } from "react-native"
+import { MockedProvider } from "@apollo/client/testing"
+import { fireEvent, render, waitFor } from "@testing-library/react-native"
 import { AddBackAccountScreen } from "./AddBankAccount"
-import { AddBankAccount } from "./index"
-
-jest.mock("axios")
+import { AddBankAccount, ADD_BANK_ACCOUNT } from "./index"
+import { useNavigation } from "@react-navigation/native"
 
 describe("AddBankAccount", () => {
-    test("<AddBankAccount />", () => {
+    test("<AddBankAccount />", async () => {
         // setup
-        // @ts-ignore
-        axios.get.mockResolvedValue({
-            data: {
-                status: "success",
-                message: "Account details fetched",
-                data: {
-                    account_number: "0123456789",
-                    account_name: "Test User",
+        const mock = {
+            request: {
+                query: ADD_BANK_ACCOUNT,
+                variables: {
+                    data: {
+                        accNumber: "0123456789",
+                        bankCode: "058",
+                        bankName: "GTBank Plc",
+                    },
                 },
             },
-        })
+            result: {
+                data: {
+                    saveBankDetails: {
+                        success: true,
+                        responseMessage: null,
+                        user: {
+                            id: "user_id",
+                            bankDetails: {
+                                accountNumber: "0123456789",
+                                bankName: "GTBank Plc",
+                            },
+                        },
+                    },
+                },
+            },
+        }
 
-        const screen = render(<AddBankAccount />)
+        const screen = render(
+            <MockedProvider mocks={[mock]} addTypename={false}>
+                <AddBankAccount />
+            </MockedProvider>,
+        )
 
         // add account number and bank name
         fireEvent.changeText(screen.getByPlaceholderText("Enter account number"), "0123456789")
@@ -30,7 +50,12 @@ describe("AddBankAccount", () => {
         fireEvent.press(screen.getByText("GTBank Plc"))
         fireEvent.press(screen.getByA11yLabel("closeBtn"))
 
-        //
+        fireEvent.press(screen.getByText("Add Account"))
+
+        await waitFor(() => {
+            expect(Alert.alert).not.toBeCalled()
+            expect(useNavigation().goBack).toBeCalled()
+        })
     })
 
     test("<AddBankAccountScreen />", () => {

@@ -64,7 +64,7 @@ export function useAddMoneyToUserAccount() {
                 if (route.name === routes.main.onboarding.addMoney) {
                     navigation.navigate(routes.main.transferTab.index)
                     // TODO:: use routes const
-                } else if (route.name === "AddMoney") {
+                } else if (route.name === routes.main.addMoney) {
                     navigation.goBack()
                 }
             } catch (err) {

@@ -1,5 +1,4 @@
 import React, { useContext } from "react"
-import { View, Text } from "react-native"
 import { TabBar } from "components/TabBar"
 import { Header } from "components/Header"
 import { Loader } from "components/Loader"
@@ -20,12 +19,7 @@ import { AddMoney } from "screens/AddMoney"
 import { Transfer } from "screens/Transfer"
 import { TransactionHistory } from "screens/TransactionHistory"
 import { CashSettings } from "screens/CashSettings"
-
-const EmptyScreen = () => (
-    <View>
-        <Text>Empty screen</Text>
-    </View>
-)
+import { AddBankAccount } from "screens/AddBankAccount"
 
 const TransferTab = createMaterialTopTabNavigator()
 function TransferTabNavigator() {
@@ -89,7 +83,7 @@ function MainStackNavigator() {
     }
 
     // const initialRoute = isNewAccount ? routes.main.onboarding.index : routes.main.transferTab.index
-    const initialRoute = routes.main.cashSettings
+    const initialRoute = routes.main.addAccount
     return (
         <MainStack.Navigator screenOptions={options} initialRouteName={initialRoute}>
             <MainStack.Screen
@@ -101,9 +95,8 @@ function MainStackNavigator() {
                 component={TransferTabNavigator}
             />
             <MainStack.Screen name={routes.main.cashSettings} component={CashSettings} />
-            <MainStack.Screen name="AddMoney" component={AddMoney} />
-            <MainStack.Screen name="Withdraw" component={EmptyScreen} />
-            <MainStack.Screen name="WithdrawSettings" component={EmptyScreen} />
+            <MainStack.Screen name={routes.main.addMoney} component={AddMoney} />
+            <MainStack.Screen name={routes.main.addAccount} component={AddBankAccount} />
         </MainStack.Navigator>
     )
 }

@@ -13,14 +13,11 @@ type IProps = {
     bank: PickerValue | null
     setBank: (bank: PickerValue) => void
 
-    loadingAccountDetails?: boolean
-    accountName?: string
-
     loading?: boolean
     onContinue: () => void
 }
 export function AddBackAccountScreen(props: IProps) {
-    let buttonDisabled = !!props.accountNumber && props.bank && !!props.accountName
+    let buttonDisabled = !!props.accountNumber && props.bank
 
     return (
         <View style={styles.container}>
@@ -35,7 +32,6 @@ export function AddBackAccountScreen(props: IProps) {
                 keyboardType="number-pad"
                 value={props.accountNumber}
                 onChangeText={(text) => props.setAccountNumber(text)}
-                disabled={props.loadingAccountDetails}
             />
 
             <Picker
@@ -50,22 +46,7 @@ export function AddBackAccountScreen(props: IProps) {
                 }))}
                 value={props.bank}
                 onChange={props.setBank}
-                disabled={props.loadingAccountDetails}
             />
-
-            {(props.loadingAccountDetails || !!props.accountName) && (
-                <View style={styles.verificationCard}>
-                    {props.loadingAccountDetails ? (
-                        <ActivityIndicator size="small" color={colorTheme.black} />
-                    ) : (
-                        <>
-                            <Text style={styles.verificationText}>{props.accountName}</Text>
-                            <Text style={styles.verificationText}>{props.bank?.Name}</Text>
-                            <Text style={styles.verificationText}>{props.accountNumber}</Text>
-                        </>
-                    )}
-                </View>
-            )}
 
             <View style={styles.footer}>
                 <Button

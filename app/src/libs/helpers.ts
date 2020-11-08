@@ -1,4 +1,5 @@
 import dayjs from "dayjs"
+import { WITHDRAWAL_FEE } from "./constants"
 
 export function escapePhoneNumber(number: string) {
     return number[0] === "0" ? number.slice(1) : number
@@ -26,4 +27,8 @@ export function formatDate(date: string) {
 
     // else return full date
     return dayjsDate.format("DD/MM/YYYY")
+}
+
+export function getWithdrawFee(amount: number) {
+    return amount - amount * WITHDRAWAL_FEE
 }

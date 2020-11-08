@@ -1,5 +1,5 @@
 import mockdate from "mockdate"
-import { escapePhoneNumber, parsePhoneNumber, formatDate } from "../helpers"
+import { escapePhoneNumber, parsePhoneNumber, formatDate, getWithdrawFee } from "../helpers"
 
 describe("helpers", () => {
     beforeEach(() => {
@@ -17,6 +17,10 @@ describe("helpers", () => {
     test("formatDate", () => {
         expect(formatDate("1604492640000")).toEqual("01:24 PM")
         expect(formatDate("1601814240000")).toEqual("04/10/2020")
+    })
+
+    test("getWithdrawFee", () => {
+        expect(getWithdrawFee(5000)).toEqual(4975)
     })
 
     afterEach(() => {

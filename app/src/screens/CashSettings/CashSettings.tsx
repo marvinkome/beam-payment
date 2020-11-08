@@ -14,6 +14,7 @@ type IProps = {
         bankName: string
     }
 
+    withdrawing?: boolean
     onWithdraw: () => void
 }
 export function CashSettingsScreen(props: IProps) {
@@ -61,6 +62,7 @@ export function CashSettingsScreen(props: IProps) {
                         type="outline"
                         title="Withdraw"
                         onPress={props.onWithdraw}
+                        loading={props.withdrawing}
                     />
 
                     <Button

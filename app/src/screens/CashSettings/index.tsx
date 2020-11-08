@@ -1,7 +1,9 @@
-import { gql, useQuery } from "@apollo/client"
-import React from "react"
+import React, { useState } from "react"
 import { Alert } from "react-native"
+import { gql, useMutation, useQuery } from "@apollo/client"
+import { WITHDRAWAL_FEE } from "libs/constants"
 import { CashSettingsScreen } from "./CashSettings"
+import { formatCurrency, getWithdrawFee } from "libs/helpers"
 
 export const GET_CASH_DETAILS = gql`
     query CashDetails {
@@ -16,13 +18,68 @@ export const GET_CASH_DETAILS = gql`
     }
 `
 
+export const WITHDRAW_MONEY = gql`
+    mutation WithdrawMoney {
+        withdrawMoney {
+            success
+            responseMessage
+            user {
+                id
+                accountBalance
+            }
+        }
+    }
+`
+
+function useWithdraw() {
+    const [withdrawingMoney, setWithdrawingMoney] = useState(false)
+    const [withdrawMoney] = useMutation(WITHDRAW_MONEY)
+
+    return {
+        withdrawingMoney,
+        withdrawMoney: async () => {
+            setWithdrawingMoney(true)
+
+            try {
+                const withdrawMoneyResp = await withdrawMoney()
+
+                const { success, responseMessage } = withdrawMoneyResp?.data?.withdrawMoney
+                setWithdrawingMoney(false)
+
+                if (!success) {
+                    return Alert.alert("Error!", responseMessage)
+                }
+
+                // handle redirect
+                Alert.alert("Success!", "Money has been sent to your bank account")
+            } catch (err) {
+                console.log(err)
+                setWithdrawingMoney(false)
+                return Alert.alert("Error!", "Failed to withdraw money")
+            }
+        },
+    }
+}
+
 export function CashSettings() {
     const { data, loading } = useQuery(GET_CASH_DETAILS)
+    const { withdrawMoney, withdrawingMoney } = useWithdraw()
 
     const onWithdraw = () => {
-        Alert.alert("Confirm!", "Are you sure you want to withdraw all your funds?", [
+        if (!data?.me?.bankDetails) {
+            return Alert.alert("Please enter bank details to be able to withdraw funds")
+        }
+
+        const accountBalance = data?.me?.accountBalance
+        const bankDetails = data?.me?.bankDetails
+
+        const alertMsg = `Send NGN ${formatCurrency(
+            getWithdrawFee(parseInt(accountBalance, 10)),
+        )} to ${bankDetails?.accountNumber} - ${bankDetails?.bankName}?`
+
+        Alert.alert("Confirm!", alertMsg, [
             { text: "Cancel" },
-            { text: "OK", onPress: () => console.log("withdraw") },
+            { text: "Confirm", onPress: () => withdrawMoney() },
         ])
     }
 
@@ -31,6 +88,7 @@ export function CashSettings() {
             accountBalance={loading ? 0 : data?.me?.accountBalance}
             bankDetails={loading ? null : data?.me?.bankDetails}
             onWithdraw={onWithdraw}
+            withdrawing={withdrawingMoney}
         />
     )
 }

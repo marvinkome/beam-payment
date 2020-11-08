@@ -1,3 +1,4 @@
+import Transaction from "models/transactions"
 import User from "models/users"
 import mongoose from "mongoose"
 import { UserService } from "services/user"
@@ -88,7 +89,22 @@ describe("User service tests", () => {
 
     test("withdrawMoney", async () => {
         const user = await userService?.withdrawMoney()
+        const transaction = await Transaction.findOne({ from: user?.id })
+
+        expect(transaction?.amount).toBe(600)
+        expect(transaction?.fees).toBe(3)
         expect(user?.accountBalance).toBe(0)
+    })
+
+    test("revertTransaction", async () => {
+        const transaction = new Transaction({
+            transactionId: "a-transaction",
+            amount: 2985,
+            fees: 15,
+        })
+
+        const user = await userService?.revertTransaction(transaction)
+        expect(user?.accountBalance).toBe(3000)
     })
 
     afterEach(async () => {

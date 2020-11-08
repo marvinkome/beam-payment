@@ -5,6 +5,7 @@ export interface ITransaction extends Document {
     transactionId: string
     from?: string | Schema.Types.ObjectId | IUser // user
     fromFlutterWave?: boolean
+    reversed?: boolean
     to?: string | Schema.Types.ObjectId | IUser // user
     toBank?: string
     amount: number
@@ -32,6 +33,7 @@ const transactionSchema: Schema<ITransaction> = new Schema(
 
         // either from user or flutterwave
         fromFlutterWave: Boolean,
+        reversed: Boolean,
         from: {
             type: Schema.Types.ObjectId,
             ref: "User",

@@ -1,26 +1,47 @@
-import { Router } from "express"
 import config from "config"
 import Logger from "loaders/logger"
+import Transaction from "models/transactions"
+
+import { Router } from "express"
+import { UserService } from "services/user"
+import { IUser } from "models/users"
 const router = Router()
 
 router.post("/transfer", async (req, res) => {
     // Logs
     Logger.info("Transfer webhook received")
 
-    const hash = req.headers["verify-hash"]
+    const hash = req.headers["verif-hash"]
     if (!hash) {
-        return res.send(200)
+        return res.sendStatus(200)
     }
 
     const secret_hash = config.flutterwaveSecretHash
     if (hash !== secret_hash) {
-        return res.send(200)
+        return res.sendStatus(200)
     }
 
-    const reqJson = JSON.parse(req.body)
-    console.log(reqJson)
+    // if transfer wasn't successful, return the original amount
+    const response = req.body
+    if (
+        response?.data?.status === "SUCCESSFUL" &&
+        response?.data?.complete_message === "Successful"
+    ) {
+        return res.sendStatus(200)
+    }
 
-    res.send(200)
+    const transactionRef = await Transaction.findOne({
+        transactionId: response.data?.reference,
+    })
+    if (!transactionRef) {
+        return res.sendStatus(200)
+    }
+
+    // refund user
+    const userService = new UserService(transactionRef.populate("to").to! as IUser)
+    await userService.revertTransaction(transactionRef)
+
+    res.sendStatus(200)
 })
 
 export default router

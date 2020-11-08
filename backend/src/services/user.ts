@@ -4,6 +4,7 @@ import Flutterwave from "loaders/flutterwave"
 import { IUser } from "models/users"
 import { nanoid } from "nanoid"
 import { storeTransaction } from "./transactions"
+import { ITransaction } from "models/transactions"
 
 export class UserService {
     user: IUser
@@ -127,6 +128,21 @@ export class UserService {
 
         // debit user
         this.user.accountBalance = 0
+        return this.user.save()
+    }
+
+    async revertTransaction(transaction: ITransaction) {
+        const amountToCredit = transaction.amount + transaction.fees
+        this.user.accountBalance = amountToCredit
+
+        await storeTransaction({
+            transaction_id: nanoid(),
+            amountPaid: amountToCredit,
+            amountRecieved: amountToCredit,
+            to: this.user,
+            reversed: true,
+        })
+
         return this.user.save()
     }
 }

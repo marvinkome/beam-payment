@@ -7,6 +7,7 @@ type TransactionDataType = {
     amountPaid: number
     from?: IUser
     fromFlutterWave?: boolean
+    reversed?: boolean
     to?: IUser
     toBank?: string
 }
@@ -19,6 +20,8 @@ export function storeTransaction(data: TransactionDataType) {
 
     if (data.fromFlutterWave) {
         tx.fromFlutterWave = data.fromFlutterWave
+    } else if (data.reversed) {
+        tx.reversed = data.reversed
     } else {
         tx.from = data.from
     }

@@ -8,9 +8,14 @@ import {
     withdrawMoney,
 } from "controllers/users"
 import { storeTransaction } from "services/transactions"
+import { transferEvent } from "events/transfer"
 
 jest.mock("services/transactions", () => ({
     storeTransaction: jest.fn(() => Promise.resolve({})),
+}))
+
+jest.mock("events/transfer", () => ({
+    transferEvent: { emit: jest.fn() },
 }))
 
 describe("User controller test", () => {
@@ -60,7 +65,7 @@ describe("User controller test", () => {
     })
 
     test("transferMoney", async () => {
-        expect.assertions(2)
+        expect.assertions(5)
 
         // with no user
         const currentUser = new User({ phoneNumber: "+2349087573381", accountBalance: 550 })
@@ -70,6 +75,15 @@ describe("User controller test", () => {
 
         expect(resp?.success).toBeTruthy()
         expect(resp?.user?.accountBalance).toBe(45)
+
+        // @ts-ignore
+        expect(transferEvent.emit.mock.calls[0][1].phoneNumber).toBe("+2349087573381")
+
+        // @ts-ignore
+        expect(transferEvent.emit.mock.calls[0][2].phoneNumber).toBe("+2349087573383")
+
+        // @ts-ignore
+        expect(transferEvent.emit.mock.calls[0][3]).toBe(data.amount)
     })
 
     test("transferMoney - error", async () => {

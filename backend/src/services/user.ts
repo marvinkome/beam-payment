@@ -52,10 +52,9 @@ export class UserService {
     async transferMoneyToAccount(amount: number, receiver: IUser) {
         // calculate fees if using SMS
         let amountRecieved = amount
-        // let sendSMS = false
+
         if (!receiver.notificationToken) {
             amountRecieved = amount + config.transactionFees.smsFee
-            // sendSMS = true
         }
 
         // remove money from user account
@@ -80,7 +79,7 @@ export class UserService {
             to: receiver,
         })
 
-        return this.user
+        return this.user.save()
     }
 
     async storeAccountDetails(details: { accNumber: string; bankName: string; bankCode: string }) {

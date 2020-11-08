@@ -14,7 +14,6 @@ describe("Notification tests", () => {
         expect(AfricasTalking.SMS.send).toBeCalledWith({
             to: ["+2349087573383"],
             message: "You just received NGN100 from +2349087573397. New balance is NGN150",
-            from: "Beam",
         })
     })
 
@@ -48,7 +47,6 @@ describe("Notification tests", () => {
         expect(AfricasTalking.SMS.send).toBeCalledWith({
             to: ["+2349087573397"],
             message: "You just sent NGN100 to +2349087573383. New balance is NGN45",
-            from: "Beam",
         })
     })
 

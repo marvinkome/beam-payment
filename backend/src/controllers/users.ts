@@ -1,6 +1,6 @@
 import Logger from "loaders/logger"
 import { transferEvent } from "events/transfer"
-import User, { IUser } from "models/users"
+import { IUser } from "models/users"
 import { findOrCreateUserAccount } from "services/authentication"
 import { UserService } from "services/user"
 
@@ -64,7 +64,7 @@ export async function transferMoney(
         const updatedUser = await userService.transferMoneyToAccount(data.amount, receiver)
 
         // handle all after transaction events
-        transferEvent.emit("transfer", updatedUser, data.amount, receiver)
+        transferEvent.emit("transfer", updatedUser, receiver, data.amount)
 
         return {
             success: true,

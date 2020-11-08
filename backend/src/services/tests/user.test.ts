@@ -61,7 +61,7 @@ describe("User service tests", () => {
         expect(receiver.accountBalance).toBe(500)
     })
 
-    test("transferMoneyToAccount - with sms", async () => {
+    test("transferMoneyToAccount - with token", async () => {
         const receiver = new User({
             phoneNumber: "+2349087573383",
             notificationToken: "notif-token",

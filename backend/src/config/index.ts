@@ -24,7 +24,7 @@ export default {
     // africastalking
     africasTalkingAPIKey: process.env.AFRICASTALKING_API_KEY || "",
     africasTalkingUsername: process.env.AFRICASTALKING_USERNAME || "",
-    africasTalkingSender: "Beam",
+    africasTalkingSender: process.env.AFRICASTALKING_SENDERID || null,
 
     // transaction fees
     transactionFees: {

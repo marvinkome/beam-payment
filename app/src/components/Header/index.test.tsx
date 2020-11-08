@@ -1,6 +1,6 @@
 import React from "react"
 import { MockedProvider } from "@apollo/client/testing"
-import { render, waitFor } from "@testing-library/react-native"
+import { fireEvent, render, waitFor } from "@testing-library/react-native"
 import { GET_ACCOUNT_BALANCE, Header } from "./index"
 
 test("Header", async () => {
@@ -18,11 +18,12 @@ test("Header", async () => {
         },
     }
 
+    const navigate = jest.fn()
     const query = render(
         <MockedProvider mocks={[mock]} addTypename={false}>
             <>
                 {/* @ts-ignore */}
-                <Header navigation={{ goBack: jest.fn(), previous: undefined }} />
+                <Header navigation={{ goBack: jest.fn(), navigate }} />
             </>
         </MockedProvider>,
     )
@@ -32,4 +33,7 @@ test("Header", async () => {
     await waitFor(() => {
         expect(query.getByText("500")).toBeTruthy()
     })
+
+    fireEvent.press(query.getByText("500"))
+    expect(navigate).toBeCalledWith("CashSettings")
 })

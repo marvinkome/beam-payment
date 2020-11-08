@@ -2,12 +2,13 @@ import React from "react"
 import BeamLogo from "assets/images/beam-logo-dark.svg"
 import Coin from "assets/icons/coin.svg"
 import { gql, useQuery } from "@apollo/client"
-import { View, StyleSheet } from "react-native"
+import { View, StyleSheet, TouchableOpacity } from "react-native"
 import { StackHeaderProps } from "@react-navigation/stack"
 import { Text, Icon } from "react-native-elements"
 import { colorTheme } from "styles/theme"
 import { fonts } from "styles/fonts"
 import { formatCurrency } from "libs/helpers"
+import { routes } from "libs/navigator"
 
 export const GET_ACCOUNT_BALANCE = gql`
     query AccountBalance {
@@ -32,15 +33,17 @@ export function Header({ navigation, previous }: StackHeaderProps) {
                 <BeamLogo width={100} />
             )}
 
-            <View style={styles.accountBalance}>
-                <Coin width={20} />
+            <TouchableOpacity onPress={() => navigation.navigate(routes.main.cashSettings)}>
+                <View style={styles.accountBalance}>
+                    <Coin width={20} />
 
-                <Text testID="accountBalance" h3 style={styles.accountBalanceText}>
-                    {loading || !data?.me?.accountBalance
-                        ? 0
-                        : formatCurrency(data?.me?.accountBalance)}
-                </Text>
-            </View>
+                    <Text testID="accountBalance" h3 style={styles.accountBalanceText}>
+                        {loading || !data?.me?.accountBalance
+                            ? 0
+                            : formatCurrency(data?.me?.accountBalance)}
+                    </Text>
+                </View>
+            </TouchableOpacity>
         </View>
     )
 }

@@ -11,7 +11,7 @@ describe("Notification tests", () => {
         await NotificationService.sendCreditAlert(receiver, 100, sender)
 
         expect(messaging().send).not.toBeCalled()
-        expect(AfricasTalking.SMS().send).toBeCalledWith({
+        expect(AfricasTalking.SMS.send).toBeCalledWith({
             to: ["+2349087573383"],
             message: "You just received NGN100 from +2349087573397. New balance is NGN150",
             from: "Beam",
@@ -35,7 +35,7 @@ describe("Notification tests", () => {
                 body: "You just received NGN100 from +2349087573397. New balance is NGN150",
             },
         })
-        expect(AfricasTalking.SMS().send).not.toBeCalled()
+        expect(AfricasTalking.SMS.send).not.toBeCalled()
     })
 
     test("debit alert - with sms", async () => {
@@ -45,7 +45,7 @@ describe("Notification tests", () => {
         await NotificationService.sendDebitAlert(sender, 100, receiver)
 
         expect(messaging().send).not.toBeCalled()
-        expect(AfricasTalking.SMS().send).toBeCalledWith({
+        expect(AfricasTalking.SMS.send).toBeCalledWith({
             to: ["+2349087573397"],
             message: "You just sent NGN100 to +2349087573383. New balance is NGN45",
             from: "Beam",
@@ -69,6 +69,6 @@ describe("Notification tests", () => {
                 body: "You just sent NGN100 to +2349087573383. New balance is NGN45",
             },
         })
-        expect(AfricasTalking.SMS().send).not.toBeCalled()
+        expect(AfricasTalking.SMS.send).not.toBeCalled()
     })
 })

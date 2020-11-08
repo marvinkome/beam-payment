@@ -9,5 +9,5 @@ const send = jest.fn(() => ({
 }))
 
 module.exports = jest.fn().mockImplementation(() => {
-    return { SMS: () => ({ send }) }
+    return { SMS: { send } }
 })

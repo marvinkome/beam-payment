@@ -55,14 +55,18 @@ export class NotificationService {
     }
 
     private static async sendSMS(data: BaseSMSOptions) {
+        Logger.info({ data })
+
         try {
-            const response = await AfricasTalking.SMS().send({
+            const response = await AfricasTalking.SMS.send({
                 to: [data.to],
                 message: data.message,
                 from: config.africasTalkingSender,
             })
 
-            if (response.SMSMessageData.Recipients[0].status !== "Success") {
+            Logger.info(response)
+
+            if (response.SMSMessageData?.Recipients[0]?.status !== "Success") {
                 Logger.error("🔥 error: %o", response.SMSMessageData)
             }
         } catch (err) {

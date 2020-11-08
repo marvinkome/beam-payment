@@ -44,6 +44,7 @@ function useTransferMoney() {
 
                 setTransferingMoney(false)
                 Alert.alert("Success!", `Money has been sent to ${escapedNumber}`)
+                return true
             } catch (err) {
                 setTransferingMoney(false)
                 return Alert.alert("Error!", `Failed to transfer money to ${escapedNumber}`)
@@ -57,6 +58,15 @@ export function Transfer() {
     const [receiverNumber, setReceiverNumber] = useState("")
     const { transferingMoney, transferMoney } = useTransferMoney()
 
+    const onTransferMoney = async () => {
+        const success = await transferMoney(amount, receiverNumber)
+
+        if (success) {
+            setAmount("")
+            setReceiverNumber("")
+        }
+    }
+
     return (
         <TransferScreen
             loading={transferingMoney}
@@ -64,7 +74,7 @@ export function Transfer() {
             receiverNumber={receiverNumber}
             onChangeAmount={setAmount}
             onChangeReceiverNumber={setReceiverNumber}
-            onContinue={() => transferMoney(amount, receiverNumber)}
+            onContinue={onTransferMoney}
         />
     )
 }

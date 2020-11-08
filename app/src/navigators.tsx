@@ -82,8 +82,7 @@ function MainStackNavigator() {
         header: (props) => <Header {...props} />,
     }
 
-    // const initialRoute = isNewAccount ? routes.main.onboarding.index : routes.main.transferTab.index
-    const initialRoute = routes.main.cashSettings
+    const initialRoute = isNewAccount ? routes.main.onboarding.index : routes.main.transferTab.index
     return (
         <MainStack.Navigator screenOptions={options} initialRouteName={initialRoute}>
             <MainStack.Screen
@@ -149,7 +148,7 @@ export function RootNavigator() {
 
     return (
         <RootStack.Navigator headerMode="none">
-            {!authContext?.isLoggedIn ? (
+            {authContext?.isLoggedIn ? (
                 <RootStack.Screen name={routes.main.index} component={MainStackNavigator} />
             ) : (
                 <RootStack.Screen name={routes.public.index} component={PublicStackNavigator} />

@@ -79,13 +79,18 @@ describe("Transfer", () => {
         )
 
         fireEvent.changeText(queries.getByPlaceholderText("Enter amount"), "500")
+        expect(queries.queryByDisplayValue("500")).toBeTruthy()
 
         fireEvent.changeText(queries.getByPlaceholderText("Enter phone number"), "09087573383")
+        expect(queries.queryByDisplayValue("09087573383")).toBeTruthy()
 
         fireEvent.press(queries.getByText("Send money"))
 
         await waitFor(() => {
             expect(Alert.alert).toBeCalledWith("Success!", "Money has been sent to +2349087573383")
         })
+
+        expect(queries.queryByDisplayValue("500")).toBeFalsy()
+        expect(queries.queryByDisplayValue("09087573383")).toBeFalsy()
     })
 })

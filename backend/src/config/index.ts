@@ -2,6 +2,7 @@ export default {
     // process information
     environment: process.env.NODE_ENV || "development",
     port: parseInt(process.env.PORT || "5055", 10),
+    serverUrl: process.env.SERVER_URL || "",
 
     // database information
     databaseUrl: process.env.DB_URL || "",
@@ -18,6 +19,7 @@ export default {
     // flutterwave
     flutterwavePublicKey: process.env.FLUTTERWAVE_KEY || "",
     flutterwaveSecretKey: process.env.FLUTTERWAVE_SECRET_KEY || "",
+    flutterwaveSecretHash: process.env.FLUTTERWAVE_SECRET_HASH || "",
 
     // africastalking
     africasTalkingAPIKey: process.env.AFRICASTALKING_API_KEY || "",
@@ -27,6 +29,7 @@ export default {
     // transaction fees
     transactionFees: {
         depositFee: 0.02,
+        withdrawFee: 0.006,
         smsFee: 5,
     },
 

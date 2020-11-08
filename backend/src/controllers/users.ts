@@ -1,6 +1,6 @@
 import Logger from "loaders/logger"
 import { transferEvent } from "events/transfer"
-import { IUser } from "models/users"
+import User, { IUser } from "models/users"
 import { findOrCreateUserAccount } from "services/authentication"
 import { UserService } from "services/user"
 
@@ -89,6 +89,26 @@ export async function storeAccountDetails(
 
     try {
         const updatedUser = await userService.storeAccountDetails(data)
+        return {
+            success: true,
+            user: updatedUser,
+        }
+    } catch (err) {
+        Logger.error("🔥 error: %o", err)
+
+        return {
+            success: false,
+            responseMessage: "Something went wrong.",
+        }
+    }
+}
+
+export async function withdrawMoney(user: IUser | null) {
+    if (!user) return
+    const userService = new UserService(user)
+
+    try {
+        const updatedUser = await userService.withdrawMoney()
         return {
             success: true,
             user: updatedUser,

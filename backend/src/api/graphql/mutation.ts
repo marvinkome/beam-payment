@@ -1,6 +1,12 @@
 import { gql } from "apollo-server-express"
 import { authenticateUser, loginUser } from "controllers/authentication"
-import { addMoney, setPin, storeAccountDetails, transferMoney } from "controllers/users"
+import {
+    addMoney,
+    setPin,
+    storeAccountDetails,
+    transferMoney,
+    withdrawMoney,
+} from "controllers/users"
 import { authenticated, generateToken } from "libs/auth"
 import { IContext } from "loaders/apollo"
 import User from "models/users"
@@ -46,6 +52,7 @@ export const mutationTypeDef = gql`
         addMoney(data: AddMoneyInput): UserMutationResponse
         transferMoney(amount: Float!, receiverNumber: String!): UserMutationResponse
         saveBankDetails(data: AccountDetailsInput): UserMutationResponse
+        withdrawMoney: UserMutationResponse
     }
 `
 
@@ -86,6 +93,10 @@ export const mutationResolver = {
 
         saveBankDetails: authenticated(async (_: any, { data }: any, ctx: IContext) => {
             return storeAccountDetails(data, ctx.currentUser)
+        }),
+
+        withdrawMoney: authenticated(async (_: any, __: any, ctx: IContext) => {
+            return withdrawMoney(ctx.currentUser)
         }),
     },
 }

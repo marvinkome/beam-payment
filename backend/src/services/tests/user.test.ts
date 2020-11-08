@@ -86,6 +86,11 @@ describe("User service tests", () => {
         })
     })
 
+    test("withdrawMoney", async () => {
+        const user = await userService?.withdrawMoney()
+        expect(user?.accountBalance).toBe(0)
+    })
+
     afterEach(async () => {
         await mongoose.connection.db.dropDatabase()
     })

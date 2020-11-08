@@ -91,4 +91,42 @@ export class UserService {
 
         return this.user.save()
     }
+
+    async withdrawMoney() {
+        const userBalance = this.user.accountBalance || 0
+
+        // calculate money to send
+        const amountToSend = userBalance - userBalance * config.transactionFees.withdrawFee
+
+        // intialize transfer through flutterwave
+        const reference = nanoid()
+        let response = null
+
+        try {
+            response = await Flutterwave.Transfer.initiate({
+                account_bank: this.user.bankDetails?.bankCode,
+                account_number: this.user.bankDetails?.accountNumber,
+                amount: amountToSend,
+                currency: "NGN",
+                reference,
+                debit_currency: "NGN",
+                callback_url: `${config.serverUrl}/hooks/transfer`,
+            })
+
+            await storeTransaction({
+                transaction_id: reference,
+                amountPaid: amountToSend,
+                amountRecieved: userBalance,
+                toBank: `${this.user.bankDetails?.bankName} - ${this.user.bankDetails?.accountNumber}`,
+                from: this.user,
+            })
+        } catch (err) {
+            Logger.error("🔥 error: %o", response)
+            throw new Error(err.message)
+        }
+
+        // debit user
+        this.user.accountBalance = 0
+        return this.user.save()
+    }
 }

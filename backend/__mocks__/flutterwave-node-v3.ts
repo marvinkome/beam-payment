@@ -20,6 +20,11 @@ const verify = jest.fn(({ id }: any) => {
     })
 })
 
+const initiate = jest.fn()
+
 module.exports = jest.fn().mockImplementation(() => {
-    return { Transaction: { verify } }
+    return {
+        Transaction: { verify },
+        Transfer: { initiate },
+    }
 })

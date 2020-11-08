@@ -1,6 +1,12 @@
 import User from "models/users"
 import mongoose from "mongoose"
-import { addMoney, setPin, storeAccountDetails, transferMoney } from "controllers/users"
+import {
+    addMoney,
+    setPin,
+    storeAccountDetails,
+    transferMoney,
+    withdrawMoney,
+} from "controllers/users"
 import { storeTransaction } from "services/transactions"
 
 jest.mock("services/transactions", () => ({
@@ -92,6 +98,14 @@ describe("User controller test", () => {
             bankCode: "123",
             bankName: "GTBank Plc",
         })
+    })
+
+    test("withdrawMoney", async () => {
+        const currentUser = new User({ phoneNumber: "+2349087573381", accountBalance: 200 })
+        const resp = await withdrawMoney(currentUser)
+
+        expect(resp?.success).toBeTruthy()
+        expect(resp?.user?.accountBalance).toBe(0)
     })
 
     afterEach(async () => {

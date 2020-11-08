@@ -292,6 +292,37 @@ describe("Mutation", () => {
         })
     })
 
+    describe("withdrawMoney", () => {
+        test("success", async () => {
+            const server = constructTestServer({
+                context: () => ({
+                    currentUser: new User({ phoneNumber: "+2349087573383", accountBalance: 550 }),
+                }),
+            })
+
+            const { mutate } = createTestClient(server)
+
+            const response = await mutate({
+                mutation: gql`
+                    mutation WithdrawMoney {
+                        withdrawMoney {
+                            success
+                            responseMessage
+                            user {
+                                accountBalance
+                            }
+                        }
+                    }
+                `,
+            })
+
+            expect(response.errors).toBeUndefined()
+            expect(response.data?.withdrawMoney.success).toBeTruthy()
+            expect(response.data?.withdrawMoney.responseMessage).toBe(null)
+            expect(response.data?.withdrawMoney.user.accountBalance).toBe(0)
+        })
+    })
+
     afterEach(async () => {
         await mongoose.connection.db.dropDatabase()
     })

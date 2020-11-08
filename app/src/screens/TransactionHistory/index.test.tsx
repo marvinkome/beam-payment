@@ -47,7 +47,9 @@ describe("TransactionHistory", () => {
             },
         ]
 
-        const queries = render(<TransactionHistoryScreen data={data} />)
+        const queries = render(
+            <TransactionHistoryScreen loading={false} data={data} refetch={jest.fn()} />,
+        )
 
         expect(queries.getAllByTestId("historyItem")).toHaveLength(3)
     })

@@ -5,6 +5,9 @@ import { colorTheme } from "styles/theme"
 import { HistoryItem } from "./HistoryItem"
 
 type IProps = {
+    refetch: () => void
+    loading?: boolean
+
     data: {
         id: string
         amount: number
@@ -18,6 +21,8 @@ export function TransactionHistoryScreen(props: IProps) {
         <View style={styles.container}>
             <FlatList
                 data={props.data}
+                refreshing={props.loading}
+                onRefresh={props.refetch}
                 renderItem={({ item }: any) => <HistoryItem {...item} />}
                 keyExtractor={(item) => `${item.id}`}
                 ListEmptyComponent={() => (

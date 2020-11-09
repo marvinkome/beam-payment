@@ -20,7 +20,7 @@ describe("helpers", () => {
     })
 
     test("getWithdrawFee", () => {
-        expect(getWithdrawFee(5000)).toEqual(4975)
+        expect(getWithdrawFee(5000)).toEqual(11)
     })
 
     afterEach(() => {

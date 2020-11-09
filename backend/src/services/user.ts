@@ -5,6 +5,7 @@ import { IUser } from "models/users"
 import { nanoid } from "nanoid"
 import { storeTransaction } from "./transactions"
 import { ITransaction } from "models/transactions"
+import { getAmountToWithdraw } from "libs/helpers"
 
 export class UserService {
     user: IUser
@@ -101,7 +102,7 @@ export class UserService {
         const userBalance = this.user.accountBalance || 0
 
         // calculate money to send
-        const amountToSend = userBalance - userBalance * config.transactionFees.withdrawFee
+        const amountToSend = getAmountToWithdraw(userBalance)
 
         // intialize transfer through flutterwave
         const reference = nanoid()

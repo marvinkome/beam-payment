@@ -79,9 +79,12 @@ export function CashSettings() {
         const accountBalance = data?.me?.accountBalance
         const bankDetails = data?.me?.bankDetails
 
-        const alertMsg = `Send NGN ${formatCurrency(
-            getWithdrawFee(parseInt(accountBalance, 10)),
-        )} to ${bankDetails?.accountNumber} - ${bankDetails?.bankName}?`
+        // Send NGN5000 to 0123456789 - GTBank Plc? NGN26.78 withdrawal fee.
+        const alertMsg = `Send NGN${formatCurrency(parseInt(accountBalance, 10))} to ${
+            bankDetails?.accountNumber
+        } - ${bankDetails?.bankName}? NGN${getWithdrawFee(
+            parseInt(accountBalance, 10),
+        )} withdrawal fee.`
 
         Alert.alert("Confirm", alertMsg, [
             { text: "Cancel" },

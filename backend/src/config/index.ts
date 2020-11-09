@@ -29,7 +29,7 @@ export default {
     // transaction fees
     transactionFees: {
         depositFee: 0.02,
-        withdrawFee: 0.005,
+        withdrawFee: [11, 27, 54],
         smsFee: 5,
     },
 

@@ -95,7 +95,9 @@ describe("CashSettings", () => {
         fireEvent.press(screen.getByText("Withdraw"))
 
         // @ts-ignore
-        expect(Alert.alert.mock.calls[0][1]).toBe("Send NGN 4,975 to 0123456789 - GTBank Plc?")
+        expect(Alert.alert.mock.calls[0][1]).toBe(
+            "Send NGN5,000 to 0123456789 - GTBank Plc? NGN11 withdrawal fee.",
+        )
 
         await act(async () => {
             // @ts-ignore

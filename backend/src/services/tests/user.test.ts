@@ -92,7 +92,7 @@ describe("User service tests", () => {
         const transaction = await Transaction.findOne({ from: user?.id })
 
         expect(transaction?.amount).toBe(600)
-        expect(transaction?.fees).toBe(3)
+        expect(transaction?.fees).toBe(11)
         expect(user?.accountBalance).toBe(0)
     })
 

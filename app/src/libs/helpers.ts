@@ -30,5 +30,13 @@ export function formatDate(date: string) {
 }
 
 export function getWithdrawFee(amount: number) {
-    return amount - amount * WITHDRAWAL_FEE
+    if (amount <= 5000) {
+        return WITHDRAWAL_FEE[0]
+    }
+
+    if (amount <= 50000) {
+        return WITHDRAWAL_FEE[1]
+    }
+
+    return WITHDRAWAL_FEE[2]
 }

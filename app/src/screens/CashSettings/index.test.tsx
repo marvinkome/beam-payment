@@ -37,7 +37,7 @@ describe("CashSettings", () => {
 
         // @ts-ignore
         expect(Alert.alert.mock.calls[0][1]).toBe(
-            "Please enter bank details to be able to withdraw funds",
+            "Please set bank details to be able to withdraw funds",
         )
     })
 
@@ -93,9 +93,6 @@ describe("CashSettings", () => {
         })
 
         fireEvent.press(screen.getByText("Withdraw"))
-
-        // @ts-ignore
-        expect(Alert.alert.mock.calls[0][0]).toBe("Confirm!")
 
         // @ts-ignore
         expect(Alert.alert.mock.calls[0][1]).toBe("Send NGN 4,975 to 0123456789 - GTBank Plc?")

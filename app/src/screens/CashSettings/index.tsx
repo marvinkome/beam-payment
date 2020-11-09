@@ -1,9 +1,9 @@
-import React, { useState } from "react"
+import React, { useCallback, useState } from "react"
 import { Alert } from "react-native"
 import { gql, useMutation, useQuery } from "@apollo/client"
-import { WITHDRAWAL_FEE } from "libs/constants"
 import { CashSettingsScreen } from "./CashSettings"
 import { formatCurrency, getWithdrawFee } from "libs/helpers"
+import { useFocusEffect } from "@react-navigation/native"
 
 export const GET_CASH_DETAILS = gql`
     query CashDetails {
@@ -62,12 +62,18 @@ function useWithdraw() {
 }
 
 export function CashSettings() {
-    const { data, loading } = useQuery(GET_CASH_DETAILS)
+    const { data, loading, refetch } = useQuery(GET_CASH_DETAILS)
     const { withdrawMoney, withdrawingMoney } = useWithdraw()
 
+    useFocusEffect(
+        useCallback(() => {
+            refetch()
+        }, []),
+    )
+
     const onWithdraw = () => {
-        if (!data?.me?.bankDetails.accountName || !data?.me?.bankDetails.bankName) {
-            return Alert.alert("Error", "Please enter bank details to be able to withdraw funds")
+        if (!data?.me?.bankDetails.accountNumber || !data?.me?.bankDetails.bankName) {
+            return Alert.alert("Error", "Please set bank details to be able to withdraw funds")
         }
 
         const accountBalance = data?.me?.accountBalance

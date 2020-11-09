@@ -1,8 +1,8 @@
-import React, { useEffect } from "react"
+import React, { useCallback } from "react"
 import orderBy from "lodash.orderby"
 import { gql, useQuery } from "@apollo/client"
 import { TransactionHistoryScreen } from "./TransactionHistory"
-import { useNavigation } from "@react-navigation/native"
+import { useFocusEffect } from "@react-navigation/native"
 
 export const TRANSACTION_HISTORY = gql`
     query TransactionHistory {
@@ -29,13 +29,12 @@ function useTransactionHistory() {
 
 export function TransactionHistory() {
     const { history, refetch, loading } = useTransactionHistory()
-    const navigation = useNavigation()
 
-    useEffect(() => {
-        navigation.addListener("focus", async () => {
-            await refetch()
-        })
-    }, [])
+    useFocusEffect(
+        useCallback(() => {
+            refetch()
+        }, []),
+    )
 
     const formattedData = orderBy(history, "createdAt", "desc").reduce((allHistory, history) => {
         let item = {

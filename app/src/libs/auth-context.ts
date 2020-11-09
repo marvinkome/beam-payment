@@ -2,7 +2,7 @@ import React from "react"
 
 export type AuthContextType = null | {
     signIn: () => void
-    signOut: () => void
+    signOut: (full?: boolean) => void
     isLoggedIn: boolean
     hasPublicDetails: boolean
 }

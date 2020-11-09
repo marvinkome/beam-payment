@@ -1,7 +1,7 @@
 import React from "react"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { fireEvent, render, waitFor } from "@testing-library/react-native"
-import { LOGIN_MUT } from "hooks/login"
+import { LOGIN_MUT, NOTIFICATION_MUT } from "hooks/login"
 import { USER_PUB_DETAIL } from "libs/keys"
 import { MockedProvider } from "@apollo/client/testing"
 import { AuthContext } from "libs/auth-context"
@@ -46,12 +46,33 @@ describe("Login page", () => {
                 },
             }
 
+            const mock2 = {
+                request: {
+                    query: NOTIFICATION_MUT,
+                    variables: {
+                        token: "token",
+                    },
+                },
+                result: {
+                    data: {
+                        setNotificationToken: {
+                            success: true,
+                            responseMessage: null,
+                            user: {
+                                id: "user_id",
+                                notificationToken: "token",
+                            },
+                        },
+                    },
+                },
+            }
+
             const signIn = jest.fn()
 
             const queries = render(
                 // @ts-ignore
                 <AuthContext.Provider value={{ signIn }}>
-                    <MockedProvider mocks={[mock]} addTypename={false}>
+                    <MockedProvider mocks={[mock, mock2]} addTypename={false}>
                         <Login />
                     </MockedProvider>
                 </AuthContext.Provider>,
@@ -107,8 +128,16 @@ describe("Login page", () => {
     test("view component", () => {
         const onContinue = jest.fn()
         const setPin = jest.fn()
+        const onForgetPin = jest.fn()
 
-        const queries = render(<LoginScreen pin="" onContinue={onContinue} setPin={setPin} />)
+        const queries = render(
+            <LoginScreen
+                pin=""
+                onContinue={onContinue}
+                setPin={setPin}
+                onForgetPin={onForgetPin}
+            />,
+        )
 
         expect(queries.getByTestId("codeInput")).toBeTruthy()
         expect(queries.getByText("Continue")).toBeTruthy()
@@ -119,7 +148,17 @@ describe("Login page", () => {
         fireEvent.changeText(queries.getByTestId("codeInput"), "2020")
         expect(setPin).toHaveBeenCalledWith("2020")
 
-        queries.update(<LoginScreen pin="2020" onContinue={onContinue} setPin={setPin} />)
+        queries.update(
+            <LoginScreen
+                pin="2020"
+                onContinue={onContinue}
+                setPin={setPin}
+                onForgetPin={onForgetPin}
+            />,
+        )
+
+        fireEvent.press(queries.getByText("Forgot pin?"))
+        expect(onForgetPin).toHaveBeenCalled()
 
         fireEvent.press(queries.getByText("Continue"))
         expect(onContinue).toHaveBeenCalled()

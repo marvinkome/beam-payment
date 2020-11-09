@@ -10,6 +10,7 @@ type IProps = {
     loading?: boolean
     setPin: (pin: string) => void
     onContinue: () => void
+    onForgetPin: () => void
 }
 export function LoginScreen(props: IProps) {
     return (
@@ -32,7 +33,9 @@ export function LoginScreen(props: IProps) {
                 codeLength={4}
             />
 
-            <TextLink style={{ textAlign: "center", marginTop: 30 }}>Forgot pin?</TextLink>
+            <TextLink onPress={props.onForgetPin} style={{ textAlign: "center", marginTop: 30 }}>
+                Forgot pin?
+            </TextLink>
 
             {/* continue button */}
             <Button

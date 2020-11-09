@@ -28,6 +28,8 @@ export function SignUp() {
 
             navigate(routes.public.verifyPhone)
         } catch (e) {
+            // TODO: Sentry
+            console.log(e)
             setSendingSms(false)
             Alert.alert("Error!", "Please use a correct phone number")
         }

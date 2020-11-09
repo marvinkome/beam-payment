@@ -136,3 +136,42 @@ export function useLogin() {
 
     return { signIn }
 }
+
+export const FORGET_PIN_MUT = gql`
+    mutation ForgetPin($phoneNumber: String!) {
+        forgetPin(phoneNumber: $phoneNumber)
+    }
+`
+export function useForgetPin() {
+    const authContext = useContext(AuthContext)
+    const [forgetPinMut] = useMutation(FORGET_PIN_MUT)
+
+    const forgetPin = async () => {
+        // TODO:: sentry breadcrumb - request started
+        let forgetPinResp = null
+        const phoneNumber = await AsyncStorage.getItem(USER_PUB_DETAIL)
+
+        try {
+            forgetPinResp = await forgetPinMut({ variables: { phoneNumber } })
+        } catch (err) {
+            // TODO:: sentry - track failed signup
+            console.log(err)
+            return Alert.alert("Error", "Failed to forget pin")
+        }
+
+        const success = forgetPinResp?.data?.forgetPin
+
+        if (!success) {
+            // TODO:: sentry - track failed signup
+            return Alert.alert("Error", "Something went wrong")
+        }
+
+        // TODO:: Add user to analytics
+        // TODO:: Track forget pin
+
+        // finish auth here
+        return authContext?.signOut(true)
+    }
+
+    return { forgetPin }
+}

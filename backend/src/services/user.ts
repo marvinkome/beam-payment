@@ -14,7 +14,7 @@ export class UserService {
         this.user = user
     }
 
-    setPin(pin: string) {
+    setPin(pin?: string) {
         this.user.pin = pin
         return this.user.save()
     }

@@ -1,11 +1,12 @@
 import React, { useState } from "react"
 import { LoginScreen } from "./Login"
-import { useLogin } from "hooks/login"
+import { useForgetPin, useLogin } from "hooks/login"
 
 export function Login() {
     const [pin, setPin] = useState("")
     const [signingIn, setSigningIn] = useState(false)
     const { signIn } = useLogin()
+    const { forgetPin } = useForgetPin()
 
     const onContinue = async () => {
         setSigningIn(true)
@@ -13,5 +14,19 @@ export function Login() {
         setSigningIn(false)
     }
 
-    return <LoginScreen pin={pin} setPin={setPin} loading={signingIn} onContinue={onContinue} />
+    const onForgetPin = async () => {
+        setSigningIn(true)
+        await forgetPin()
+        setSigningIn(false)
+    }
+
+    return (
+        <LoginScreen
+            pin={pin}
+            setPin={setPin}
+            loading={signingIn}
+            onContinue={onContinue}
+            onForgetPin={onForgetPin}
+        />
+    )
 }

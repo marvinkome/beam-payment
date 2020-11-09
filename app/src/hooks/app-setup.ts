@@ -34,10 +34,14 @@ export function useAppSetup() {
         setLoggedIn(true)
     }
 
-    const signOut = async () => {
-        setLoggedIn(false)
+    const signOut = async (full?: boolean) => {
         authToken("")
-        await AsyncStorage.removeItem(USER_PUB_DETAIL)
+        setLoggedIn(false)
+
+        if (full) {
+            await AsyncStorage.removeItem(USER_PUB_DETAIL)
+            setHasPublicDetails(false)
+        }
     }
 
     const authContext = {

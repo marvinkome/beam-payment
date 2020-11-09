@@ -40,10 +40,10 @@ export function TransactionHistoryScreen(props: IProps) {
 const styles = StyleSheet.create({
     container: {
         marginTop: 50,
+        marginBottom: 20,
         marginHorizontal: 15,
         borderWidth: 1,
         borderColor: colorTheme.grey,
-        borderTopLeftRadius: 10,
-        borderTopRightRadius: 10,
+        borderRadius: 10,
     },
 })

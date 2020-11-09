@@ -9,6 +9,7 @@ export function VerifyPhone() {
     const [code, setCode] = useState("")
     const [verifingCode, setVerifingCode] = useState(false)
     const { signIn } = useAuthentication()
+
     const { confirmation, phoneNumber } = smsConfirmationObj()
 
     const onVerify = async () => {
@@ -30,6 +31,13 @@ export function VerifyPhone() {
         }
     }
 
+    const onResendCode = async () => {
+        setVerifingCode(true)
+        const confirmation = await auth().signInWithPhoneNumber(phoneNumber!)
+        smsConfirmationObj({ confirmation, phoneNumber })
+        setVerifingCode(false)
+    }
+
     return (
         <VerifyPhoneScreen
             phoneNumber={phoneNumber}
@@ -37,6 +45,7 @@ export function VerifyPhone() {
             code={code}
             setCode={setCode}
             loading={verifingCode}
+            resendCode={onResendCode}
         />
     )
 }

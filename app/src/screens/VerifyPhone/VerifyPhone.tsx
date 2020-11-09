@@ -3,6 +3,7 @@ import { StyleSheet, ScrollView } from "react-native"
 import { Button, Text } from "react-native-elements"
 import { PinInput } from "components/PinInput"
 import { colorTheme } from "styles/theme"
+import { TextLink } from "components/TextLink"
 
 type IProps = {
     loading: boolean
@@ -10,6 +11,7 @@ type IProps = {
     phoneNumber: string | null
     setCode: (code: string) => void
     onVerify: () => void
+    resendCode: () => void
 }
 export function VerifyPhoneScreen(props: IProps) {
     return (
@@ -31,7 +33,11 @@ export function VerifyPhoneScreen(props: IProps) {
             {/* resend button */}
             <Text style={styles.resend}>
                 Didn't receive code?{" "}
-                <Text style={{ color: colorTheme.primary, fontSize: 18 }}>Send again</Text>
+                <Text
+                    onPress={props.resendCode}
+                    style={{ color: colorTheme.primary, fontSize: 18 }}>
+                    Send again
+                </Text>
             </Text>
 
             {/* continue button */}

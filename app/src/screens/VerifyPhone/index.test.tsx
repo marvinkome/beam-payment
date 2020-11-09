@@ -68,6 +68,14 @@ describe("Verify phone page tests", () => {
 
             expect(smsConfirmationObj).toHaveBeenCalled()
 
+            fireEvent.press(queries.getByText("Send again"))
+            await waitFor(() => {
+                expect(smsConfirmationObj).toBeCalledWith({
+                    confirmation: {},
+                    phoneNumber: "+234913498619",
+                })
+            })
+
             fireEvent.changeText(queries.getByTestId("codeInput"), "202020")
             fireEvent.press(queries.getByText("Continue"))
 
@@ -123,6 +131,7 @@ describe("Verify phone page tests", () => {
 
     test("view component", () => {
         const onVerify = jest.fn()
+        const onResendCode = jest.fn()
         const setCode = jest.fn()
 
         const queries = render(
@@ -132,6 +141,7 @@ describe("Verify phone page tests", () => {
                 phoneNumber="+234913498619"
                 onVerify={onVerify}
                 loading={false}
+                resendCode={onResendCode}
             />,
         )
 
@@ -149,11 +159,15 @@ describe("Verify phone page tests", () => {
                 setCode={setCode}
                 phoneNumber="+234913498619"
                 onVerify={onVerify}
+                resendCode={onResendCode}
                 loading={false}
             />,
         )
 
+        fireEvent.press(queries.getByText("Send again"))
+        expect(onResendCode).toBeCalled()
+
         fireEvent.press(queries.getByText("Continue"))
-        expect(onVerify).toHaveBeenCalled()
+        expect(onVerify).toBeCalled()
     })
 })

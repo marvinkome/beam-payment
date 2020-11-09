@@ -16,6 +16,7 @@ export const userTypeDef = gql`
     type User {
         id: ID
         phoneNumber: String
+        notificationToken: String
         isNewAccount: Boolean
         accountSetupState: AccountSetupState
         accountBalance: Float

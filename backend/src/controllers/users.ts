@@ -26,6 +26,27 @@ export async function setPin(data: { pin: string }, user: IUser | null) {
     }
 }
 
+export async function setNotificationToken(data: { token: string }, user: IUser | null) {
+    if (!user) return
+    const userService = new UserService(user)
+
+    try {
+        const updatedUser = await userService.setNotificationToken(data.token)
+
+        return {
+            success: true,
+            user: updatedUser,
+        }
+    } catch (e) {
+        // todo:: add sentry
+
+        return {
+            success: false,
+            responseMessage: "Error setting notification token. Please try again",
+        }
+    }
+}
+
 export async function addMoney(
     data: { tx_id: string; tx_ref: string; amount: number },
     user: IUser | null

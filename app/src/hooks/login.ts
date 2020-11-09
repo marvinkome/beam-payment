@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
+import messaging from "@react-native-firebase/messaging"
 import { useContext } from "react"
 import { AuthContext } from "libs/auth-context"
 import { gql, useMutation } from "@apollo/client"
@@ -74,10 +75,23 @@ export const LOGIN_MUT = gql`
         }
     }
 `
+export const NOTIFICATION_MUT = gql`
+    mutation SetNotificationToken($token: String!) {
+        setNotificationToken(token: $token) {
+            success
+            responseMessage
+            user {
+                id
+                notificationToken
+            }
+        }
+    }
+`
 
 export function useLogin() {
     const authContext = useContext(AuthContext)
     const [loginMutation] = useMutation(LOGIN_MUT)
+    const [setNotificationToken] = useMutation(NOTIFICATION_MUT)
 
     const signIn = async (pin: string) => {
         // TODO:: sentry breadcrumb - request started
@@ -103,6 +117,15 @@ export function useLogin() {
 
         // setup user data
         await authToken(token)
+
+        // store notification token
+        try {
+            const token = await messaging().getToken()
+            await setNotificationToken({ variables: { token } })
+        } catch (e) {
+            console.log(e)
+            // TODO:: Sentry.captureException(e)
+        }
 
         // TODO:: Add user to analytics
         // TODO:: Track successful sign up

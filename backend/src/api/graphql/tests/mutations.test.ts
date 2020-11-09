@@ -142,6 +142,39 @@ describe("Mutation", () => {
         })
     })
 
+    describe("setNotificationToken", () => {
+        test("success", async () => {
+            const server = constructTestServer({
+                context: () => ({
+                    currentUser: new User({ phoneNumber: "+2349087573383" }),
+                }),
+            })
+
+            const { mutate } = createTestClient(server)
+
+            const response = await mutate({
+                mutation: gql`
+                    mutation SetNotificationToken($token: String!) {
+                        setNotificationToken(token: $token) {
+                            success
+                            responseMessage
+                            user {
+                                id
+                                notificationToken
+                            }
+                        }
+                    }
+                `,
+                variables: { token: "token" },
+            })
+
+            expect(response.errors).toBeUndefined()
+            expect(response.data?.setNotificationToken.success).toBeTruthy()
+            expect(response.data?.setNotificationToken.responseMessage).toBe(null)
+            expect(response.data?.setNotificationToken.user.notificationToken).toBe("token")
+        })
+    })
+
     describe("addMoney", () => {
         test("success", async () => {
             const server = constructTestServer({

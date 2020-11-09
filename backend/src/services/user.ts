@@ -18,6 +18,11 @@ export class UserService {
         return this.user.save()
     }
 
+    setNotificationToken(token: string) {
+        this.user.notificationToken = token
+        return this.user.save()
+    }
+
     async addMoney(data: { tx_id: string; tx_ref: string; amount: number }) {
         // verify transaction
         const flwResp = await Flutterwave.Transaction.verify({ id: data.tx_id })

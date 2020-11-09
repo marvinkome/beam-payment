@@ -1,12 +1,6 @@
 import { gql } from "apollo-server-express"
 import { authenticateUser, loginUser } from "controllers/authentication"
-import {
-    addMoney,
-    setPin,
-    storeAccountDetails,
-    transferMoney,
-    withdrawMoney,
-} from "controllers/users"
+import * as userController from "controllers/users"
 import { authenticated, generateToken } from "libs/auth"
 import { IContext } from "loaders/apollo"
 import User from "models/users"
@@ -49,6 +43,7 @@ export const mutationTypeDef = gql`
 
         # USERS
         setPin(pin: String!): UserMutationResponse
+        setNotificationToken(token: String!): UserMutationResponse
         addMoney(data: AddMoneyInput): UserMutationResponse
         transferMoney(amount: Float!, receiverNumber: String!): UserMutationResponse
         saveBankDetails(data: AccountDetailsInput): UserMutationResponse
@@ -80,23 +75,29 @@ export const mutationResolver = {
 
         /* USERS */
         setPin: authenticated(async (_: any, data: { pin: string }, ctx: IContext) => {
-            return setPin(data, ctx.currentUser)
+            return userController.setPin(data, ctx.currentUser)
         }),
 
+        setNotificationToken: authenticated(
+            async (_: any, data: { token: string }, ctx: IContext) => {
+                return userController.setNotificationToken(data, ctx.currentUser)
+            }
+        ),
+
         addMoney: authenticated(async (_: any, { data }: any, ctx: IContext) => {
-            return addMoney(data, ctx.currentUser)
+            return userController.addMoney(data, ctx.currentUser)
         }),
 
         transferMoney: authenticated(async (_: any, data: any, ctx: IContext) => {
-            return transferMoney(data, ctx.currentUser)
+            return userController.transferMoney(data, ctx.currentUser)
         }),
 
         saveBankDetails: authenticated(async (_: any, { data }: any, ctx: IContext) => {
-            return storeAccountDetails(data, ctx.currentUser)
+            return userController.storeAccountDetails(data, ctx.currentUser)
         }),
 
         withdrawMoney: authenticated(async (_: any, __: any, ctx: IContext) => {
-            return withdrawMoney(ctx.currentUser)
+            return userController.withdrawMoney(ctx.currentUser)
         }),
     },
 }

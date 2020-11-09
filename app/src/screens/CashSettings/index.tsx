@@ -66,8 +66,8 @@ export function CashSettings() {
     const { withdrawMoney, withdrawingMoney } = useWithdraw()
 
     const onWithdraw = () => {
-        if (!data?.me?.bankDetails) {
-            return Alert.alert("Please enter bank details to be able to withdraw funds")
+        if (!data?.me?.bankDetails.accountName || !data?.me?.bankDetails.bankName) {
+            return Alert.alert("Error", "Please enter bank details to be able to withdraw funds")
         }
 
         const accountBalance = data?.me?.accountBalance
@@ -77,7 +77,7 @@ export function CashSettings() {
             getWithdrawFee(parseInt(accountBalance, 10)),
         )} to ${bankDetails?.accountNumber} - ${bankDetails?.bankName}?`
 
-        Alert.alert("Confirm!", alertMsg, [
+        Alert.alert("Confirm", alertMsg, [
             { text: "Cancel" },
             { text: "Confirm", onPress: () => withdrawMoney() },
         ])

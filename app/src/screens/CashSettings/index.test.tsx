@@ -6,6 +6,41 @@ import { CashSettings, GET_CASH_DETAILS, WITHDRAW_MONEY } from "./index"
 import { Alert } from "react-native"
 
 describe("CashSettings", () => {
+    beforeEach(() => {
+        // @ts-ignore
+        Alert.alert.mockClear()
+    })
+
+    test("<CashSettings /> - without bankDetails", async () => {
+        const queryMock = {
+            request: {
+                query: GET_CASH_DETAILS,
+            },
+            result: {
+                data: {
+                    me: {
+                        id: "user_id",
+                        accountBalance: 5000,
+                        bankDetails: null,
+                    },
+                },
+            },
+        }
+
+        const screen = render(
+            <MockedProvider mocks={[queryMock]} addTypename={false}>
+                <CashSettings />
+            </MockedProvider>,
+        )
+
+        fireEvent.press(screen.getByText("Withdraw"))
+
+        // @ts-ignore
+        expect(Alert.alert.mock.calls[0][1]).toBe(
+            "Please enter bank details to be able to withdraw funds",
+        )
+    })
+
     test("<CashSettings />", async () => {
         const queryMock = {
             request: {

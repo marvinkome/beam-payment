@@ -5,6 +5,7 @@ import { gql, useMutation } from "@apollo/client"
 import { SetPinScreen } from "./SetPin"
 import { Alert } from "react-native"
 import { routes } from "libs/navigator"
+import { trackEvent } from "libs/analytics"
 
 export const SAVE_PIN = gql`
     mutation SetPin($pin: String!) {
@@ -33,9 +34,11 @@ function useSavePin() {
                 const { success, responseMessage } = savePinResp?.data?.setPin
 
                 if (!success) {
+                    Sentry.captureMessage(responseMessage)
                     return Alert.alert("Error!", responseMessage)
                 }
 
+                trackEvent("Set pin")
                 navigate(routes.main.onboarding.addMoney)
             } catch (e) {
                 Sentry.captureException(e)

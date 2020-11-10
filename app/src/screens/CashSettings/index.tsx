@@ -1,9 +1,11 @@
 import React, { useCallback, useState } from "react"
+import * as Sentry from "@sentry/react-native"
 import { Alert } from "react-native"
 import { gql, useMutation, useQuery } from "@apollo/client"
 import { CashSettingsScreen } from "./CashSettings"
 import { formatCurrency, getWithdrawFee } from "libs/helpers"
 import { useFocusEffect } from "@react-navigation/native"
+import { trackEvent } from "libs/analytics"
 
 export const GET_CASH_DETAILS = gql`
     query CashDetails {
@@ -47,13 +49,14 @@ function useWithdraw() {
                 setWithdrawingMoney(false)
 
                 if (!success) {
+                    Sentry.captureMessage(responseMessage)
                     return Alert.alert("Error!", responseMessage)
                 }
 
-                // handle redirect
+                trackEvent("Withdraw money from account")
                 Alert.alert("Success!", "Money has been sent to your bank account")
             } catch (err) {
-                console.log(err)
+                Sentry.captureException(err)
                 setWithdrawingMoney(false)
                 return Alert.alert("Error!", "Failed to withdraw money")
             }

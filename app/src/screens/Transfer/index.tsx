@@ -1,8 +1,10 @@
 import React, { useState } from "react"
+import * as Sentry from "@sentry/react-native"
 import { gql, useMutation } from "@apollo/client"
 import { escapePhoneNumber } from "libs/helpers"
 import { Alert } from "react-native"
 import { TransferScreen } from "./Transfer"
+import { trackEvent } from "libs/analytics"
 
 export const TRANSER_MONEY = gql`
     mutation TransferMoney($amount: Float!, $receiverNumber: String!) {
@@ -39,13 +41,16 @@ function useTransferMoney() {
 
                 if (!success) {
                     setTransferingMoney(false)
+                    Sentry.captureMessage(responseMessage)
                     return Alert.alert("Error!", responseMessage)
                 }
 
                 setTransferingMoney(false)
+                trackEvent("Sent money", { to: escapePhoneNumber })
                 Alert.alert("Success!", `Money has been sent to ${escapedNumber}`)
                 return true
             } catch (err) {
+                Sentry.captureException(err)
                 setTransferingMoney(false)
                 return Alert.alert("Error!", `Failed to transfer money to ${escapedNumber}`)
             }

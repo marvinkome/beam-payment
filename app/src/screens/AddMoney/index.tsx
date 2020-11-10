@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 import shortid from "shortid"
+import * as Sentry from "@sentry/react-native"
 import { gql, useMutation } from "@apollo/client"
 import { useNavigation, useRoute } from "@react-navigation/native"
 import { Alert } from "react-native"
@@ -10,6 +11,7 @@ import { FLUTTERWAVE_KEY, EMAIL_URL } from "libs/keys"
 import { DEPOSIT_FEE } from "libs/constants"
 import { AddMoneyScreen } from "./AddMoney"
 import { routes } from "libs/navigator"
+import { trackEvent } from "libs/analytics"
 
 export const ADD_MONEY = gql`
     mutation AddMoney($addMoneyInput: AddMoneyInput) {
@@ -34,6 +36,7 @@ export function useAddMoneyToUserAccount() {
         addingMoney,
         addMoney: async (params: RedirectParams, amount: string) => {
             if (params.status !== "successful") {
+                Sentry.captureMessage("Transaction failed. Please try again")
                 return Alert.alert("Error!", "Transaction failed. Please try again")
             }
 
@@ -53,11 +56,13 @@ export function useAddMoneyToUserAccount() {
                 const { success, responseMessage } = addMoneyResp?.data?.addMoney
 
                 if (!success) {
+                    Sentry.captureMessage(responseMessage)
                     setAddingMoney(false)
                     return Alert.alert("Error!", responseMessage)
                 }
 
                 setAddingMoney(false)
+                trackEvent("Added money to account")
 
                 // handle redirect
                 // if it's onboarding
@@ -67,6 +72,7 @@ export function useAddMoneyToUserAccount() {
                     navigation.goBack()
                 }
             } catch (err) {
+                Sentry.captureException(err)
                 setAddingMoney(false)
                 return Alert.alert("Error!", "Failed to credit account")
             }
@@ -82,6 +88,7 @@ export function AddMoney() {
     const payWithFlutterWaveBtn = (renderButton: (props: CustomButtonProps) => React.ReactNode) => (
         <PayWithFlutterwave
             onRedirect={(params: RedirectParams) => addMoney(params, amount)}
+            onInitializeError={(e) => Sentry.captureException(e)}
             customButton={renderButton}
             options={{
                 tx_ref: shortid.generate(),

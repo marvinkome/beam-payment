@@ -1,8 +1,10 @@
 import React, { useState } from "react"
+import * as Sentry from "@sentry/react-native"
 import { Alert } from "react-native"
 import { AddBackAccountScreen } from "./AddBankAccount"
 import { gql, useMutation } from "@apollo/client"
 import { useNavigation } from "@react-navigation/native"
+import { trackEvent } from "libs/analytics"
 
 export const ADD_BANK_ACCOUNT = gql`
     mutation SaveBankDetails($data: AccountDetailsInput!) {
@@ -45,13 +47,15 @@ function useAddBankAccount() {
                 setAddingAccount(false)
 
                 if (!success) {
+                    Sentry.captureMessage(responseMessage)
                     return Alert.alert("Error!", responseMessage)
                 }
 
                 // handle redirect
+                trackEvent("Add bank details")
                 navigation.goBack()
             } catch (err) {
-                console.log(err)
+                Sentry.captureException(err)
                 setAddingAccount(false)
                 return Alert.alert("Error!", "Failed to save bank details")
             }

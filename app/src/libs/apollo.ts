@@ -9,7 +9,6 @@ export async function apolloSetup(signOut: () => void) {
         if (graphQLErrors) {
             const err = graphQLErrors[0].message
             if (err === "Unauthenticated") {
-                console.log(err)
                 signOut()
             }
         }

@@ -21,7 +21,7 @@ export function VerifyPhone() {
             const idToken = await auth().currentUser?.getIdToken()
 
             if (!idToken) {
-                throw new Error()
+                throw new Error("ID token not found")
             }
 
             await signIn(idToken, phoneNumber!)

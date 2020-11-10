@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import messaging from "@react-native-firebase/messaging"
 import * as Sentry from "@sentry/react-native"
+import * as analytics from "libs/analytics"
 import { useContext } from "react"
 import { AuthContext } from "libs/auth-context"
 import { gql, useMutation } from "@apollo/client"
@@ -22,7 +23,6 @@ export const AUTH_USER_MUT = gql`
         }
     }
 `
-
 export function useAuthentication() {
     const authContext = useContext(AuthContext)
     const [authenticateUserMutation] = useMutation(AUTH_USER_MUT)
@@ -41,7 +41,7 @@ export function useAuthentication() {
             return Alert.alert("Error", "Failed to sign in")
         }
 
-        const { token, success, responseMessage } = loginResp?.data?.authenticateUser
+        const { token, success, responseMessage, user } = loginResp?.data?.authenticateUser
 
         if (!success) {
             Sentry.captureMessage(responseMessage)
@@ -50,10 +50,10 @@ export function useAuthentication() {
 
         // setup user data
         await AsyncStorage.setItem(USER_PUB_DETAIL, phoneNumber)
-        await authToken(token)
+        authToken(token)
 
-        // TODO:: Add user to analytics
-        // TODO:: Track successful sign up
+        analytics.setUser(user.id, { $email: user.email })
+        analytics.trackEvent("Login successful")
 
         // finish auth here
         return authContext?.signIn()
@@ -88,7 +88,6 @@ export const NOTIFICATION_MUT = gql`
         }
     }
 `
-
 export function useLogin() {
     const authContext = useContext(AuthContext)
     const [loginMutation] = useMutation(LOGIN_MUT)
@@ -109,7 +108,7 @@ export function useLogin() {
             return Alert.alert("Error!", "Failed to sign in")
         }
 
-        const { token, success, responseMessage } = loginResp?.data?.loginUser
+        const { token, success, responseMessage, user } = loginResp?.data?.loginUser
 
         if (!success) {
             Sentry.captureMessage(responseMessage)
@@ -127,8 +126,8 @@ export function useLogin() {
             Sentry.captureException(e)
         }
 
-        // TODO:: Add user to analytics
-        // TODO:: Track successful sign up
+        analytics.setUser(user.id, { $email: user.email })
+        analytics.trackEvent("Login successful")
 
         // finish auth here
         return authContext?.signIn()
@@ -164,9 +163,6 @@ export function useForgetPin() {
         if (!success) {
             return Alert.alert("Error", "Something went wrong")
         }
-
-        // TODO:: Add user to analytics
-        // TODO:: Track forget pin
 
         // finish auth here
         return authContext?.signOut(true)

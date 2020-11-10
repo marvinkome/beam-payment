@@ -3,6 +3,7 @@ import banks from "config/banks"
 import { IUser } from "models/users"
 import { formatCurrency } from "libs/helpers"
 import { UserService } from "./user"
+import Logger from "loaders/logger"
 
 export class UssdService {
     user: IUser
@@ -130,8 +131,15 @@ export class UssdService {
 
     private async handleOldPin(code: string) {
         const pin = code.match(/\d{4}/)![0]
+        let correctPin = false
 
-        if (!(await this.user.verify_pin(pin))) {
+        try {
+            correctPin = await this.user.verify_pin(pin)
+        } catch (err) {
+            Logger.error(`🔥 error: ${err.message}`)
+        }
+
+        if (!correctPin) {
             return "END Old pin is incorrect"
         }
 

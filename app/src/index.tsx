@@ -1,5 +1,6 @@
 import "react-native-gesture-handler"
 import React from "react"
+import * as Sentry from "@sentry/react-native"
 import { ApolloProvider } from "@apollo/client"
 import { NavigationContainer } from "@react-navigation/native"
 import { ThemeProvider } from "react-native-elements"
@@ -9,6 +10,13 @@ import { ElementsTheme, NavigationTheme } from "styles/theme"
 import { AuthContext } from "libs/auth-context"
 import { navigationRef } from "libs/navigator"
 import { useAppSetup } from "hooks/app-setup"
+import { SENTRY_KEY } from "libs/keys"
+
+if (!__DEV__) {
+    Sentry.init({
+        dsn: SENTRY_KEY,
+    })
+}
 
 export default function BeamApp() {
     const appData = useAppSetup()

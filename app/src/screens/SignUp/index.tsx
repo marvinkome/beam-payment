@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import * as Sentry from "@sentry/react-native"
 import auth from "@react-native-firebase/auth"
 import { Alert } from "react-native"
 import { useNavigation } from "@react-navigation/native"
@@ -28,8 +29,7 @@ export function SignUp() {
 
             navigate(routes.public.verifyPhone)
         } catch (e) {
-            // TODO: Sentry
-            console.log(e)
+            Sentry.captureException(e)
             setSendingSms(false)
             Alert.alert("Error!", "Please use a correct phone number")
         }

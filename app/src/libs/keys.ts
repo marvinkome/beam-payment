@@ -13,3 +13,7 @@ export const EMAIL_URL = getConfig("marvinkome@gmail.com")
 
 // APIs
 export const FLUTTERWAVE_KEY = getConfig("FLWPUBK_TEST-11ff807f10429d67f82dde205ce0b5fb-X")
+
+export const SENTRY_KEY = getConfig(
+    "https://7ffd58bcf4fa4098b4968f903c228e85@o474872.ingest.sentry.io/5511855",
+)

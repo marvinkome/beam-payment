@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import messaging from "@react-native-firebase/messaging"
+import * as Sentry from "@sentry/react-native"
 import { useContext } from "react"
 import { AuthContext } from "libs/auth-context"
 import { gql, useMutation } from "@apollo/client"
@@ -27,7 +28,8 @@ export function useAuthentication() {
     const [authenticateUserMutation] = useMutation(AUTH_USER_MUT)
 
     const signIn = async (idToken: string, phoneNumber: string) => {
-        // TODO:: sentry breadcrumb - request started
+        Sentry.addBreadcrumb({ message: "Registration request started" })
+
         let loginResp = null
 
         try {
@@ -35,15 +37,14 @@ export function useAuthentication() {
                 variables: { idToken },
             })
         } catch (err) {
-            // TODO:: sentry - track failed signup
-            console.log(err)
-            return Alert.alert("Error!", "Failed to sign in")
+            Sentry.captureException(err)
+            return Alert.alert("Error", "Failed to sign in")
         }
 
         const { token, success, responseMessage } = loginResp?.data?.authenticateUser
 
         if (!success) {
-            // TODO:: sentry - track failed signup
+            Sentry.captureMessage(responseMessage)
             return Alert.alert("Error!", responseMessage)
         }
 
@@ -94,7 +95,8 @@ export function useLogin() {
     const [setNotificationToken] = useMutation(NOTIFICATION_MUT)
 
     const signIn = async (pin: string) => {
-        // TODO:: sentry breadcrumb - request started
+        Sentry.addBreadcrumb({ message: "Login request started" })
+
         let loginResp = null
         const phoneNumber = await AsyncStorage.getItem(USER_PUB_DETAIL)
 
@@ -103,28 +105,26 @@ export function useLogin() {
                 variables: { phoneNumber, pin },
             })
         } catch (err) {
-            // TODO:: sentry - track failed signup
-            console.log(err)
+            Sentry.captureException(err)
             return Alert.alert("Error!", "Failed to sign in")
         }
 
         const { token, success, responseMessage } = loginResp?.data?.loginUser
 
         if (!success) {
-            // TODO:: sentry - track failed signup
+            Sentry.captureMessage(responseMessage)
             return Alert.alert("Error!", responseMessage)
         }
 
         // setup user data
-        await authToken(token)
+        authToken(token)
 
         // store notification token
         try {
             const token = await messaging().getToken()
             await setNotificationToken({ variables: { token } })
         } catch (e) {
-            console.log(e)
-            // TODO:: Sentry.captureException(e)
+            Sentry.captureException(e)
         }
 
         // TODO:: Add user to analytics
@@ -147,22 +147,21 @@ export function useForgetPin() {
     const [forgetPinMut] = useMutation(FORGET_PIN_MUT)
 
     const forgetPin = async () => {
-        // TODO:: sentry breadcrumb - request started
+        Sentry.addBreadcrumb({ message: "forget pin request started" })
+
         let forgetPinResp = null
         const phoneNumber = await AsyncStorage.getItem(USER_PUB_DETAIL)
 
         try {
             forgetPinResp = await forgetPinMut({ variables: { phoneNumber } })
         } catch (err) {
-            // TODO:: sentry - track failed signup
-            console.log(err)
+            Sentry.captureException(err)
             return Alert.alert("Error", "Failed to forget pin")
         }
 
         const success = forgetPinResp?.data?.forgetPin
 
         if (!success) {
-            // TODO:: sentry - track failed signup
             return Alert.alert("Error", "Something went wrong")
         }
 

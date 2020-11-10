@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import * as Sentry from "@sentry/react-native"
 import { useNavigation } from "@react-navigation/native"
 import { gql, useMutation } from "@apollo/client"
 import { SetPinScreen } from "./SetPin"
@@ -37,7 +38,7 @@ function useSavePin() {
 
                 navigate(routes.main.onboarding.addMoney)
             } catch (e) {
-                console.log(e)
+                Sentry.captureException(e)
                 Alert.alert("Error!", "Error saving pin. Try again")
             }
         },

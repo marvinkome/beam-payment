@@ -123,15 +123,15 @@ describe("ussd tests", () => {
         expect(mockRes.send.mock.calls[2][0]).toMatch(/FCMB/g)
 
         // select bank
-        mockReq.body.text = "1*0123456789*2"
+        mockReq.body.text = "1*0123456789*9*2"
         await handleUSSDCode(mockReq, mockRes)
 
         // expect details were saved
         const newUser = await User.findOne({ phoneNumber: "+2349087573383" })
         expect(newUser?.pin).toBeDefined()
         expect(newUser?.bankDetails?.accountNumber).toBe("0123456789")
-        expect(newUser?.bankDetails?.bankCode).toBe("058")
-        expect(newUser?.bankDetails?.bankName).toBe("GTBank Plc")
+        expect(newUser?.bankDetails?.bankCode).toBe("068")
+        expect(newUser?.bankDetails?.bankName).toBe("Standard Chartered Bank")
 
         const transaction = await Transaction.findOne({ from: newUser?.id })
         expect(transaction?.amount).toBe(1245)

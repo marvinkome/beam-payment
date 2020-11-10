@@ -1,6 +1,10 @@
 import config from "config"
 
 export function getAmountToWithdraw(amount: number) {
+    if (amount < config.transactionFees.withdrawFee[0]) {
+        return null
+    }
+
     if (amount <= 5000) {
         return amount - config.transactionFees.withdrawFee[0]
     }
@@ -10,4 +14,8 @@ export function getAmountToWithdraw(amount: number) {
     }
 
     return amount - config.transactionFees.withdrawFee[2]
+}
+
+export function formatCurrency(number: number) {
+    return new Intl.NumberFormat().format(number)
 }

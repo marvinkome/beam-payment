@@ -96,6 +96,18 @@ describe("User service tests", () => {
         expect(user?.accountBalance).toBe(0)
     })
 
+    test("withdrawMoney - small amount", async () => {
+        userService = new UserService(
+            new User({ phoneNumber: "+2349087573383", accountBalance: 10 })
+        )
+
+        try {
+            await userService?.withdrawMoney()
+        } catch (err) {
+            expect(err.message).toBe("You must have more than NGN100 to withdraw")
+        }
+    })
+
     test("revertTransaction", async () => {
         const transaction = new Transaction({
             transactionId: "a-transaction",

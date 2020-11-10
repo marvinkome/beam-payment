@@ -88,13 +88,23 @@ export class UserService {
         return this.user.save()
     }
 
-    async storeAccountDetails(details: { accNumber: string; bankName: string; bankCode: string }) {
-        this.user.bankDetails = {
-            accountNumber: details.accNumber,
-            bankName: details.bankName,
-            bankCode: details.bankCode,
+    async storeAccountDetails(details: {
+        accNumber?: string
+        bankName?: string
+        bankCode?: string
+    }) {
+        const bankDetails: any = this.user.bankDetails || {}
+
+        if (details.accNumber) {
+            bankDetails.accountNumber = details.accNumber
         }
 
+        if (details.bankName) {
+            bankDetails.bankName = details.bankName
+            bankDetails.bankCode = details.bankCode
+        }
+
+        this.user.bankDetails = bankDetails
         return this.user.save()
     }
 
@@ -103,6 +113,9 @@ export class UserService {
 
         // calculate money to send
         const amountToSend = getAmountToWithdraw(userBalance)
+        if (!amountToSend) {
+            throw new Error("You must have more than NGN100 to withdraw")
+        }
 
         // intialize transfer through flutterwave
         const reference = nanoid()

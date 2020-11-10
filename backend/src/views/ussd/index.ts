@@ -37,6 +37,10 @@ export function renderChooseBank(banks: { name: string; code: string }[], more?:
     `
 }
 
+export function savedAccountDetails() {
+    return "END Account details have been changed"
+}
+
 export function renderTransferredMoney() {
     return "END All your money has been sent to your bank account. You'll receive a credit alert shortly."
 }

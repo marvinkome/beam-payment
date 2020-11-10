@@ -177,6 +177,88 @@ describe("ussd tests", () => {
         )
     })
 
+    test("change account details", async () => {
+        await createDemoUser({
+            accountBalance: 1245,
+            pin: "2020",
+            bankDetails: {
+                accountNumber: "0123456789",
+                bankCode: "058",
+                bankName: "GTBank Plc",
+            },
+        })
+
+        const mockReq: any = {
+            body: { phoneNumber: "+2349087573383", text: "2" },
+        }
+
+        const mockRes: any = {
+            send: jest.fn(),
+            set: jest.fn(),
+        }
+
+        await handleUSSDCode(mockReq, mockRes)
+        expect(mockRes.send.mock.calls[0][0]).toMatch(/CON Enter your account number:/)
+
+        // set account number
+        mockReq.body.text = "2*0123456789"
+        await handleUSSDCode(mockReq, mockRes)
+        expect(mockRes.send.mock.calls[1][0]).toMatch(/Access Bank/g)
+        expect(mockRes.send.mock.calls[1][0]).toMatch(/More/g)
+
+        // select more bank
+        mockReq.body.text = "2*0123456789*9"
+        await handleUSSDCode(mockReq, mockRes)
+        expect(mockRes.send.mock.calls[2][0]).not.toMatch(/Access Bank/g)
+        expect(mockRes.send.mock.calls[2][0]).not.toMatch(/More/g)
+        expect(mockRes.send.mock.calls[2][0]).toMatch(/Ecobank/g)
+        expect(mockRes.send.mock.calls[2][0]).toMatch(/FCMB/g)
+
+        // select bank
+        mockReq.body.text = "2*0123456789*9*2"
+        await handleUSSDCode(mockReq, mockRes)
+        expect(mockRes.send.mock.calls[3][0]).toMatch("END Account details have been changed")
+
+        // expect details were saved
+        const newUser = await User.findOne({ phoneNumber: "+2349087573383" })
+        expect(newUser?.bankDetails?.accountNumber).toBe("0123456789")
+        expect(newUser?.bankDetails?.bankCode).toBe("068")
+        expect(newUser?.bankDetails?.bankName).toBe("Standard Chartered Bank")
+    })
+
+    test("change pin", async () => {
+        await createDemoUser({ accountBalance: 1245, pin: "2020" })
+
+        const mockReq: any = {
+            body: { phoneNumber: "+2349087573383", text: "3" },
+        }
+
+        const mockRes: any = {
+            send: jest.fn(),
+            set: jest.fn(),
+        }
+
+        // @ts-ignore
+        await handleUSSDCode(mockReq, mockRes)
+        expect(mockRes.send.mock.calls[0][0]).toMatch("CON Enter old pin")
+
+        mockReq.body.text = "3*2021"
+        await handleUSSDCode(mockReq, mockRes)
+        expect(mockRes.send.mock.calls[1][0]).toMatch("END Old pin is incorrect")
+
+        mockReq.body.text = "3*2020"
+        await handleUSSDCode(mockReq, mockRes)
+        expect(mockRes.send.mock.calls[2][0]).toMatch("CON Enter new pin")
+
+        mockReq.body.text = "3*2020*2022"
+        await handleUSSDCode(mockReq, mockRes)
+        expect(mockRes.send.mock.calls[3][0]).toMatch("END Saved new pin")
+
+        const newUser = await User.findOne({ phoneNumber: "+2349087573383" })
+        const changedPin = await newUser?.verify_pin("2022")
+        expect(changedPin).toBeTruthy()
+    })
+
     afterEach(async () => {
         await mongoose.connection.db.dropDatabase()
     })

@@ -22,24 +22,40 @@ export class UssdService {
             return this.handleWithdrawOption()
         }
 
+        if (code === "2") {
+            return ussdViews.renderEnterAccountNumber()
+        }
+
+        if (code === "3") {
+            return ussdViews.renderEnterOld()
+        }
+
         if (/1\*\d{4}$/g.test(code)) {
             return this.handleWithdrawPin(code)
         }
 
-        if (/1\*.*\d{10}$/.test(code)) {
+        if (/[1-2]\*.*\d{10}$/.test(code)) {
             return this.handleAccountNumber(code)
         }
 
-        if (/1\*.*\d{10}\*[9]$/.test(code)) {
+        if (/[1-2]\*.*\d{10}\*[9]$/.test(code)) {
             return this.handleMoreBanks()
         }
 
-        if (/1\*.*\d{10}\*[1-6]$/.test(code)) {
+        if (/[1-2]\*.*\d{10}\*[1-6]$/.test(code)) {
             return this.handleSelectBank(code)
         }
 
-        if (/1\*.*\d{10}\*[9]\*[1-5]$/.test(code)) {
+        if (/[1-2]\*.*\d{10}\*[9]\*[1-5]$/.test(code)) {
             return this.handleSelectBank(code, true)
+        }
+
+        if (/3\*\d{4}$/.test(code)) {
+            return this.handleOldPin(code)
+        }
+
+        if (/3\*\d{4}\*\d{4}$/.test(code)) {
+            return this.handleNewPin(code)
         }
     }
 
@@ -100,6 +116,7 @@ export class UssdService {
     }
 
     private async handleSelectBank(code: string, secondOption?: boolean) {
+        const withdrawing = code.match(/^[1-2]/)![0] === "1"
         const bankIndex = parseInt(code.match(/[1-6]$/)![0])
         const slicedBanks = secondOption ? banks.slice(6, banks.length) : banks.slice(0, 6)
 
@@ -108,7 +125,24 @@ export class UssdService {
             bankName: slicedBanks[bankIndex - 1].name,
         })
 
-        return this.transferMoney()
+        return withdrawing ? this.transferMoney() : ussdViews.savedAccountDetails()
+    }
+
+    private async handleOldPin(code: string) {
+        const pin = code.match(/\d{4}/)![0]
+
+        if (!(await this.user.verify_pin(pin))) {
+            return "END Old pin is incorrect"
+        }
+
+        return "CON Enter new pin"
+    }
+
+    private async handleNewPin(code: string) {
+        const pin = code.match(/\d{4}$/)![0]
+
+        await this.userService.setPin(pin)
+        return "END Saved new pin"
     }
 
     private async transferMoney() {

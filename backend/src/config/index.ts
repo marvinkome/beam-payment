@@ -1,3 +1,11 @@
+let serviceAccount = {}
+
+if (process.env.NODE_ENV === "production") {
+    serviceAccount = require("/opt/firebase/firebase_secret.json")
+} else if (process.env.NODE_ENV === "development") {
+    serviceAccount = require("../../firebase_secret.json")
+}
+
 export default {
     // process information
     environment: process.env.NODE_ENV || "development",
@@ -15,10 +23,7 @@ export default {
     //     process.env.NODE_ENV === "production"
     //         ? require("/opt/firebase/firebase_secret.json")
     //         : require("../../firebase_secret.json"),
-    serviceAccount:
-        process.env.NODE_ENV === "production"
-            ? require("../../../firebase_secret.json")
-            : require("../../firebase_secret.json"),
+    serviceAccount,
 
     // flutterwave
     flutterwavePublicKey: process.env.FLUTTERWAVE_KEY || "",

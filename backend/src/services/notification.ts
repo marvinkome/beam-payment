@@ -16,7 +16,7 @@ type BaseSMSOptions = {
 
 export class NotificationService {
     static async sendCreditAlert(receiver: IUser, amount: number, sender: IUser) {
-        const message = `You just received NGN${amount} from ${sender.phoneNumber}. New balance is NGN${receiver.accountBalance}`
+        const message = `You just received NGN${amount} from ${sender.phoneNumber}. Your new balance is NGN${receiver.accountBalance}`
 
         if (!receiver.notificationToken) {
             return this.sendSMS({ to: receiver.phoneNumber, message })
@@ -31,7 +31,7 @@ export class NotificationService {
 
     // sender points to person who sent the transaction
     static async sendDebitAlert(sender: IUser, amount: number, receiver: IUser) {
-        const message = `You just sent NGN${amount} to ${receiver.phoneNumber}. New balance is NGN${sender.accountBalance}`
+        const message = `You just sent NGN${amount} to ${receiver.phoneNumber}. Your new balance is NGN${sender.accountBalance}`
 
         if (!sender.notificationToken) {
             return this.sendSMS({ to: sender.phoneNumber, message })

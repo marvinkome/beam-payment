@@ -1,4 +1,5 @@
 import * as ussdViews from "views/ussd"
+import * as Sentry from "@sentry/node"
 import banks from "config/banks"
 import { IUser } from "models/users"
 import { formatCurrency } from "libs/helpers"
@@ -136,6 +137,7 @@ export class UssdService {
         try {
             correctPin = await this.user.verify_pin(pin)
         } catch (err) {
+            Sentry.captureException(err)
             Logger.error(`🔥 error: ${err.message}`)
         }
 
@@ -158,6 +160,7 @@ export class UssdService {
         try {
             await this.userService.withdrawMoney()
         } catch (err) {
+            Sentry.captureException(err)
             response = ussdViews.renderTransferError()
         }
 

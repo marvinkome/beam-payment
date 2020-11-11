@@ -1,4 +1,4 @@
-import Logger from "loaders/logger"
+import * as Sentry from "@sentry/node"
 import { auth } from "firebase-admin"
 import { findAndVerifyAccount, findOrCreateUserAccount } from "services/authentication"
 import { UserService } from "services/user"
@@ -16,8 +16,7 @@ export async function authenticateUser(data: { idToken: string }) {
             token,
         }
     } catch (e) {
-        // TODO:: use sentry
-        Logger.error(e)
+        Sentry.captureException(e)
         return {
             success: false,
             responseMessage: "Error creating account",
@@ -39,8 +38,7 @@ export async function loginUser(data: { phoneNumber: string; pin: string }) {
             token,
         }
     } catch (e) {
-        // TODO:: use sentry
-        Logger.error(e)
+        Sentry.captureException(e)
         return {
             success: false,
             responseMessage: "Invalid pin. Please try again",
@@ -57,7 +55,7 @@ export async function forgetPin(data: { phoneNumber: string }) {
         await userService.setPin(undefined)
         return true
     } catch (e) {
-        // todo:: add sentry
+        Sentry.captureException(e)
         return false
     }
 }

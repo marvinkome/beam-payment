@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/node"
 import config from "config"
 import Logger from "loaders/logger"
 import Flutterwave from "loaders/flutterwave"
@@ -35,6 +36,7 @@ export class UserService {
             flwResp.data?.currency !== "NGN"
 
         if (isInvalid) {
+            Sentry.captureMessage(flwResp.message)
             Logger.error("🔥 error: %o", flwResp)
             throw new Error(flwResp.message)
         }
@@ -140,6 +142,7 @@ export class UserService {
                 from: this.user,
             })
         } catch (err) {
+            Sentry.captureException(err)
             Logger.error("🔥 error: %o", response)
             throw new Error(err.message)
         }

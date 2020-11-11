@@ -1,4 +1,5 @@
 import Logger from "loaders/logger"
+import * as Sentry from "@sentry/node"
 import { transferEvent } from "events/transfer"
 import { IUser } from "models/users"
 import { findOrCreateUserAccount } from "services/authentication"
@@ -17,8 +18,7 @@ export async function setPin(data: { pin: string }, user: IUser | null) {
             user: updatedUser,
         }
     } catch (e) {
-        // todo:: add sentry
-
+        Sentry.captureException(e)
         return {
             success: false,
             responseMessage: "Error saving pin. Please try again",
@@ -38,8 +38,7 @@ export async function setNotificationToken(data: { token: string }, user: IUser 
             user: updatedUser,
         }
     } catch (e) {
-        // todo:: add sentry
-
+        Sentry.captureException(e)
         return {
             success: false,
             responseMessage: "Error setting notification token. Please try again",
@@ -62,6 +61,7 @@ export async function addMoney(
             user: updatedUser,
         }
     } catch (err) {
+        Sentry.captureException(err)
         Logger.error("🔥 error: %o", err)
 
         return {
@@ -92,6 +92,7 @@ export async function transferMoney(
             user: updatedUser,
         }
     } catch (err) {
+        Sentry.captureException(err)
         Logger.error("🔥 error: %o", err)
 
         return {
@@ -115,6 +116,7 @@ export async function storeAccountDetails(
             user: updatedUser,
         }
     } catch (err) {
+        Sentry.captureException(err)
         Logger.error("🔥 error: %o", err)
 
         return {
@@ -135,6 +137,7 @@ export async function withdrawMoney(user: IUser | null) {
             user: updatedUser,
         }
     } catch (err) {
+        Sentry.captureException(err)
         Logger.error("🔥 error: %o", err)
 
         return {

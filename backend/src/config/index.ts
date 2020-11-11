@@ -26,6 +26,9 @@ export default {
     africasTalkingUsername: process.env.AFRICASTALKING_USERNAME || "",
     africasTalkingSender: process.env.AFRICASTALKING_SENDERID || null,
 
+    // sentry
+    sentryId: "https://20f8b9db7a2240ef9b12d3f0fddc5e00@o474872.ingest.sentry.io/5512341",
+
     // transaction fees
     transactionFees: {
         depositFee: 0.02,

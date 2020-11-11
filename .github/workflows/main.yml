@@ -19,6 +19,30 @@ jobs:
       - uses: actions/checkout@v2
       - name: install and test
         run: |
-          cd server
+          cd backend
           yarn install --frozen-lockfile
           yarn test
+
+  backend-cd:
+    runs-on: ubuntu-18.04
+    needs: backend-ci
+    if: github.event.push.ref == 'refs/heads/main' || github.ref == 'refs/heads/main'
+
+    steps:
+      - uses: actions/checkout/v2
+
+      - name: Docker Login
+        run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Docker Build
+        run: docker build -t beam-payment-backend ./backend
+
+      - name: Tag
+        run: |
+          docker tag beam-payment-backend ${{ secrets.DOCKER_USER }}/beam-payment-backend:${{ github.sha }}
+          docker tag beam-payment-backend ${{ secrets.DOCKER_USER }}/beam-payment-backend:latest
+
+      - name: Push
+        run: |
+          docker push ${{ secrets.DOCKER_USER }}/beam-payment-backend:${{ github.sha }}
+          docker push ${{ secrets.DOCKER_USER }}/beam-payment-backend:latest

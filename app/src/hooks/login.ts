@@ -17,6 +17,7 @@ export const AUTH_USER_MUT = gql`
             token
             user {
                 id
+                phoneNumber
                 isNewAccount
                 accountSetupState
             }
@@ -52,7 +53,7 @@ export function useAuthentication() {
         await AsyncStorage.setItem(USER_PUB_DETAIL, phoneNumber)
         authToken(token)
 
-        analytics.setUser(user.id, { $email: user.email })
+        analytics.setUser(user.id, { phone: user.phoneNumber })
         analytics.trackEvent("Login successful")
 
         // finish auth here
@@ -83,6 +84,7 @@ export const NOTIFICATION_MUT = gql`
             responseMessage
             user {
                 id
+                phoneNumber
                 notificationToken
             }
         }
@@ -126,7 +128,7 @@ export function useLogin() {
             Sentry.captureException(e)
         }
 
-        analytics.setUser(user.id, { $email: user.email })
+        analytics.setUser(user.id, { phone: user.phoneNumber })
         analytics.trackEvent("Login successful")
 
         // finish auth here

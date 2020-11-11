@@ -5,6 +5,7 @@ import { IUser } from "models/users"
 import { formatCurrency } from "libs/helpers"
 import { UserService } from "./user"
 import Logger from "loaders/logger"
+import mixpanel from "libs/mixpanel"
 
 export class UssdService {
     user: IUser
@@ -13,6 +14,9 @@ export class UssdService {
     constructor(user: IUser) {
         this.user = user
         this.userService = new UserService(user)
+        mixpanel.people.set(user.id, {
+            phone: user.phoneNumber,
+        })
     }
 
     async handleUSSDCode(code: string) {
@@ -62,12 +66,18 @@ export class UssdService {
     }
 
     private handleInitialScreen() {
+        mixpanel.track("Open USSD home screen", {
+            category: "USSD",
+        })
         return ussdViews.renderInitialScreen(formatCurrency(this.user.accountBalance || 0))
     }
 
     private handleWithdrawOption() {
+        mixpanel.track("Use the withdrawal option", { category: "USSD" })
+
         // check if user has pin
         if (!this.user.pin) {
+            mixpanel.track("Set pin during withdraw", { category: "USSD" })
             return ussdViews.renderChoosePin()
         }
 
@@ -76,6 +86,7 @@ export class UssdService {
             !this.user.bankDetails.bankName ||
             !this.user.bankDetails.bankCode
         ) {
+            mixpanel.track("Set account details during withdraw", { category: "USSD" })
             return ussdViews.renderEnterAccountNumber()
         }
 
@@ -109,6 +120,7 @@ export class UssdService {
         const accountNumber = code.match(/\d{10}/)![0]
         await this.userService.storeAccountDetails({ accNumber: accountNumber })
 
+        mixpanel.track("Saved account number", { category: "USSD" })
         // render bank details
         return ussdViews.renderChooseBank(banks.slice(0, 6), true)
     }
@@ -127,6 +139,7 @@ export class UssdService {
             bankName: slicedBanks[bankIndex - 1].name,
         })
 
+        mixpanel.track("Saved bank details", { category: "USSD" })
         return withdrawing ? this.transferMoney() : ussdViews.savedAccountDetails()
     }
 
@@ -159,7 +172,9 @@ export class UssdService {
         let response = ussdViews.renderTransferredMoney()
         try {
             await this.userService.withdrawMoney()
+            mixpanel.track("Withdraw money", { category: "USSD" })
         } catch (err) {
+            mixpanel.track("Failed to withdraw money", { category: "USSD" })
             Sentry.captureException(err)
             response = ussdViews.renderTransferError()
         }

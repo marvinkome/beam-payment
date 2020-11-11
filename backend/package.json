@@ -48,6 +48,7 @@
         "flutterwave-node-v3": "^1.0.6",
         "graphql": "^15.4.0",
         "jsonwebtoken": "^8.5.1",
+        "mixpanel": "^0.13.0",
         "module-alias": "^2.2.2",
         "mongoose": "^5.10.10",
         "nanoid": "^3.1.16",

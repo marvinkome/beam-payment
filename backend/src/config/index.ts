@@ -29,6 +29,9 @@ export default {
     // sentry
     sentryId: "https://20f8b9db7a2240ef9b12d3f0fddc5e00@o474872.ingest.sentry.io/5512341",
 
+    // mixpanel
+    mixpanel: process.env.MIXPANEL_KEY || "",
+
     // transaction fees
     transactionFees: {
         depositFee: 0.02,

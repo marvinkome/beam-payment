@@ -1,0 +1,24 @@
+name: Beam payment CI/CD
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "backend/**"
+  pull_request:
+    branches: [main]
+
+jobs:
+  backend-ci:
+    runs-on: ubuntu-18.04
+    container: 
+      image: node:12.18.3
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: install and test
+        run: |
+          cd server
+          yarn install --frozen-lockfile
+          yarn test

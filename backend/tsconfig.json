@@ -16,12 +16,9 @@
         "typeRoots": ["./types"],
         "types": ["@types/jest", "node"],
         "paths": {
-            "src": ["src/*"],
-            "@libs/*": ["src/libs/*"],
-            "@models/*": ["src/models/*"],
-            "@routes/*": ["src/routes/*"]
+            "src": ["src/*"]
         }
     },
     "include": ["./**/*.ts"],
-    "exclude": ["node_modules", "./dist/"]
+    "exclude": ["node_modules", "__mocks__"]
 }

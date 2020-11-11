@@ -8,13 +8,13 @@ import {
     withdrawMoney,
 } from "controllers/users"
 import { storeTransaction } from "services/transactions"
-import { transferEvent } from "events/transfer"
+import { transferEvent } from "app-events/transfer"
 
 jest.mock("services/transactions", () => ({
     storeTransaction: jest.fn(() => Promise.resolve({})),
 }))
 
-jest.mock("events/transfer", () => ({
+jest.mock("app-events/transfer", () => ({
     transferEvent: { emit: jest.fn() },
 }))
 

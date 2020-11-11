@@ -1,4 +1,5 @@
 import * as Sentry from "@sentry/node"
+import Logger from "./logger"
 import express from "express"
 import bodyParser from "body-parser"
 import cors from "cors"
@@ -13,8 +14,15 @@ export default function ({ app }: { app: express.Application }) {
 
     app.use(cors({ origin: "*" }))
 
+    app.use((req, res, next) => {
+        Logger.info(`${req.method} - ${req.url}`)
+        Logger.info(`${res.statusCode}`)
+        next()
+    })
+
     app.get("/liveness", (req, res) => {
-        res.status(200).end()
+        res.status(200)
+        res.send("Beam server is up and running")
     })
 
     app.use(router)
@@ -31,7 +39,7 @@ export default function ({ app }: { app: express.Application }) {
         })
     )
 
-    app.use((_: any, __: any, res: any) => {
+    app.use((_: any, res: any) => {
         // The error id is attached to `res.sentry` to be returned
         // and optionally displayed to the user for support.
         res.statusCode = 500

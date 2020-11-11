@@ -57,10 +57,14 @@
     },
     "_moduleAliases": {
         "src": "./dist/src",
-        "loaders": "./dist/src/loaders",
+        "api": "./dist/src/api",
+        "config": "./dist/src/config",
         "controllers": "./dist/src/controllers",
+        "app-events": "./dist/src/app-events",
+        "libs": "./dist/src/libs",
+        "loaders": "./dist/src/loaders",
         "models": "./dist/src/models",
         "services": "./dist/src/services",
-        "api": "./dist/src/api"
+        "views": "./dist/src/views"
     }
 }

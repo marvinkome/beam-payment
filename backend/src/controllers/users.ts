@@ -1,6 +1,6 @@
 import Logger from "loaders/logger"
 import * as Sentry from "@sentry/node"
-import { transferEvent } from "events/transfer"
+import { transferEvent } from "app-events/transfer"
 import { IUser } from "models/users"
 import { findOrCreateUserAccount } from "services/authentication"
 import { UserService } from "services/user"

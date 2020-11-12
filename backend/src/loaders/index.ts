@@ -14,14 +14,14 @@ export default function ({ app }: { app: express.Application }) {
     // initialize firebase
     firebaseLoader()
 
-    // sentry
-    sentryLoader({ app })
-
     // initialize App
     expressLoader({ app })
 
     // initialize apollo
     apolloLoader({ app })
+
+    // sentry
+    sentryLoader({ app })
 
     Logger.info("🚀 Loaders Initialized")
 }

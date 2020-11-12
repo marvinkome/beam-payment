@@ -6,6 +6,7 @@ import { fonts } from "styles/fonts"
 import { colorTheme } from "styles/theme"
 import { routes } from "libs/navigator"
 import { formatCurrency } from "libs/helpers"
+import { EMAIL_URL } from "libs/keys"
 
 type IProps = {
     accountBalance: number
@@ -83,7 +84,7 @@ export function CashSettingsScreen(props: IProps) {
                 </View>
             </View>
 
-            <Text style={styles.footerText}>Need help? Send an email to team@usebeam.com</Text>
+            <Text style={styles.footerText}>Need help? Send an email to {EMAIL_URL}</Text>
         </ScrollView>
     )
 }

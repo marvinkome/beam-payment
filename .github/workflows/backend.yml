@@ -1,4 +1,4 @@
-name: Beam payment CI/CD
+name: Beam payment backend CI/CD
 
 on:
   push:
@@ -6,12 +6,12 @@ on:
       - main
     paths:
       - "backend/**"
-      - ".github/workflows/*"
+      - ".github/workflows/backend*"
   pull_request:
     branches: [main]
 
 jobs:
-  backend-ci:
+  ci:
     runs-on: ubuntu-18.04
     container: 
       image: node:12.18.3
@@ -24,7 +24,7 @@ jobs:
           yarn install --frozen-lockfile
           yarn test
 
-  backend-cd:
+  cd:
     runs-on: ubuntu-18.04
     needs: backend-ci
     if: github.event.push.ref == 'refs/heads/main' || github.ref == 'refs/heads/main'

@@ -1,0 +1,25 @@
+name: Beam payment app CI/CD
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "app/**"
+      - ".github/workflows/app*"
+  pull_request:
+    branches: [main]
+
+jobs:
+  ci:
+    runs-on: ubuntu-18.04
+    container: 
+      image: node:12.18.3
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: install and test
+        run: |
+          cd app
+          yarn install --frozen-lockfile
+          yarn test

@@ -27,24 +27,5 @@ export default function ({ app }: { app: express.Application }) {
 
     app.use(router)
 
-    app.use(
-        Sentry.Handlers.errorHandler({
-            shouldHandleError(error) {
-                // Capture all 404 and 500 errors
-                if (error.status === 404 || error.status === 500) {
-                    return true
-                }
-                return false
-            },
-        })
-    )
-
-    app.use((_: any, res: any) => {
-        // The error id is attached to `res.sentry` to be returned
-        // and optionally displayed to the user for support.
-        res.statusCode = 500
-        res.end(res.sentry + "\n")
-    })
-
     return app
 }

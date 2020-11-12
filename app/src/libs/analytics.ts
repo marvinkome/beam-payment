@@ -4,8 +4,9 @@ import { MIXPANEL_KEY } from "./keys"
 
 export function initAnalytics() {
     if (MIXPANEL_KEY.length) {
-        mixpanelApi.sharedInstanceWithToken(MIXPANEL_KEY)
-        mixpanelApi.optInTracking()
+        mixpanelApi.sharedInstanceWithToken(MIXPANEL_KEY).then(() => {
+            mixpanelApi.optInTracking()
+        })
     }
 }
 

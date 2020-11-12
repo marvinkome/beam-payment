@@ -17,14 +17,15 @@ export function VerifyPhone() {
         setVerifingCode(true)
 
         try {
-            await confirmation?.confirm(code)
-            const idToken = await auth().currentUser?.getIdToken()
-
+            // first try to get the user idToken for auto verification
+            let idToken = await auth().currentUser?.getIdToken()
             if (!idToken) {
-                throw new Error("ID token not found")
+                // if no idToken found, confirm code
+                await confirmation?.confirm(code)
+                idToken = await auth().currentUser?.getIdToken()
             }
 
-            await signIn(idToken, phoneNumber!)
+            await signIn(idToken!, phoneNumber!)
             setVerifingCode(false)
         } catch (e) {
             Sentry.captureException(e)

@@ -26,7 +26,7 @@ jobs:
 
   cd:
     runs-on: ubuntu-18.04
-    needs: backend-ci
+    needs: ci
     if: github.event.push.ref == 'refs/heads/main' || github.ref == 'refs/heads/main'
 
     steps:

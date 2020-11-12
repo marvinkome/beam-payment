@@ -15,7 +15,7 @@ describe("helpers", () => {
     })
 
     test("formatDate", () => {
-        expect(formatDate("1604492640000")).toEqual("01:24 PM")
+        expect(formatDate("1604492640000")).toEqual("12:24 PM")
         expect(formatDate("1601814240000")).toEqual("04/10/2020")
     })
 

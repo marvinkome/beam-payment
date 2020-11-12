@@ -20,7 +20,4 @@ export const FLUTTERWAVE_KEY = getConfig(
 export const SENTRY_KEY = getConfig(
     "https://7ffd58bcf4fa4098b4968f903c228e85@o474872.ingest.sentry.io/5511855",
 )
-export const MIXPANEL_KEY = getConfig(
-    "399ffa254b9c3f34d189cf43b08c8ade",
-    "399ffa254b9c3f34d189cf43b08c8ade",
-)
+export const MIXPANEL_KEY = getConfig("", "399ffa254b9c3f34d189cf43b08c8ade")

@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: beam-backend-svc
+spec:
+  selector:
+    app: beam-backend
+  ports:
+    - port: 80
+      targetPort: 5055
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: beam-backend-dep
+    labels:
+        app: beam-backend
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: beam-backend
+    template:
+        metadata:
+            labels:
+                app: beam-backend
+        spec:
+            containers:
+                - name: beam-backend
+                  image: docker.io/marvinkome/beam-payment-backend:latest
+                  imagePullPolicy: Always
+                  ports:
+                      - containerPort: 5055
+                  volumeMounts:
+                      - name: firebase-secret-volume
+                        mountPath: "/opt/firebase"
+                        readOnly: true
+                  envFrom:
+                      - secretRef:
+                            name: beam-backend-secret
+                  livenessProbe:
+                      httpGet:
+                          path: /liveness
+                          port: 5055
+                      initialDelaySeconds: 5
+                  readinessProbe:
+                      httpGet:
+                          path: /liveness
+                          port: 5055
+            volumes:
+                - name: firebase-secret-volume
+                  secret:
+                      secretName: firebase-secret

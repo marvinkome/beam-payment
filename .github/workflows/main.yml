@@ -47,3 +47,21 @@ jobs:
         run: |
           docker push ${{ secrets.DOCKER_USER }}/beam-payment-backend:${{ github.sha }}
           docker push ${{ secrets.DOCKER_USER }}/beam-payment-backend:latest
+
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DOCTL_TOKEN }}
+
+      - name: Update deployment file
+        run: |
+          sed -i 's|<IMAGE>|docker.io/marvinkome/beam-payment-backend:'${{ github.sha }}'|' $GITHUB_WORKSPACE/config/beam-backend.yml
+  
+      - name: Save DigitalOcean kubeconfig
+        run: doctl kubernetes cluster kubeconfig save beam-cluster
+
+      - name: Deploy DigitalOcean Kubernetes
+        run: kubectl apply -f $GITHUB_WORKSPACE/config/beam-backend.yml
+
+      - name: Verify deployment
+        run: kubectl rollout status deployment/beam-backend-dep

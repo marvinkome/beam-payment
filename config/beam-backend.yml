@@ -27,7 +27,7 @@ spec:
         spec:
             containers:
                 - name: beam-backend
-                  image: docker.io/marvinkome/beam-payment-backend:latest
+                  image: <IMAGE>
                   imagePullPolicy: Always
                   ports:
                       - containerPort: 5055

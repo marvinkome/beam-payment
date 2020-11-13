@@ -36,10 +36,9 @@ jobs:
       - name: install
         run: yarn install --frozen-lockfile
 
-      - name: Add code push
-        run: npm install -g appcenter-cli
-
       - name: Deploy
-        run: appcenter codepush release-react -d Production
+        run: |
+          npm install -g appcenter-cli
+          appcenter codepush release-react -d Production
         env:
           APPCENTER_ACCESS_TOKEN: ${{ secrets.APPCENTER_ACCESS_TOKEN }}

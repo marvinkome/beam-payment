@@ -27,6 +27,7 @@ jobs:
 
   cd:
     runs-on: ubuntu-18.04
+    needs: ci
     steps:
       - uses: actions/checkout@v2
 
@@ -36,6 +37,6 @@ jobs:
       - name: Deploy
         uses: NishanthShankar/codepush-action@master
         with:
-          args: release-react Beam -d Production
+          args: release-react -d Production
         env:
           APPCENTER_ACCESS_TOKEN: ${{ secrets.APPCENTER_ACCESS_TOKEN }}

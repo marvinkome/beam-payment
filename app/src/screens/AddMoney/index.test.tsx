@@ -10,6 +10,7 @@ import { Amount } from "./Amount"
 import { AddMoneyScreen } from "./AddMoney"
 import { AddMoney, ADD_MONEY } from "./index"
 import { routes } from "libs/navigator"
+import { OnboardingContext } from "libs/onboarding-context"
 
 describe("AddMoney", () => {
     test("<Amount />", () => {
@@ -99,9 +100,16 @@ describe("AddMoney", () => {
             },
         }
 
+        const onboardingCtx = {
+            hasCompletedOnboarding: false,
+            completeOnboarding: jest.fn(),
+        }
+
         const query = render(
             <MockedProvider mocks={[mock]} addTypename={false}>
-                <AddMoney />
+                <OnboardingContext.Provider value={onboardingCtx}>
+                    <AddMoney />
+                </OnboardingContext.Provider>
             </MockedProvider>,
         )
 
@@ -117,7 +125,7 @@ describe("AddMoney", () => {
         fireEvent.press(query.getByText("Continue"))
 
         await waitFor(() => {
-            expect(useNavigation().navigate).toBeCalledWith("TransferTab")
+            expect(onboardingCtx.completeOnboarding).toBeCalled()
         })
     })
 

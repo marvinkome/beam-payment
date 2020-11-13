@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
 import shortid from "shortid"
 import * as Sentry from "@sentry/react-native"
 import { gql, useMutation } from "@apollo/client"
@@ -12,6 +12,7 @@ import { DEPOSIT_FEE } from "libs/constants"
 import { AddMoneyScreen } from "./AddMoney"
 import { routes } from "libs/navigator"
 import { trackEvent } from "libs/analytics"
+import { OnboardingContext } from "libs/onboarding-context"
 
 export const ADD_MONEY = gql`
     mutation AddMoney($addMoneyInput: AddMoneyInput) {
@@ -29,6 +30,7 @@ export const ADD_MONEY = gql`
 export function useAddMoneyToUserAccount() {
     const [addingMoney, setAddingMoney] = useState(false)
     const [addMoney] = useMutation(ADD_MONEY)
+    const onboardingContext = useContext(OnboardingContext)
     const navigation = useNavigation()
     const route = useRoute()
 
@@ -66,11 +68,11 @@ export function useAddMoneyToUserAccount() {
 
                 // handle redirect
                 // if it's onboarding
-                if (route.name === routes.main.onboarding.addMoney) {
-                    navigation.navigate(routes.main.transferTab.index)
-                } else if (route.name === routes.main.addMoney) {
-                    navigation.goBack()
+                if (route.name === routes.main.addMoney) {
+                    return navigation.goBack()
                 }
+
+                onboardingContext?.completeOnboarding()
             } catch (err) {
                 Sentry.captureException(err)
                 setAddingMoney(false)

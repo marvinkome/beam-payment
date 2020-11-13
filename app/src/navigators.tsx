@@ -20,6 +20,7 @@ import { Transfer } from "screens/Transfer"
 import { TransactionHistory } from "screens/TransactionHistory"
 import { CashSettings } from "screens/CashSettings"
 import { AddBankAccount } from "screens/AddBankAccount"
+import { OnboardingContext } from "libs/onboarding-context"
 
 const TransferTab = createMaterialTopTabNavigator()
 function TransferTabNavigator() {
@@ -72,8 +73,7 @@ function OnboardingStackNavigator() {
 
 const MainStack = createStackNavigator()
 function MainStackNavigator() {
-    const { loading, isNewAccount } = useMainSetup()
-
+    const { loading, onboardingContext } = useMainSetup()
     if (loading) {
         return <Loader />
     }
@@ -82,21 +82,33 @@ function MainStackNavigator() {
         header: (props) => <Header {...props} />,
     }
 
-    const initialRoute = isNewAccount ? routes.main.onboarding.index : routes.main.transferTab.index
     return (
-        <MainStack.Navigator screenOptions={options} initialRouteName={initialRoute}>
-            <MainStack.Screen
-                name={routes.main.onboarding.index}
-                component={OnboardingStackNavigator}
-            />
-            <MainStack.Screen
-                name={routes.main.transferTab.index}
-                component={TransferTabNavigator}
-            />
-            <MainStack.Screen name={routes.main.cashSettings} component={CashSettings} />
-            <MainStack.Screen name={routes.main.addMoney} component={AddMoney} />
-            <MainStack.Screen name={routes.main.addAccount} component={AddBankAccount} />
-        </MainStack.Navigator>
+        <OnboardingContext.Provider value={onboardingContext}>
+            <MainStack.Navigator screenOptions={options}>
+                {onboardingContext.hasCompletedOnboarding ? (
+                    <>
+                        <MainStack.Screen
+                            name={routes.main.transferTab.index}
+                            component={TransferTabNavigator}
+                        />
+                        <MainStack.Screen
+                            name={routes.main.cashSettings}
+                            component={CashSettings}
+                        />
+                        <MainStack.Screen name={routes.main.addMoney} component={AddMoney} />
+                        <MainStack.Screen
+                            name={routes.main.addAccount}
+                            component={AddBankAccount}
+                        />
+                    </>
+                ) : (
+                    <MainStack.Screen
+                        name={routes.main.onboarding.index}
+                        component={OnboardingStackNavigator}
+                    />
+                )}
+            </MainStack.Navigator>
+        </OnboardingContext.Provider>
     )
 }
 

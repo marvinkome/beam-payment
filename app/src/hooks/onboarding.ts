@@ -1,7 +1,12 @@
+import { useEffect, useState } from "react"
 import { gql, useQuery } from "@apollo/client"
+import { OnboardingContextType } from "libs/onboarding-context"
 
 export function useMainSetup() {
-    const { data, loading } = useQuery(gql`
+    const [isLoading, setLoading] = useState(true)
+    const [onboardingCompleted, setOnboardingCompleted] = useState(false)
+
+    const { data } = useQuery(gql`
         query isNewAccount {
             me {
                 id
@@ -9,7 +14,20 @@ export function useMainSetup() {
             }
         }
     `)
-    return { loading, isNewAccount: data?.me?.isNewAccount }
+
+    useEffect(() => {
+        if (data?.me) {
+            setOnboardingCompleted(!data?.me?.isNewAccount)
+            setLoading(false)
+        }
+    }, [data])
+
+    const onboardingContext: OnboardingContextType = {
+        completeOnboarding: () => setOnboardingCompleted(true),
+        hasCompletedOnboarding: onboardingCompleted,
+    }
+
+    return { loading: isLoading, onboardingContext }
 }
 
 export function useOnboardingStep() {

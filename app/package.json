@@ -29,6 +29,7 @@
         "lodash.orderby": "^4.6.0",
         "react": "16.13.1",
         "react-native": "0.63.3",
+        "react-native-code-push": "^6.4.0",
         "react-native-confirmation-code-field": "^6.5.0",
         "react-native-elements": "^3.0.0-alpha.1",
         "react-native-gesture-handler": "^1.8.0",

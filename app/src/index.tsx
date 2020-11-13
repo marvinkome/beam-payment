@@ -1,6 +1,7 @@
 import "react-native-gesture-handler"
 import React from "react"
 import * as Sentry from "@sentry/react-native"
+import codePush from "react-native-code-push"
 import { ApolloProvider } from "@apollo/client"
 import { NavigationContainer } from "@react-navigation/native"
 import { ThemeProvider } from "react-native-elements"
@@ -21,7 +22,7 @@ if (!__DEV__) {
 
 initAnalytics()
 
-export default function BeamApp() {
+function BeamApp() {
     const appData = useAppSetup()
 
     if (appData.isLoading) {
@@ -48,3 +49,10 @@ export default function BeamApp() {
         </ThemeProvider>
     )
 }
+
+let codePushOptions = {
+    checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
+    installMode: codePush.InstallMode.ON_NEXT_RESUME,
+}
+
+export default codePush(codePushOptions)(BeamApp)

@@ -36,10 +36,10 @@ jobs:
       - name: install
         run: yarn install --frozen-lockfile
 
+      - name: Add code push
+        run: npm install -g appcenter-cli
+
       - name: Deploy
-        uses: marvinkome/codepush-action@0.1
-        with:
-          directory: app
-          args: release-react -d Production
+        run: appcenter codepush release-react -d Production
         env:
           APPCENTER_ACCESS_TOKEN: ${{ secrets.APPCENTER_ACCESS_TOKEN }}

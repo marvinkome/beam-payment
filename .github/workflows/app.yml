@@ -10,6 +10,10 @@ on:
   pull_request:
     branches: [main]
 
+defaults:
+  run:
+    working-directory: app
+
 jobs:
   ci:
     runs-on: ubuntu-18.04
@@ -21,7 +25,6 @@ jobs:
 
       - name: install and test
         run: |
-          cd app
           yarn install --frozen-lockfile
           yarn test
 
@@ -37,9 +40,8 @@ jobs:
           yarn install --frozen-lockfile
 
       - name: Deploy
-        uses: joabalea/App-Center-action@v1.0.2
+        uses: NishanthShankar/codepush-action@master
         with:
-          command: |
-            cd app
-            appcenter codepush release-react -d Production
-          token: ${{ secrets.APPCENTER_ACCESS_TOKEN }}
+          args: release-react -d Production
+        env:
+          APPCENTER_ACCESS_TOKEN: ${{ secrets.APPCENTER_ACCESS_TOKEN }}

@@ -38,7 +38,7 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Deploy
-        uses: Freeplay/codepush-action@master
+        uses: FreeplayApp/codepush-action@v1
         with:
           directory: ./app
           args: release-react -d Production

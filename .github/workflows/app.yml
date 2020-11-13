@@ -39,7 +39,6 @@ jobs:
       - name: install and deploy
         run: |
           yarn install --frozen-lockfile
-          yarn lint
           yarn deploy
           
         env:

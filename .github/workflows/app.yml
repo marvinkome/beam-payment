@@ -37,8 +37,9 @@ jobs:
           yarn install --frozen-lockfile
 
       - name: Deploy
-        uses: NishanthShankar/codepush-action@master
+        uses: joabalea/App-Center-action@v1.0.2
         with:
-          args: release-react -d Production
-        env:
-          APPCENTER_ACCESS_TOKEN: ${{ secrets.APPCENTER_ACCESS_TOKEN }}
+          command: |
+            cd app
+            appcenter codepush release-react -d Production
+          token: ${{ secrets.APPCENTER_ACCESS_TOKEN }}

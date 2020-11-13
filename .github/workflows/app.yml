@@ -38,7 +38,7 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Deploy
-        uses: FreeplayApp/codepush-action@v1
+        uses: marvinkome/codepush-action@0.1
         with:
           directory: app
           args: release-react -d Production

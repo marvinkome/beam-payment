@@ -33,12 +33,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: install
-        run: yarn install --frozen-lockfile
-
-      - name: Deploy
+      - name: install and deploy
         run: |
-          npm install appcenter-cli
-          appcenter codepush release-react -d Production
+          yarn install --frozen-lockfile
+          yarn deploy
         env:
           APPCENTER_ACCESS_TOKEN: ${{ secrets.APPCENTER_ACCESS_TOKEN }}

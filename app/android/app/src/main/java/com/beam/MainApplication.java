@@ -35,6 +35,11 @@ public class MainApplication extends Application implements ReactApplication {
         protected String getJSMainModuleName() {
           return "index";
         }
+
+        @Override
+        protected String getJSBundleFile() {
+          return CodePush.getJSBundleFile();
+        }
       };
 
   @Override
@@ -47,11 +52,6 @@ public class MainApplication extends Application implements ReactApplication {
     super.onCreate();
     SoLoader.init(this, /* native exopackage */ false);
     initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
-  }
-
-  @Override
-  protected String getJSBundleFile() {
-    return CodePush.getJSBundleFile();
   }
 
   /**

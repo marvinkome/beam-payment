@@ -32,7 +32,9 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: install
-        run: yarn install --frozen-lockfile
+        run: |
+          cd app
+          yarn install --frozen-lockfile
 
       - name: Deploy
         uses: NishanthShankar/codepush-action@master

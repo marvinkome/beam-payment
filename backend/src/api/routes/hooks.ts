@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/node"
 import config from "config"
 import Logger from "loaders/logger"
 import Transaction from "models/transactions"
@@ -9,7 +10,7 @@ const router = Router()
 
 router.post("/transfer", async (req, res) => {
     // Logs
-    Logger.info("Transfer webhook received")
+    Logger.info("Transfer webhook received", req.body)
 
     const hash = req.headers["verif-hash"]
     if (!hash) {
@@ -23,6 +24,8 @@ router.post("/transfer", async (req, res) => {
 
     // if transfer wasn't successful, return the original amount
     const response = req.body
+    Sentry.addBreadcrumb(response)
+
     if (
         response?.data?.status === "SUCCESSFUL" &&
         response?.data?.complete_message === "Successful"
@@ -33,6 +36,7 @@ router.post("/transfer", async (req, res) => {
     const transactionRef = await Transaction.findOne({
         transactionId: response.data?.reference,
     })
+
     if (!transactionRef) {
         return res.sendStatus(200)
     }

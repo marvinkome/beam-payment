@@ -19,10 +19,6 @@ export default {
     jwtSecret: process.env.APP_KEY || "",
 
     // firebase
-    // serviceAccount:
-    //     process.env.NODE_ENV === "production"
-    //         ? require("/opt/firebase/firebase_secret.json")
-    //         : require("../../firebase_secret.json"),
     serviceAccount,
 
     // flutterwave

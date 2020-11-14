@@ -1,4 +1,4 @@
-package com.beam;
+package com.usebeam;
 
 import android.app.Application;
 import android.content.Context;

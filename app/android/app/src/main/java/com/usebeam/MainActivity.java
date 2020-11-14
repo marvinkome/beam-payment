@@ -1,4 +1,4 @@
-package com.beam;
+package com.usebeam;
 
 import com.facebook.react.ReactActivity;
 

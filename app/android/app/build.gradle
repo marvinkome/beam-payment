@@ -146,7 +146,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.beam"
+        applicationId "com.usebeam"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         multiDexEnabled true

@@ -1,5 +1,4 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
-import messaging from "@react-native-firebase/messaging"
 import * as Sentry from "@sentry/react-native"
 import * as analytics from "libs/analytics"
 import { useContext } from "react"
@@ -8,6 +7,7 @@ import { gql, useMutation } from "@apollo/client"
 import { Alert } from "react-native"
 import { authToken } from "store/authStore"
 import { USER_PUB_DETAIL } from "libs/keys"
+import { useStoreNotification } from "./notifications"
 
 export const AUTH_USER_MUT = gql`
     mutation AuthenticateUser($idToken: String!) {
@@ -27,6 +27,7 @@ export const AUTH_USER_MUT = gql`
 export function useAuthentication() {
     const authContext = useContext(AuthContext)
     const [authenticateUserMutation] = useMutation(AUTH_USER_MUT)
+    const storeNotification = useStoreNotification()
 
     const signIn = async (idToken: string, phoneNumber: string) => {
         Sentry.addBreadcrumb({ message: "Registration request started" })
@@ -53,6 +54,9 @@ export function useAuthentication() {
         await AsyncStorage.setItem(USER_PUB_DETAIL, phoneNumber)
         authToken(token)
 
+        // store notification
+        await storeNotification()
+
         analytics.setUser(user.id, { phone: user.phoneNumber })
         analytics.trackEvent("Login successful")
 
@@ -77,23 +81,10 @@ export const LOGIN_MUT = gql`
         }
     }
 `
-export const NOTIFICATION_MUT = gql`
-    mutation SetNotificationToken($token: String!) {
-        setNotificationToken(token: $token) {
-            success
-            responseMessage
-            user {
-                id
-                phoneNumber
-                notificationToken
-            }
-        }
-    }
-`
 export function useLogin() {
     const authContext = useContext(AuthContext)
     const [loginMutation] = useMutation(LOGIN_MUT)
-    const [setNotificationToken] = useMutation(NOTIFICATION_MUT)
+    const storeNotification = useStoreNotification()
 
     const signIn = async (pin: string) => {
         Sentry.addBreadcrumb({ message: "Login request started" })
@@ -121,12 +112,7 @@ export function useLogin() {
         authToken(token)
 
         // store notification token
-        try {
-            const token = await messaging().getToken()
-            await setNotificationToken({ variables: { token } })
-        } catch (e) {
-            Sentry.captureException(e)
-        }
+        await storeNotification()
 
         analytics.setUser(user.id, { phone: user.phoneNumber })
         analytics.trackEvent("Login successful")

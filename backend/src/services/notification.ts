@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/node"
 import config from "config"
 import Logger from "loaders/logger"
 import { messaging } from "firebase-admin"
@@ -44,14 +45,19 @@ export class NotificationService {
         })
     }
 
-    private static sendFirebaseNotification(data: BaseNotificationOptions) {
-        return messaging().send({
-            token: data.userToken,
-            notification: {
-                title: data.title,
-                body: data.body,
-            },
-        })
+    private static async sendFirebaseNotification(data: BaseNotificationOptions) {
+        try {
+            await messaging().send({
+                token: data.userToken,
+                notification: {
+                    title: data.title,
+                    body: data.body,
+                },
+            })
+        } catch (err) {
+            Sentry.captureException(err)
+            Logger.error("🔥 error: %o", err)
+        }
     }
 
     private static async sendSMS(data: BaseSMSOptions) {

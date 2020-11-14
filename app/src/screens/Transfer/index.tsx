@@ -28,11 +28,17 @@ function useTransferMoney() {
         transferMoney: async (amount: string, receiverNumber: string) => {
             setTransferingMoney(true)
             const escapedNumber = `+234${escapePhoneNumber(receiverNumber)}`
+            const newAmount = parseFloat(Number(amount).toPrecision(2))
+
+            if (newAmount < 1) {
+                setTransferingMoney(false)
+                return Alert.alert("Error", "The amount is too small")
+            }
 
             try {
                 const transferMoneyResp = await transferMoney({
                     variables: {
-                        amount: parseInt(amount, 10),
+                        amount: newAmount,
                         receiverNumber: escapedNumber,
                     },
                 })
@@ -47,7 +53,7 @@ function useTransferMoney() {
 
                 setTransferingMoney(false)
                 trackEvent("Sent money", { to: escapePhoneNumber })
-                Alert.alert("Success!", `Money has been sent to ${escapedNumber}`)
+                Alert.alert("Success", `Money has been sent to ${escapedNumber}`)
                 return true
             } catch (err) {
                 Sentry.captureException(err)

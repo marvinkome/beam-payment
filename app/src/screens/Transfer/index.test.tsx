@@ -87,10 +87,59 @@ describe("Transfer", () => {
         fireEvent.press(queries.getByText("Send money"))
 
         await waitFor(() => {
-            expect(Alert.alert).toBeCalledWith("Success!", "Money has been sent to +2349087573383")
+            expect(Alert.alert).toBeCalledWith("Success", "Money has been sent to +2349087573383")
         })
 
         expect(queries.queryByDisplayValue("500")).toBeFalsy()
+        expect(queries.queryByDisplayValue("09087573383")).toBeFalsy()
+    })
+
+    test("<Transfer /> - floats", async () => {
+        const mock = {
+            request: {
+                query: TRANSER_MONEY,
+                variables: {
+                    amount: 1.5,
+                    receiverNumber: "+2349087573383",
+                },
+            },
+            result: {
+                data: {
+                    transferMoney: {
+                        success: true,
+                        responseMessage: null,
+                        user: {
+                            id: "user_id",
+                            accountBalance: 400,
+                        },
+                    },
+                },
+            },
+        }
+
+        const queries = render(
+            <MockedProvider mocks={[mock]} addTypename={false}>
+                <Transfer />
+            </MockedProvider>,
+        )
+
+        fireEvent.changeText(queries.getByPlaceholderText("Enter amount"), "0.5")
+        expect(queries.queryByDisplayValue("0.5")).toBeTruthy()
+
+        fireEvent.changeText(queries.getByPlaceholderText("Enter phone number"), "09087573383")
+        expect(queries.queryByDisplayValue("09087573383")).toBeTruthy()
+
+        fireEvent.press(queries.getByText("Send money"))
+        expect(Alert.alert).toBeCalledWith("Error", "The amount is too small")
+
+        fireEvent.changeText(queries.getByPlaceholderText("Enter amount"), "1.5")
+        fireEvent.press(queries.getByText("Send money"))
+
+        await waitFor(() => {
+            expect(Alert.alert).toBeCalledWith("Success", "Money has been sent to +2349087573383")
+        })
+
+        expect(queries.queryByDisplayValue("1.5")).toBeFalsy()
         expect(queries.queryByDisplayValue("09087573383")).toBeFalsy()
     })
 })

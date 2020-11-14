@@ -61,6 +61,14 @@ describe("User service tests", () => {
         expect(receiver.accountBalance).toBe(500)
     })
 
+    test("transferMoneyToAccount - small amount - with sms", async () => {
+        const receiver = new User({ phoneNumber: "+2349087573383" })
+
+        const user = await userService?.transferMoneyToAccount(0.3, receiver)
+        expect(user?.accountBalance).toBe(594.7)
+        expect(receiver.accountBalance).toBe(0.3)
+    })
+
     test("transferMoneyToAccount - with token", async () => {
         const receiver = new User({
             phoneNumber: "+2349087573383",
@@ -71,6 +79,18 @@ describe("User service tests", () => {
 
         expect(user?.accountBalance).toBe(100)
         expect(receiver.accountBalance).toBe(500)
+    })
+
+    test("transferMoneyToAccount - with small amount - with token", async () => {
+        const receiver = new User({
+            phoneNumber: "+2349087573383",
+            notificationToken: "notif-token",
+        })
+
+        const user = await userService?.transferMoneyToAccount(0.3, receiver)
+
+        expect(user?.accountBalance).toBe(599.7)
+        expect(receiver.accountBalance).toBe(0.3)
     })
 
     test("storeAccountDetails", async () => {

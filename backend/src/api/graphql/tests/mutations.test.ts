@@ -249,6 +249,44 @@ describe("Mutation", () => {
             expect(response.data?.transferMoney.user.accountBalance).toBe(45)
         })
 
+        test("with small amount", async () => {
+            const server = constructTestServer({
+                context: () => ({
+                    currentUser: new User({
+                        phoneNumber: "+2349087573383",
+                        accountBalance: 550,
+                        notificationToken: "notif-token",
+                    }),
+                }),
+            })
+
+            const { mutate } = createTestClient(server)
+
+            const response = await mutate({
+                mutation: gql`
+                    mutation TransferMoney($amount: Float!, $receiverNumber: String!) {
+                        transferMoney(amount: $amount, receiverNumber: $receiverNumber) {
+                            success
+                            responseMessage
+                            user {
+                                id
+                                accountBalance
+                            }
+                        }
+                    }
+                `,
+                variables: {
+                    amount: 0.3,
+                    receiverNumber: "+2349087673383",
+                },
+            })
+
+            expect(response.errors).toBeUndefined()
+            expect(response.data?.transferMoney.success).toBeTruthy()
+            expect(response.data?.transferMoney.responseMessage).toBe(null)
+            expect(response.data?.transferMoney.user.accountBalance).toBe(544.7)
+        })
+
         test("error", async () => {
             const server = constructTestServer({
                 context: () => ({

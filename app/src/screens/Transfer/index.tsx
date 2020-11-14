@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import * as Sentry from "@sentry/react-native"
 import { gql, useMutation } from "@apollo/client"
 import { escapePhoneNumber } from "libs/helpers"
-import { Alert } from "react-native"
+import { Alert, Vibration } from "react-native"
 import { TransferScreen } from "./Transfer"
 import { trackEvent } from "libs/analytics"
 
@@ -53,9 +53,13 @@ function useTransferMoney() {
 
                 setTransferingMoney(false)
                 trackEvent("Sent money", { to: escapePhoneNumber })
+
+                Vibration.vibrate()
                 Alert.alert("Success", `Money has been sent to ${escapedNumber}`)
+
                 return true
             } catch (err) {
+                console.log(err)
                 Sentry.captureException(err)
                 setTransferingMoney(false)
                 return Alert.alert("Error!", `Failed to transfer money to ${escapedNumber}`)

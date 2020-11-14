@@ -15,11 +15,52 @@
       },
       "oauth_client": [
         {
+          "client_id": "992903294041-saduj5ub5vc38822m7nqtvcfrh3qqem9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.beam",
+            "certificate_hash": "6d4a68c2b057f563b151b5ee2e682b6fb91353c0"
+          }
+        },
+        {
           "client_id": "992903294041-igd17k2u9i65iiob1efof7bim71gq1i0.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.beam",
             "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAc-L66sbZzljPz7pn_HcyRr1pK76M44c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "992903294041-lp2gn624a9h5pakko33q6idlo704j6s9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:992903294041:android:a61f64f8fdb02256cd5548",
+        "android_client_info": {
+          "package_name": "com.usebeam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "992903294041-8d72qadj2ijru0dk1rlkeu40di97p5tu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.usebeam",
+            "certificate_hash": "6d4a68c2b057f563b151b5ee2e682b6fb91353c0"
           }
         }
       ],

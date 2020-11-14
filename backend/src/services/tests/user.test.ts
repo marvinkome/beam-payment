@@ -131,8 +131,8 @@ describe("User service tests", () => {
     test("revertTransaction", async () => {
         const transaction = new Transaction({
             transactionId: "a-transaction",
-            amount: 2985,
-            fees: 15,
+            amount: 3000,
+            fees: 11,
         })
 
         const user = await userService?.revertTransaction(transaction)

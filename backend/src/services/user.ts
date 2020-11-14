@@ -153,7 +153,7 @@ export class UserService {
     }
 
     async revertTransaction(transaction: ITransaction) {
-        const amountToCredit = transaction.amount + transaction.fees
+        const amountToCredit = transaction.amount
         this.user.accountBalance = amountToCredit
 
         await storeTransaction({

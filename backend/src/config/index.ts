@@ -24,7 +24,7 @@ export default {
     // flutterwave
     flutterwavePublicKey: process.env.FLUTTERWAVE_KEY || "",
     flutterwaveSecretKey: process.env.FLUTTERWAVE_SECRET_KEY || "",
-    flutterwaveSecretHash: process.env.FLUTTERWAVE_SECRET_HASH || "",
+    flutterwaveSecretHash: process.env.FLUTTERWAVE_SECRET_HASH || "a-hash",
 
     // africastalking
     africasTalkingAPIKey: process.env.AFRICASTALKING_API_KEY || "",

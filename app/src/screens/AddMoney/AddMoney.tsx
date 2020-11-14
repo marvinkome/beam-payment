@@ -4,10 +4,13 @@ import { ScrollView, View } from "react-native"
 import { Button, Text } from "react-native-elements"
 import { Amounts } from "./index"
 import { Amount } from "./Amount"
+import { TextLink } from "components/TextLink"
 
 type IProps = {
     loading: boolean
     selectedAmount: Amounts
+    isOnboarding?: boolean
+    skipOnboarding?: () => void
     onSelectAmount: (amount: Amounts) => void
     renderContinueBtn: (renderButton: (props: CustomButtonProps) => React.ReactNode) => JSX.Element
 }
@@ -25,6 +28,12 @@ export function AddMoneyScreen(props: IProps) {
                     selectedAmount={props.selectedAmount}
                     onSelectAmount={props.onSelectAmount}
                 />
+
+                {props.isOnboarding && (
+                    <TextLink onPress={props.skipOnboarding} style={{ paddingHorizontal: 20 }}>
+                        Skip for now
+                    </TextLink>
+                )}
             </View>
 
             <View style={{ flex: 1, justifyContent: "flex-end" }}>

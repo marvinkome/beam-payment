@@ -42,6 +42,14 @@ export function Header({ navigation, previous }: StackHeaderProps) {
                             ? 0
                             : formatCurrency(data?.me?.accountBalance)}
                     </Text>
+
+                    <Icon
+                        name="plus"
+                        type="feather"
+                        size={18}
+                        containerStyle={styles.iconBg}
+                        color={colorTheme.white}
+                    />
                 </View>
             </TouchableOpacity>
         </View>
@@ -72,5 +80,12 @@ const styles = StyleSheet.create({
     accountBalanceText: {
         ...fonts.semiBold,
         marginLeft: 10,
+    },
+
+    iconBg: {
+        backgroundColor: colorTheme.primary,
+        marginLeft: 10,
+        borderRadius: 50,
+        padding: 2,
     },
 })

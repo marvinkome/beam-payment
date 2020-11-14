@@ -86,6 +86,8 @@ export type Amounts = "500" | "1500" | "3000"
 export function AddMoney() {
     const [amount, setAmount] = useState<Amounts>("500")
     const { addingMoney, addMoney } = useAddMoneyToUserAccount()
+    const onboardingContext = useContext(OnboardingContext)
+    const route = useRoute()
 
     const payWithFlutterWaveBtn = (renderButton: (props: CustomButtonProps) => React.ReactNode) => (
         <PayWithFlutterwave
@@ -106,8 +108,10 @@ export function AddMoney() {
         <AddMoneyScreen
             loading={addingMoney}
             selectedAmount={amount}
+            isOnboarding={route.name !== routes.main.addMoney}
             onSelectAmount={setAmount}
             renderContinueBtn={payWithFlutterWaveBtn}
+            skipOnboarding={onboardingContext?.completeOnboarding}
         />
     )
 }

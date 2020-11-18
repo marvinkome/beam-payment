@@ -80,7 +80,6 @@ describe("Login page", () => {
             )
 
             fireEvent.changeText(queries.getByTestId("codeInput"), "2020")
-            fireEvent.press(queries.getByText("Continue"))
 
             await waitFor(() => {
                 expect(signIn).toBeCalled()
@@ -118,7 +117,6 @@ describe("Login page", () => {
             )
 
             fireEvent.changeText(queries.getByTestId("codeInput"), "2020")
-            fireEvent.press(queries.getByText("Continue"))
 
             await waitFor(() => {
                 expect(Alert.alert).toBeCalledWith("Error!", "Invalid code. Please try again.")

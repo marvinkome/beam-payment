@@ -39,7 +39,7 @@ export function Header({ navigation, previous }: StackHeaderProps) {
 
                     <Text testID="accountBalance" h3 style={styles.accountBalanceText}>
                         {loading || !data?.me?.accountBalance
-                            ? 0
+                            ? ""
                             : formatCurrency(data?.me?.accountBalance)}
                     </Text>
 

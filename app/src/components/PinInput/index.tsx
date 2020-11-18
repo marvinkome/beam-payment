@@ -34,7 +34,7 @@ export function PinInput(props: IProps) {
             if (props.secure) {
                 textChild = (
                     <MaskSymbol
-                        maskSymbol="*"
+                        maskSymbol="•"
                         isLastFilledCell={isLastFilledCell({ index, value: props.value })}>
                         {symbol}
                     </MaskSymbol>

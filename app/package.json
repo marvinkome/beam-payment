@@ -23,7 +23,6 @@
         "@react-navigation/stack": "^5.9.3",
         "@sentry/react-native": "^2.0.0",
         "@types/lodash.orderby": "^4.6.6",
-        "appcenter": "^3.1.2",
         "babel-plugin-module-resolver": "^4.0.0",
         "dayjs": "^1.9.4",
         "flutterwave-react-native": "^1.0.2",

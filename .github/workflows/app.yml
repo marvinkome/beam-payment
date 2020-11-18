@@ -34,7 +34,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: install appcenter
-        run: npm install -g appcenter
+        run: npm install -g appcenter-cli
         env:
           NPM_CONFIG_PREFIX: "~/.npm-global"
 

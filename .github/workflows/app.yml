@@ -10,10 +10,6 @@ on:
   pull_request:
     branches: [main]
 
-defaults:
-  run:
-    working-directory: app
-
 jobs:
   ci:
     runs-on: ubuntu-18.04
@@ -25,6 +21,7 @@ jobs:
 
       - name: install and test
         run: |
+          cd app
           yarn install --frozen-lockfile
           yarn test
 
@@ -38,6 +35,7 @@ jobs:
 
       - name: install and deploy
         run: |
+          cd app
           yarn install --frozen-lockfile
           yarn deploy
           

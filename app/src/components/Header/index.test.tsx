@@ -28,7 +28,7 @@ test("Header", async () => {
         </MockedProvider>,
     )
 
-    expect(query.getByText("0")).toBeFalsy()
+    expect(query.queryByText("0")).toBeFalsy()
 
     await waitFor(() => {
         expect(query.getByText("500")).toBeTruthy()

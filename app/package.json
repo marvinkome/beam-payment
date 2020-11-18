@@ -7,7 +7,7 @@
         "ios": "react-native run-ios",
         "start": "react-native start",
         "test": "TZ=UTC jest",
-        "deploy": "appcenter codepush release-react -d Production",
+        "deploy": "appcenter codepush release-react -a marvinkome/Beam-1 -d Production",
         "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
     },
     "dependencies": {

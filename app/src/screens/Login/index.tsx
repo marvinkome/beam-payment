@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { LoginScreen } from "./Login"
 import { useForgetPin, useLogin } from "hooks/login"
 
@@ -19,6 +19,12 @@ export function Login() {
         await forgetPin()
         setSigningIn(false)
     }
+
+    useEffect(() => {
+        if (pin.length === 4) {
+            onContinue()
+        }
+    }, [pin])
 
     return (
         <LoginScreen

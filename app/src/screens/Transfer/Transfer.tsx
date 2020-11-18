@@ -1,6 +1,6 @@
 import React from "react"
 import { PhoneNumberInput } from "components/PhoneNumberInput"
-import { View, StyleSheet } from "react-native"
+import { View, ScrollView, StyleSheet } from "react-native"
 import { Button, Input } from "react-native-elements"
 import { colorTheme } from "styles/theme"
 
@@ -25,7 +25,7 @@ type IProps = {
 }
 export function TransferScreen(props: IProps) {
     return (
-        <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.container}>
             <Input
                 containerStyle={styles.inputContainer}
                 label="How much:"
@@ -58,7 +58,7 @@ export function TransferScreen(props: IProps) {
                     iconRight
                 />
             </View>
-        </View>
+        </ScrollView>
     )
 }
 

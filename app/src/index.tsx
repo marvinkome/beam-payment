@@ -2,6 +2,7 @@ import "react-native-gesture-handler"
 import React from "react"
 import * as Sentry from "@sentry/react-native"
 import codePush from "react-native-code-push"
+import UserInactivity from "react-native-user-inactivity"
 import { ApolloProvider } from "@apollo/client"
 import { NavigationContainer } from "@react-navigation/native"
 import { ThemeProvider } from "react-native-elements"
@@ -30,6 +31,10 @@ function BeamApp() {
         return <Loader />
     }
 
+    const onIdle = (active: boolean) => {
+        if (!active) appData?.authContext?.signOut()
+    }
+
     const trackStateChange = () => {
         trackEvent("Visit page", { pageName: navigationRef.current?.getCurrentRoute()?.name })
     }
@@ -38,12 +43,15 @@ function BeamApp() {
         <ThemeProvider theme={ElementsTheme}>
             <ApolloProvider client={appData.apolloClient}>
                 <AuthContext.Provider value={appData.authContext}>
-                    <NavigationContainer
-                        theme={NavigationTheme}
-                        ref={navigationRef}
-                        onStateChange={trackStateChange}>
-                        <RootNavigator />
-                    </NavigationContainer>
+                    {/* sign out after 5 mins of inactivity */}
+                    <UserInactivity onAction={onIdle} timeForInactivity={5 * 60 * 1000}>
+                        <NavigationContainer
+                            theme={NavigationTheme}
+                            ref={navigationRef}
+                            onStateChange={trackStateChange}>
+                            <RootNavigator />
+                        </NavigationContainer>
+                    </UserInactivity>
                 </AuthContext.Provider>
             </ApolloProvider>
         </ThemeProvider>

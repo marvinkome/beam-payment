@@ -7,6 +7,7 @@ import { createStackNavigator, StackNavigationOptions } from "@react-navigation/
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs"
 import { AuthContext } from "libs/auth-context"
 import { useMainSetup, useOnboardingStep } from "hooks/onboarding"
+import { OnboardingContext } from "libs/onboarding-context"
 import { routes } from "libs/navigator"
 import { fonts } from "styles/fonts"
 
@@ -20,7 +21,6 @@ import { Transfer } from "screens/Transfer"
 import { TransactionHistory } from "screens/TransactionHistory"
 import { CashSettings } from "screens/CashSettings"
 import { AddBankAccount } from "screens/AddBankAccount"
-import { OnboardingContext } from "libs/onboarding-context"
 
 const TransferTab = createMaterialTopTabNavigator()
 function TransferTabNavigator() {

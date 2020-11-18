@@ -23,6 +23,7 @@
         "@react-navigation/stack": "^5.9.3",
         "@sentry/react-native": "^2.0.0",
         "@types/lodash.orderby": "^4.6.6",
+        "@types/react-native-background-timer": "^2.0.0",
         "babel-plugin-module-resolver": "^4.0.0",
         "dayjs": "^1.9.4",
         "flutterwave-react-native": "^1.0.2",
@@ -30,6 +31,7 @@
         "lodash.orderby": "^4.6.0",
         "react": "16.13.1",
         "react-native": "0.63.3",
+        "react-native-background-timer": "^2.4.1",
         "react-native-code-push": "^6.4.0",
         "react-native-confirmation-code-field": "^6.5.0",
         "react-native-elements": "^3.0.0-alpha.1",
@@ -42,6 +44,7 @@
         "react-native-svg": "^12.1.0",
         "react-native-svg-transformer": "^0.14.3",
         "react-native-tab-view": "^2.15.2",
+        "react-native-user-inactivity": "^1.1.0",
         "react-native-vector-icons": "^7.1.0",
         "react-native-webview": "^10.10.0",
         "shortid": "^2.2.16"

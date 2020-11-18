@@ -8,7 +8,7 @@ import { IContext } from "loaders/apollo"
 export function generateToken(user: IUser) {
     const today = new Date()
     const expirationDate = new Date(today)
-    expirationDate.setDate(today.getDate() + 60) // expires in 60 days
+    expirationDate.setMinutes(today.getMinutes() + 15) // expires in 15 mins
 
     return sign(
         {

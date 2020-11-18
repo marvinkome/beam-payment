@@ -19,7 +19,7 @@ export function useAppSetup() {
             }
 
             // setup apollo
-            const { client } = await apolloSetup(authContext.signOut)
+            const { client } = await apolloSetup(signOut)
 
             setApolloClient(client)
 

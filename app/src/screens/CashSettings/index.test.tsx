@@ -84,7 +84,7 @@ describe("CashSettings", () => {
             </MockedProvider>,
         )
 
-        expect(screen.getByText("NGN 0")).toBeTruthy()
+        expect(screen.queryByText("NGN 0")).toBeFalsy()
 
         await waitFor(() => {
             expect(screen.getByText("NGN 5,000")).toBeTruthy()

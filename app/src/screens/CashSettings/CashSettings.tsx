@@ -9,7 +9,7 @@ import { formatCurrency } from "libs/helpers"
 import { EMAIL_URL } from "libs/keys"
 
 type IProps = {
-    accountBalance: number
+    accountBalance?: number
     bankDetails?: {
         accountNumber: string
         bankName: string
@@ -28,7 +28,9 @@ export function CashSettingsScreen(props: IProps) {
                     Add money
                 </Text>
 
-                <Text style={styles.cardText}>NGN {formatCurrency(props.accountBalance)}</Text>
+                {props.accountBalance && (
+                    <Text style={styles.cardText}>NGN {formatCurrency(props.accountBalance)}</Text>
+                )}
 
                 <Button
                     containerStyle={styles.buttonContainer}

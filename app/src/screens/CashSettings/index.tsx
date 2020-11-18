@@ -97,7 +97,7 @@ export function CashSettings() {
 
     return (
         <CashSettingsScreen
-            accountBalance={loading ? 0 : data?.me?.accountBalance}
+            accountBalance={data?.me?.accountBalance}
             bankDetails={loading ? null : data?.me?.bankDetails}
             onWithdraw={onWithdraw}
             withdrawing={withdrawingMoney}

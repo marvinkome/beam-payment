@@ -33,16 +33,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: install appcenter
-        run: npm install -g appcenter-cli
-        env:
-          NPM_CONFIG_PREFIX: "~/.npm-global"
-
       - name: install and deploy
         run: |
+          npm install -g appcenter-cli
           cd app
           yarn install --frozen-lockfile
           yarn deploy
           
         env:
+          NPM_CONFIG_PREFIX: "~/.npm-global"
           APPCENTER_ACCESS_TOKEN: ${{ secrets.APPCENTER_ACCESS_TOKEN }}

@@ -5,7 +5,7 @@ import { Button, Text } from "react-native-elements"
 import { fonts } from "styles/fonts"
 import { colorTheme } from "styles/theme"
 import { routes } from "libs/navigator"
-import { formatCurrency } from "libs/helpers"
+import { formatCurrency, isFalsy } from "libs/helpers"
 import { EMAIL_URL } from "libs/keys"
 
 type IProps = {
@@ -28,8 +28,8 @@ export function CashSettingsScreen(props: IProps) {
                     Add money
                 </Text>
 
-                {!!props.accountBalance && (
-                    <Text style={styles.cardText}>NGN {formatCurrency(props.accountBalance)}</Text>
+                {!isFalsy(props.accountBalance) && (
+                    <Text style={styles.cardText}>NGN {formatCurrency(props.accountBalance!)}</Text>
                 )}
 
                 <Button

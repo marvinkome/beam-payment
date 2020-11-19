@@ -7,7 +7,7 @@ import { StackHeaderProps } from "@react-navigation/stack"
 import { Text, Icon } from "react-native-elements"
 import { colorTheme } from "styles/theme"
 import { fonts } from "styles/fonts"
-import { formatCurrency } from "libs/helpers"
+import { formatCurrency, isFalsy } from "libs/helpers"
 import { routes } from "libs/navigator"
 
 export const GET_ACCOUNT_BALANCE = gql`
@@ -38,7 +38,7 @@ export function Header({ navigation, previous }: StackHeaderProps) {
                     <Coin width={20} />
 
                     <Text testID="accountBalance" h3 style={styles.accountBalanceText}>
-                        {loading || !data?.me?.accountBalance
+                        {loading || isFalsy(data?.me?.accountBalance)
                             ? ""
                             : formatCurrency(data?.me?.accountBalance)}
                     </Text>

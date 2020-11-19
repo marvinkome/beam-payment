@@ -40,3 +40,7 @@ export function getWithdrawFee(amount: number) {
 
     return WITHDRAWAL_FEE[2]
 }
+
+export function isFalsy(value: any) {
+    return value === null && value === undefined
+}

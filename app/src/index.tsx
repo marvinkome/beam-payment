@@ -15,6 +15,9 @@ import { useAppSetup } from "hooks/app-setup"
 import { SENTRY_KEY } from "libs/keys"
 import { initAnalytics, trackEvent } from "libs/analytics"
 
+import { LogBox } from "react-native"
+LogBox.ignoreLogs(["Setting"])
+
 if (!__DEV__) {
     Sentry.init({
         dsn: SENTRY_KEY,

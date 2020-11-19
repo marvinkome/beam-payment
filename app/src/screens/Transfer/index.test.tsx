@@ -4,6 +4,8 @@ import { Alert } from "react-native"
 import { fireEvent, render, waitFor } from "@testing-library/react-native"
 import { TransferScreen } from "./Transfer"
 import { Transfer, TRANSER_MONEY } from "./index"
+import { useRoute } from "@react-navigation/native"
+import { routes } from "libs/navigator"
 
 describe("Transfer", () => {
     test("<TranserScreen />", () => {
@@ -92,6 +94,43 @@ describe("Transfer", () => {
 
         expect(queries.queryByDisplayValue("500")).toBeFalsy()
         expect(queries.queryByDisplayValue("09087573383")).toBeFalsy()
+    })
+
+    test("<Transfer /> - with initial value", () => {
+        // @ts-ignore
+        useRoute.mockImplementation(() => ({
+            params: { phoneNumber: "07089073483" },
+        }))
+
+        const mock = {
+            request: {
+                query: TRANSER_MONEY,
+                variables: {
+                    amount: 500,
+                    receiverNumber: "+2347089073483",
+                },
+            },
+            result: {
+                data: {
+                    transferMoney: {
+                        success: true,
+                        responseMessage: null,
+                        user: {
+                            id: "user_id",
+                            accountBalance: 400,
+                        },
+                    },
+                },
+            },
+        }
+
+        const queries = render(
+            <MockedProvider mocks={[mock]} addTypename={false}>
+                <Transfer />
+            </MockedProvider>,
+        )
+
+        expect(queries.queryByDisplayValue("07089073483")).toBeTruthy()
     })
 
     test("<Transfer /> - floats", async () => {

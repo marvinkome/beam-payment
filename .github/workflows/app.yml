@@ -38,7 +38,7 @@ jobs:
           npm install -g appcenter-cli
           cd app
           yarn install --frozen-lockfile
-          yarn deploy
+          appcenter codepush release-react -a marvinkome/Beam-1 -d Production
           
         env:
           NPM_CONFIG_PREFIX: "~/.npm-global"

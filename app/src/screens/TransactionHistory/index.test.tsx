@@ -1,10 +1,12 @@
 import React from "react"
 import mockdate from "mockdate"
 import { MockedProvider } from "@apollo/client/testing"
-import { render, waitFor, within } from "@testing-library/react-native"
+import { render, waitFor, within, fireEvent } from "@testing-library/react-native"
 import { HistoryItem } from "./HistoryItem"
 import { TransactionHistoryScreen } from "./TransactionHistory"
 import { TransactionHistory, TRANSACTION_HISTORY } from "./index"
+import { useNavigation } from "@react-navigation/native"
+import { routes } from "libs/navigator"
 
 describe("TransactionHistory", () => {
     test("<HistoryItem />", () => {
@@ -20,6 +22,11 @@ describe("TransactionHistory", () => {
 
         expect(queries.getByA11yHint("credited 200")).toBeTruthy()
         expect(queries.getByText("09087573383")).toBeTruthy()
+
+        fireEvent.press(queries.getByTestId("historyItem"))
+        expect(useNavigation().navigate).toBeCalledWith(routes.main.transferTab.transfer, {
+            phoneNumber: "09087573383",
+        })
     })
 
     test("<TransactionHistoryScreen />", () => {

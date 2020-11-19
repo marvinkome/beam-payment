@@ -1,10 +1,11 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import * as Sentry from "@sentry/react-native"
+import { useRoute } from "@react-navigation/native"
 import { gql, useMutation } from "@apollo/client"
 import { escapePhoneNumber } from "libs/helpers"
 import { Alert, Vibration } from "react-native"
-import { TransferScreen } from "./Transfer"
 import { trackEvent } from "libs/analytics"
+import { TransferScreen } from "./Transfer"
 
 export const TRANSER_MONEY = gql`
     mutation TransferMoney($amount: Float!, $receiverNumber: String!) {
@@ -69,9 +70,18 @@ function useTransferMoney() {
 }
 
 export function Transfer() {
+    const { params } = useRoute()
+    const initialPhoneNumber = (params as any)?.phoneNumber
+
     const [amount, setAmount] = useState("")
     const [receiverNumber, setReceiverNumber] = useState("")
     const { transferingMoney, transferMoney } = useTransferMoney()
+
+    useEffect(() => {
+        if (initialPhoneNumber) {
+            setReceiverNumber(initialPhoneNumber)
+        }
+    }, [initialPhoneNumber])
 
     const onTransferMoney = async () => {
         const success = await transferMoney(amount, receiverNumber)

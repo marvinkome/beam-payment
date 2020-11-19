@@ -1,5 +1,6 @@
 import * as Sentry from "@sentry/node"
 import config from "config"
+import mixpanel from "libs/mixpanel"
 import Logger from "loaders/logger"
 import Flutterwave from "loaders/flutterwave"
 import { IUser } from "models/users"
@@ -115,7 +116,7 @@ export class UserService {
 
         // calculate money to send
         const amountToSend = getAmountToWithdraw(userBalance)
-        if (!amountToSend) {
+        if (!amountToSend || amountToSend <= 100) {
             throw new Error("You must have more than NGN100 to withdraw")
         }
 
@@ -163,6 +164,9 @@ export class UserService {
             to: this.user,
             reversed: true,
         })
+
+        mixpanel.people.set(this.user.id, { phone: this.user.phoneNumber })
+        mixpanel.track("Revert transaction")
 
         return this.user.save()
     }

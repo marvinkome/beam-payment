@@ -8,7 +8,7 @@ import { UserService } from "services/user"
 
 export async function onFailedWithdrawal(req: express.Request, res: express.Response) {
     // Logs
-    // Logger.info("Transfer webhook received", req.body)
+    Logger.info("Transfer webhook received", req.body)
 
     const hash = req.headers["verif-hash"]
     if (!hash) return res.sendStatus(200)
@@ -22,7 +22,7 @@ export async function onFailedWithdrawal(req: express.Request, res: express.Resp
 
     if (
         response?.data?.status === "SUCCESSFUL" &&
-        response?.data?.complete_message === "Successful"
+        response?.data?.complete_message.match(/successful/i)
     ) {
         return res.sendStatus(200)
     }

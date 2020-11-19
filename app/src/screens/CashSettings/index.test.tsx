@@ -107,6 +107,8 @@ describe("CashSettings", () => {
                 "Money has been sent to your bank account",
             )
         })
+
+        expect(screen.getByText("GTBank Plc")).toBeTruthy()
     })
 
     test("<CashSettingsScreen />", () => {

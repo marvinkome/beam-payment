@@ -28,7 +28,7 @@ export function CashSettingsScreen(props: IProps) {
                     Add money
                 </Text>
 
-                {props.accountBalance && (
+                {!!props.accountBalance && (
                     <Text style={styles.cardText}>NGN {formatCurrency(props.accountBalance)}</Text>
                 )}
 

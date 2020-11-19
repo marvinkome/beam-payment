@@ -22,7 +22,7 @@ export async function onFailedWithdrawal(req: express.Request, res: express.Resp
 
     if (
         response?.data?.status === "SUCCESSFUL" &&
-        response?.data?.complete_message.match(/successful/i)
+        /successful/i.test(response?.data?.complete_message)
     ) {
         return res.sendStatus(200)
     }

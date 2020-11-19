@@ -17,9 +17,10 @@ type BaseSMSOptions = {
 
 export class NotificationService {
     static async sendCreditAlert(receiver: IUser, amount: number, sender: IUser) {
-        const message = `You just received NGN${amount} from ${sender.phoneNumber}. Your new balance is NGN${receiver.accountBalance}`
+        let message = `NGN${amount} was sent to you from ${sender.phoneNumber}. New balance: NGN${receiver.accountBalance}.`
 
         if (!receiver.notificationToken) {
+            message = message + `\n Collect with https://usebeam.app`
             return this.sendSMS({ to: receiver.phoneNumber, message })
         }
 

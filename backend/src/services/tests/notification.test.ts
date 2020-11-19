@@ -13,7 +13,8 @@ describe("Notification tests", () => {
         expect(messaging().send).not.toBeCalled()
         expect(AfricasTalking.SMS.send).toBeCalledWith({
             to: ["+2349087573383"],
-            message: "You just received NGN100 from +2349087573397. Your new balance is NGN150",
+            message: `NGN100 was sent to you from +2349087573397. New balance: NGN150.
+ Collect with https://usebeam.app`,
         })
     })
 
@@ -31,7 +32,7 @@ describe("Notification tests", () => {
             token: "notif-token",
             notification: {
                 title: "Transaction Notification",
-                body: "You just received NGN100 from +2349087573397. Your new balance is NGN150",
+                body: "NGN100 was sent to you from +2349087573397. New balance: NGN150.",
             },
         })
         expect(AfricasTalking.SMS.send).not.toBeCalled()

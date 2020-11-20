@@ -35,12 +35,6 @@ export function SignUp() {
         }
     }
 
-    useEffect(() => {
-        if (phoneNumber.length === 10) {
-            signInWithPhoneNumber()
-        }
-    }, [phoneNumber])
-
     return (
         <SignUpScreen
             phoneNumber={phoneNumber}

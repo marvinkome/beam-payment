@@ -91,11 +91,11 @@ export function Transfer() {
         }
     }, [initialPhoneNumber])
 
-    useEffect(() => {
-        if (!inputsNotReadyForTransfer(amount, receiverNumber)) {
-            onTransferMoney()
-        }
-    }, [amount, receiverNumber])
+    // useEffect(() => {
+    //     if (!inputsNotReadyForTransfer(amount, receiverNumber)) {
+    //         onTransferMoney()
+    //     }
+    // }, [amount, receiverNumber])
 
     const onTransferMoney = async () => {
         const success = await transferMoney(amount, receiverNumber)

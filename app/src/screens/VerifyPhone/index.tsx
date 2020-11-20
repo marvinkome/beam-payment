@@ -47,6 +47,18 @@ export function VerifyPhone() {
         }
     }, [code])
 
+    useEffect(() => {
+        const unsubscribe = auth().onAuthStateChanged(async (user) => {
+            if (user) {
+                setVerifingCode(true)
+                const idToken = await user.getIdToken()
+                await signIn(idToken!, phoneNumber!)
+            }
+        })
+
+        return unsubscribe
+    })
+
     return (
         <VerifyPhoneScreen
             phoneNumber={phoneNumber}

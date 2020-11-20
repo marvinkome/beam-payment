@@ -74,6 +74,12 @@ $primary: #9175db;
         margin: 0 auto;
         border-style: none;
         letter-spacing: 1.5px;
+        text-decoration: none;
+        width: 50%;
+
+        @media only screen and (max-width: 480px) {
+          width: 100%;
+        }
 
         img {
           height: 35px;

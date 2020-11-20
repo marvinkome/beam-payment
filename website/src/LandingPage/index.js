@@ -3,7 +3,6 @@ import Screenshot from "../assets/screenshot.png";
 import playstore from "../assets/playstore.svg";
 import { Header } from "./Header";
 
-import "animate.css/animate.css";
 import "./LandingPage.scss";
 
 const headerText = [

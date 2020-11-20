@@ -16,6 +16,7 @@ describe("Transfer", () => {
         const queries = render(
             <TransferScreen
                 loading={false}
+                disableBtn={true}
                 amount=""
                 receiverNumber=""
                 onChangeAmount={onChangeAmount}
@@ -38,6 +39,7 @@ describe("Transfer", () => {
         queries.update(
             <TransferScreen
                 loading={false}
+                disableBtn={false}
                 amount="500"
                 receiverNumber="07037276587"
                 onChangeAmount={onChangeAmount}
@@ -85,8 +87,6 @@ describe("Transfer", () => {
 
         fireEvent.changeText(queries.getByPlaceholderText("Enter phone number"), "09087573383")
         expect(queries.queryByDisplayValue("09087573383")).toBeTruthy()
-
-        fireEvent.press(queries.getByText("Send money"))
 
         await waitFor(() => {
             expect(Alert.alert).toBeCalledWith("Success", "Money has been sent to +2349087573383")
@@ -168,11 +168,9 @@ describe("Transfer", () => {
         fireEvent.changeText(queries.getByPlaceholderText("Enter phone number"), "09087573383")
         expect(queries.queryByDisplayValue("09087573383")).toBeTruthy()
 
-        fireEvent.press(queries.getByText("Send money"))
         expect(Alert.alert).toBeCalledWith("Error", "The amount is too small")
 
         fireEvent.changeText(queries.getByPlaceholderText("Enter amount"), "1.5")
-        fireEvent.press(queries.getByText("Send money"))
 
         await waitFor(() => {
             expect(Alert.alert).toBeCalledWith("Success", "Money has been sent to +2349087573383")

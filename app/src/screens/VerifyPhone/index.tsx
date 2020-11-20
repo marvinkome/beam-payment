@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import auth from "@react-native-firebase/auth"
 import * as Sentry from "@sentry/react-native"
 import { Alert } from "react-native"
@@ -30,7 +30,7 @@ export function VerifyPhone() {
         } catch (e) {
             Sentry.captureException(e)
             setVerifingCode(false)
-            Alert.alert("Error!", "Invalid code")
+            Alert.alert("Error", "Invalid code")
         }
     }
 
@@ -40,6 +40,12 @@ export function VerifyPhone() {
         smsConfirmationObj({ confirmation, phoneNumber })
         setVerifingCode(false)
     }
+
+    useEffect(() => {
+        if (code.length === 6) {
+            onVerify()
+        }
+    }, [code])
 
     return (
         <VerifyPhoneScreen

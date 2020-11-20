@@ -1,7 +1,7 @@
 import React from "react"
 import CountryIcon from "assets/icons/country.svg"
 import { StyleSheet, View, ViewStyle } from "react-native"
-import { Input, Text } from "react-native-elements"
+import { Input, InputProps, Text } from "react-native-elements"
 import { colorTheme } from "styles/theme"
 
 type IProps = {
@@ -9,6 +9,7 @@ type IProps = {
     containerStyle?: ViewStyle
     placeholder?: string
     label?: string
+    inputProps?: InputProps
     value: string
     onChange: (text: string) => void
 }
@@ -31,6 +32,7 @@ export function PhoneNumberInput(props: IProps) {
             renderErrorMessage={false}
             value={props.value}
             onChangeText={props.onChange}
+            {...props.inputProps}
         />
     )
 }

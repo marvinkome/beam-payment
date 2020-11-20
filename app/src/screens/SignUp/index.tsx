@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import * as Sentry from "@sentry/react-native"
 import auth from "@react-native-firebase/auth"
 import { Alert } from "react-native"
@@ -31,9 +31,15 @@ export function SignUp() {
         } catch (e) {
             Sentry.captureException(e)
             setSendingSms(false)
-            Alert.alert("Error!", "Please use a correct phone number")
+            Alert.alert("Error", "Something went wrong. Please try again")
         }
     }
+
+    useEffect(() => {
+        if (phoneNumber.length === 10) {
+            signInWithPhoneNumber()
+        }
+    }, [phoneNumber])
 
     return (
         <SignUpScreen

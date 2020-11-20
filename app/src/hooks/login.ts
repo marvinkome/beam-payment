@@ -47,7 +47,7 @@ export function useAuthentication() {
 
         if (!success) {
             Sentry.captureMessage(responseMessage)
-            return Alert.alert("Error!", responseMessage)
+            return Alert.alert("Error", responseMessage)
         }
 
         // setup user data

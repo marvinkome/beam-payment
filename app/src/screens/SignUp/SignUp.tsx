@@ -28,6 +28,7 @@ export function SignUpScreen(props: IProps) {
             {/* phone number input */}
             <PhoneNumberInput
                 withIcon
+                inputProps={{ autoFocus: true }}
                 placeholder="Your phone number"
                 containerStyle={styles.inputContainer}
                 onChange={props.onChangePhoneNumber}

@@ -77,13 +77,11 @@ describe("Verify phone page tests", () => {
             })
 
             fireEvent.changeText(queries.getByTestId("codeInput"), "202020")
-            fireEvent.press(queries.getByText("Continue"))
 
             await waitFor(() => {
                 expect(signIn).toBeCalled()
             })
 
-            // expect(confirm).toHaveBeenCalledWith("202020")
             expect(authToken).toHaveBeenCalledWith("token")
             expect(AsyncStorage.setItem).toHaveBeenCalledWith(USER_PUB_DETAIL, "+234913498619")
             expect(Alert.alert).not.toHaveBeenCalled()
@@ -118,10 +116,9 @@ describe("Verify phone page tests", () => {
             expect(smsConfirmationObj).toHaveBeenCalled()
 
             fireEvent.changeText(queries.getByTestId("codeInput"), "202020")
-            fireEvent.press(queries.getByText("Continue"))
 
             await waitFor(() => {
-                expect(Alert.alert).toBeCalledWith("Error!", "Error authenticating account")
+                expect(Alert.alert).toBeCalledWith("Error", "Error authenticating account")
             })
 
             // expect(confirm).toHaveBeenCalledWith("202020")

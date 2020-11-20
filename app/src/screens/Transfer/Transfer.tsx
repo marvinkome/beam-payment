@@ -4,16 +4,9 @@ import { View, ScrollView, StyleSheet } from "react-native"
 import { Button, Input } from "react-native-elements"
 import { colorTheme } from "styles/theme"
 
-function disableButton(props: IProps) {
-    if (!props.amount.length) return true
-    if (!props.receiverNumber.length) return true
-    if (props.receiverNumber.length < 10) return true
-
-    return false
-}
-
 type IProps = {
     loading: boolean
+    disableBtn: boolean
 
     amount: string
     onChangeAmount: (amount: string) => void
@@ -46,7 +39,7 @@ export function TransferScreen(props: IProps) {
             <View style={styles.footer}>
                 <Button
                     loading={props.loading}
-                    disabled={disableButton(props)}
+                    disabled={props.disableBtn}
                     onPress={props.onContinue}
                     title="Send money"
                     icon={{

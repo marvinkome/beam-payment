@@ -7,6 +7,14 @@ import { Alert, Vibration } from "react-native"
 import { trackEvent } from "libs/analytics"
 import { TransferScreen } from "./Transfer"
 
+function inputsNotReadyForTransfer(amount: string, receiverNumber: string) {
+    if (!amount.length) return true
+    if (!receiverNumber.length) return true
+    if (receiverNumber.length < 10) return true
+
+    return false
+}
+
 export const TRANSER_MONEY = gql`
     mutation TransferMoney($amount: Float!, $receiverNumber: String!) {
         transferMoney(amount: $amount, receiverNumber: $receiverNumber) {
@@ -83,6 +91,12 @@ export function Transfer() {
         }
     }, [initialPhoneNumber])
 
+    useEffect(() => {
+        if (!inputsNotReadyForTransfer(amount, receiverNumber)) {
+            onTransferMoney()
+        }
+    }, [amount, receiverNumber])
+
     const onTransferMoney = async () => {
         const success = await transferMoney(amount, receiverNumber)
 
@@ -95,6 +109,7 @@ export function Transfer() {
     return (
         <TransferScreen
             loading={transferingMoney}
+            disableBtn={inputsNotReadyForTransfer(amount, receiverNumber)}
             amount={amount}
             receiverNumber={receiverNumber}
             onChangeAmount={setAmount}

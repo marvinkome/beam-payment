@@ -7,6 +7,7 @@ import { escapePhoneNumber } from "libs/helpers"
 import { smsConfirmationObj } from "store/authStore"
 import { SignUpScreen } from "./SignUp"
 import { routes } from "libs/navigator"
+import { trackEvent } from "libs/analytics"
 
 export function SignUp() {
     const { navigate } = useNavigation()
@@ -15,6 +16,9 @@ export function SignUp() {
 
     const signInWithPhoneNumber = async () => {
         const escapedNumber = escapePhoneNumber(phoneNumber)
+
+        Sentry.addBreadcrumb({ message: `Escaped phone number ${escapedNumber}` })
+        trackEvent("Submit sign up form", { phoneNumber: escapedNumber })
 
         setSendingSms(true)
         try {

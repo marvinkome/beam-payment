@@ -18,12 +18,15 @@ function App() {
             </h1>
 
             <div className="button-container">
-              <button className="cta-btn">
+              <a
+                href="https://play.google.com/store/apps/details?id=com.usebeam"
+                className="cta-btn"
+              >
                 <span>DOWNLOAD ON PLAYSTORE </span>
                 <span>
                   <img alt="playstore" src={playstore}></img>
                 </span>
-              </button>
+              </a>
             </div>
           </div>
         </div>

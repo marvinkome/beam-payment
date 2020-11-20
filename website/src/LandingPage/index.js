@@ -7,7 +7,7 @@ import "./LandingPage.scss";
 
 const headerText = [
   "Pay anyone with a phone number",
-  "Withdraw money with app",
+  "Withdraw money with app to your bank",
   "Free app to app payments. ₦5 SMS fee non-app users",
 ];
 

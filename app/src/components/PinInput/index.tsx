@@ -66,6 +66,7 @@ export function PinInput(props: IProps) {
                 textContentType="oneTimeCode"
                 renderCell={renderCell}
                 testID={props.testID}
+                autoFocus
             />
         </View>
     )

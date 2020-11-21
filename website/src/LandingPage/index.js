@@ -1,9 +1,14 @@
 import React from "react";
+import ReactGA from "react-ga";
 import Screenshot from "../assets/screenshot.png";
 import playstore from "../assets/playstore.svg";
 import { Header } from "./Header";
 
 import "./LandingPage.scss";
+
+if (process.env.NODE_ENV !== "development") {
+  ReactGA.initialize("UA-183688411-1");
+}
 
 function App() {
   return (

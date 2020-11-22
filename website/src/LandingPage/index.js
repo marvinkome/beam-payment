@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import ReactGA from "react-ga";
 import Screenshot from "../assets/screenshot.png";
 import playstore from "../assets/playstore.svg";
 import { Header } from "./Header";
@@ -6,6 +7,11 @@ import { Header } from "./Header";
 import "./LandingPage.scss";
 
 function App() {
+  useEffect(() => {
+    ReactGA.set({ page: window.location.pathname });
+    ReactGA.pageview(window.location.pathname + window.location.search);
+  }, []);
+
   return (
     <div className="App">
       <Header />
@@ -18,15 +24,17 @@ function App() {
             </h1>
 
             <div className="button-container">
-              <a
-                href="https://play.google.com/store/apps/details?id=com.usebeam"
+              <ReactGA.OutboundLink
+                eventLabel="Playstore"
+                to="https://play.google.com/store/apps/details?id=com.usebeam"
+                target="_self"
                 className="cta-btn"
               >
                 <span>DOWNLOAD ON PLAYSTORE </span>
                 <span>
                   <img alt="playstore" src={playstore}></img>
                 </span>
-              </a>
+              </ReactGA.OutboundLink>
             </div>
           </div>
         </div>

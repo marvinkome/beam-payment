@@ -5,7 +5,9 @@ import LandingPage from "./LandingPage";
 import reportWebVitals from "./reportWebVitals";
 import "./index.css";
 
-ReactGA.initialize("UA-183688411-1");
+if (process.env.NODE_ENV !== "development") {
+  ReactGA.initialize("UA-183688411-1");
+}
 
 ReactDOM.render(
   <React.StrictMode>

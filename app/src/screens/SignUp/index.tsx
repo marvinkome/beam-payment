@@ -18,7 +18,6 @@ export function SignUp() {
         const escapedNumber = escapePhoneNumber(phoneNumber)
 
         Sentry.addBreadcrumb({ message: `Escaped phone number ${escapedNumber}` })
-        trackEvent("Submit sign up form", { phoneNumber: escapedNumber })
 
         setSendingSms(true)
         try {
@@ -33,6 +32,8 @@ export function SignUp() {
 
             navigate(routes.public.verifyPhone)
         } catch (e) {
+            trackEvent("Phone number verification failed", { phoneNumber: escapedNumber })
+
             Sentry.captureException(e)
             setSendingSms(false)
             Alert.alert("Error", "Something went wrong. Please try again")

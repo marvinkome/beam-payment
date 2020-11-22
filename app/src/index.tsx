@@ -13,7 +13,7 @@ import { AuthContext } from "libs/auth-context"
 import { navigationRef } from "libs/navigator"
 import { useAppSetup } from "hooks/app-setup"
 import { SENTRY_KEY } from "libs/keys"
-import { initAnalytics, trackEvent } from "libs/analytics"
+import { initAnalytics, trackEvent, trackPageView } from "libs/analytics"
 
 import { LogBox } from "react-native"
 LogBox.ignoreLogs(["Setting"])
@@ -39,7 +39,7 @@ function BeamApp() {
     }
 
     const trackStateChange = () => {
-        trackEvent("Visit page", { pageName: navigationRef.current?.getCurrentRoute()?.name })
+        trackPageView(navigationRef.current?.getCurrentRoute()?.name)
     }
 
     return (

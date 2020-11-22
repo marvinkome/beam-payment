@@ -33,13 +33,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: install and deploy
-        run: |
-          npm install -g appcenter-cli
-          cd app
-          yarn install --frozen-lockfile
-          appcenter codepush release-react -a marvinkome/Beam-1 -d Production
-          
+      - name: install
+        run: yarn install --frozen-lockfile
+
+      - name: deploy
+        uses: marvinkome/codepush-action@0.1
+        with:
+          directory: app
+          args: release-react -a marvinkome/Beam-1 -d Production
         env:
-          NPM_CONFIG_PREFIX: "~/.npm-global"
           APPCENTER_ACCESS_TOKEN: ${{ secrets.APPCENTER_ACCESS_TOKEN }}

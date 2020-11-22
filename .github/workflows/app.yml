@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - "app/**/*.(js|tsx|ts)"
+      - "app/**"
       - ".github/workflows/app*"
   pull_request:
     branches: [main]
@@ -27,6 +27,8 @@ jobs:
 
   cd:
     runs-on: ubuntu-18.04
+    needs: ci
+    if: github.event.push.ref == 'refs/heads/main' || github.ref == 'refs/heads/main'
     container: 
       image: node:12.18.3
 

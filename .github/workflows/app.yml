@@ -37,7 +37,7 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: deploy
-        uses: marvinkome/codepush-action@0.2
+        uses: marvinkome/codepush-action@0.3
         with:
           directory: app
           args: release-react -a marvinkome/Beam-1 -d Production

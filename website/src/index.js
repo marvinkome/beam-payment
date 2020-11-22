@@ -1,8 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import ReactGA from "react-ga";
 import LandingPage from "./LandingPage";
 import reportWebVitals from "./reportWebVitals";
 import "./index.css";
+
+ReactGA.initialize("UA-183688411-1");
 
 ReactDOM.render(
   <React.StrictMode>

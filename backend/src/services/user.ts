@@ -42,15 +42,23 @@ export class UserService {
             throw new Error(flwResp.message)
         }
 
+        let amountPaid = data.amount
+        const amountRecieved = flwResp.data?.amount_settled
+
+        // handle international payments
+        if (amountPaid > amountRecieved) {
+            amountPaid = Math.floor(amountRecieved)
+        }
+
         // credit user
-        this.user.accountBalance = (this.user.accountBalance || 0) + data.amount
+        this.user.accountBalance = (this.user.accountBalance || 0) + amountPaid
         await this.user.save()
 
         // store transaction
         await storeTransaction({
             transaction_id: `${flwResp.data?.id}`,
-            amountPaid: data.amount,
-            amountRecieved: flwResp.data?.amount_settled,
+            amountPaid,
+            amountRecieved,
             fromFlutterWave: true,
             to: this.user,
         })

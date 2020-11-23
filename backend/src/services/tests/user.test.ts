@@ -1,3 +1,4 @@
+import Flutterwave from "loaders/flutterwave"
 import Transaction from "models/transactions"
 import User from "models/users"
 import mongoose from "mongoose"
@@ -38,6 +39,37 @@ describe("User service tests", () => {
         const user = await userService?.addMoney(data)
 
         expect(user?.accountBalance).toBe(1100)
+    })
+
+    test("add money - international payments", async () => {
+        Flutterwave.Transaction.verify.mockImplementationOnce(() => {
+            const amount = 3060
+            const percentageFee = parseFloat((3.8 / 100).toFixed(3))
+            const app_fee = amount * percentageFee
+
+            return Promise.resolve({
+                status: "success",
+                message: "Transaction fetched successfully",
+                data: {
+                    id: "123456",
+                    tx_ref: "a-ref-1234",
+                    status: "successful",
+                    currency: "NGN",
+                    amount,
+                    app_fee,
+                    amount_settled: amount - app_fee,
+                },
+            })
+        })
+
+        const data = {
+            tx_id: "123456",
+            tx_ref: "a-ref-1234",
+            amount: 3000,
+        }
+
+        const user = await userService?.addMoney(data)
+        expect(user?.accountBalance).toBe(3543)
     })
 
     test("transferMoneyToAccount - with error", async () => {

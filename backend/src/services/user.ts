@@ -6,7 +6,7 @@ import Flutterwave from "loaders/flutterwave"
 import { IUser } from "models/users"
 import { nanoid } from "nanoid"
 import { storeTransaction } from "./transactions"
-import { ITransaction } from "models/transactions"
+import { ITransaction, TransactionFeeType } from "models/transactions"
 import { getAmountToWithdraw } from "libs/helpers"
 
 export class UserService {
@@ -61,6 +61,7 @@ export class UserService {
             amountRecieved,
             fromFlutterWave: true,
             to: this.user,
+            feeType: TransactionFeeType.DEPOSIT,
         })
 
         return this.user
@@ -69,9 +70,11 @@ export class UserService {
     async transferMoneyToAccount(amount: number, receiver: IUser) {
         // calculate fees if using SMS
         let amountRecieved = amount
+        let feeType
 
         if (!receiver.notificationToken) {
             amountRecieved = amount + config.transactionFees.smsFee
+            feeType = TransactionFeeType.SMS
         }
 
         // remove money from user account
@@ -94,6 +97,7 @@ export class UserService {
             amountRecieved,
             from: this.user,
             to: receiver,
+            ...(feeType && { feeType }),
         })
 
         return this.user.save()
@@ -145,6 +149,7 @@ export class UserService {
 
             await storeTransaction({
                 transaction_id: reference,
+                feeType: TransactionFeeType.WITHDRAWAL,
                 amountPaid: amountToSend,
                 amountRecieved: userBalance,
                 toBank: `${this.user.bankDetails?.bankName} - ${this.user.bankDetails?.accountNumber}`,
@@ -167,6 +172,7 @@ export class UserService {
 
         await storeTransaction({
             transaction_id: nanoid(),
+            feeType: TransactionFeeType.WITHDRAWAL,
             amountPaid: amountToCredit,
             amountRecieved: amountToCredit,
             to: this.user,

@@ -9,6 +9,7 @@ import {
 } from "controllers/users"
 import { storeTransaction } from "services/transactions"
 import { transferEvent } from "app-events/transfer"
+import { TransactionFeeType } from "models/transactions"
 
 jest.mock("services/transactions", () => ({
     storeTransaction: jest.fn(() => Promise.resolve({})),
@@ -61,6 +62,7 @@ describe("User controller test", () => {
             amountPaid: 3000,
             amountRecieved: 3017.16,
             fromFlutterWave: true,
+            feeType: TransactionFeeType.DEPOSIT,
         })
     })
 

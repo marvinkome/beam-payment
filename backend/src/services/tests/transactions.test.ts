@@ -1,3 +1,4 @@
+import { TransactionFeeType } from "models/transactions"
 import User from "models/users"
 import mongoose from "mongoose"
 import { storeTransaction } from "services/transactions"
@@ -23,6 +24,7 @@ describe("Transactions tests", () => {
             amountRecieved: 1508.58,
             fromFlutterWave: true,
             to: new User({ phoneNumber: "+2349087573383" }),
+            feeType: TransactionFeeType.DEPOSIT,
         })
 
         expect(tx.fees).toBe(8.58)

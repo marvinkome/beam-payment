@@ -1,6 +1,13 @@
 import { Schema, Document, model } from "mongoose"
 import { IUser } from "./users"
 
+export enum TransactionFeeType {
+    SMS = "SMS",
+    DEPOSIT = "DEPOSIT",
+    WITHDRAWAL = "WITHDRAWAL",
+    REVERSAL = "REVERSAL",
+}
+
 export interface ITransaction extends Document {
     transactionId: string
     from?: string | Schema.Types.ObjectId | IUser // user
@@ -10,6 +17,7 @@ export interface ITransaction extends Document {
     toBank?: string
     amount: number
     fees: number
+    feeType?: TransactionFeeType
 }
 
 const transactionSchema: Schema<ITransaction> = new Schema(
@@ -29,6 +37,11 @@ const transactionSchema: Schema<ITransaction> = new Schema(
             min: 0,
             type: Number,
             required: true,
+        },
+
+        feeType: {
+            type: String,
+            enum: ["SMS", "DEPOSIT", "WITHDRAWAL", "REVERSAL"],
         },
 
         // either from user or flutterwave

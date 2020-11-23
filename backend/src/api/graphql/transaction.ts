@@ -8,12 +8,25 @@ export const transactionTypeDef = gql`
         DEBIT
     }
 
+    enum TransactionFeeType {
+        SMS
+        DEPOSIT
+        WITHDRAWAL
+        REVERSAL
+    }
+
+    type TransactionFee {
+        amount: Float
+        type: TransactionFeeType
+    }
+
     type Transaction {
         id: ID
         transactionId: String
         transactionType: TransactionType
         between: User
         amount: Float
+        fee: TransactionFee
         createdAt: String
     }
 `
@@ -46,6 +59,13 @@ export const transactionResolver = {
 
         amount: (transaction: ITransaction) => {
             return transaction.amount - transaction.fees
+        },
+
+        fee: async (transaction: ITransaction) => {
+            return {
+                amount: transaction.fees,
+                type: transaction.feeType,
+            }
         },
     },
 }

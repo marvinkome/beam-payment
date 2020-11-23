@@ -1,5 +1,5 @@
 import User from "models/users"
-import Transaction from "models/transactions"
+import Transaction, { TransactionFeeType } from "models/transactions"
 import mongoose from "mongoose"
 import { gql } from "apollo-server-express"
 import { createTestClient } from "apollo-server-testing"
@@ -77,6 +77,7 @@ describe("Query", () => {
             fees: 17.16,
             fromFlutterWave: true,
             to: currentUser,
+            feeType: TransactionFeeType.DEPOSIT,
         }).save()
 
         await new Transaction({
@@ -104,6 +105,10 @@ describe("Query", () => {
                         between {
                             phoneNumber
                         }
+                        fee {
+                            amount
+                            type
+                        }
                         amount
                         createdAt
                     }
@@ -121,6 +126,10 @@ describe("Query", () => {
         expect(response.data?.transactionHistory[1].transactionType).toBe("DEBIT")
 
         expect(response.data?.transactionHistory[2].between).toBe(null)
+        expect(response.data?.transactionHistory[2].fee).toMatchObject({
+            amount: 17.16,
+            type: "DEPOSIT",
+        })
     })
 
     afterEach(async () => {

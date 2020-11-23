@@ -1,10 +1,11 @@
-import Transaction from "models/transactions"
+import Transaction, { TransactionFeeType } from "models/transactions"
 import { IUser } from "models/users"
 
 type TransactionDataType = {
     transaction_id: string
     amountRecieved: number
     amountPaid: number
+    feeType?: TransactionFeeType
     from?: IUser
     fromFlutterWave?: boolean
     reversed?: boolean
@@ -17,6 +18,7 @@ export function storeTransaction(data: TransactionDataType) {
     tx.transactionId = data.transaction_id
     tx.amount = data.amountRecieved
     tx.fees = parseFloat((data.amountRecieved - data.amountPaid).toFixed(2))
+    tx.feeType = data.feeType
 
     if (data.fromFlutterWave) {
         tx.fromFlutterWave = data.fromFlutterWave

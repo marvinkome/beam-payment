@@ -25,10 +25,19 @@ jobs:
           yarn install --frozen-lockfile
           yarn test
 
+  test:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+
+
   cd:
     runs-on: ubuntu-18.04
     needs: ci
-    if: github.event.push.ref == 'refs/heads/main' || github.ref == 'refs/heads/main'
+    if: github.event.push.ref != 'refs/heads/main' || github.ref != 'refs/heads/main'
     container: 
       image: node:12.18.3
 

@@ -114,7 +114,7 @@ export function useLogin() {
         // store notification token
         await storeNotification()
 
-        analytics.setUser(user.id, { phone: user.phoneNumber })
+        analytics.setUser(user.id, { phone: `${user.phoneNumber}` })
         analytics.trackEvent("Login successful")
 
         // finish auth here

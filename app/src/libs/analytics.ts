@@ -41,5 +41,5 @@ export function trackEvent(event: string, props?: any, forMixpanel = true) {
         mixpanelApi.trackWithProperties(event, props)
     }
 
-    analytics().logEvent(event, props)
+    analytics().logEvent(event.split(" ").join("_").toLowerCase(), props)
 }

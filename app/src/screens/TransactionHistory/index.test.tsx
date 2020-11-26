@@ -16,12 +16,29 @@ describe("TransactionHistory", () => {
                 amount={200}
                 between="+2349087573383"
                 type="credit"
+                fee={5}
+                feeType="SMS"
                 timestamp={`${new Date("2020-11-04T13:24:00").getTime()}`}
             />,
         )
 
         expect(queries.getByA11yHint("credited 200")).toBeTruthy()
         expect(queries.getByText("09087573383")).toBeTruthy()
+        expect(queries.getByText("+NGN 5 - SMS fee")).toBeTruthy()
+
+        queries.update(
+            <HistoryItem
+                id="0"
+                amount={200}
+                between="+2349087573383"
+                type="credit"
+                fee={5}
+                feeType="DEPOSIT"
+                timestamp={`${new Date("2020-11-04T13:24:00").getTime()}`}
+            />,
+        )
+
+        expect(queries.getByText("+NGN 5")).toBeTruthy()
 
         fireEvent.press(queries.getByTestId("historyItem"))
         expect(useNavigation().navigate).toBeCalledWith(routes.main.transferTab.transfer, {
@@ -32,24 +49,53 @@ describe("TransactionHistory", () => {
     test("<TransactionHistoryScreen />", () => {
         const data = [
             {
+                // receiving
                 id: "0",
                 amount: 1200,
                 between: "+2349087573383",
                 type: "credit" as any,
+                fee: 0,
+                feeType: null,
                 timestamp: `${new Date("2020-11-04T15:24:00").getTime()}`,
             },
             {
+                // sending
                 id: "1",
+                amount: 1200,
+                between: "+2349087573383",
+                type: "debit" as any,
+                fee: 0,
+                feeType: null,
+                timestamp: `${new Date("2020-11-04T15:25:00").getTime()}`,
+            },
+            {
+                // sending with sms
+                id: "2",
                 amount: 400,
                 between: "+2349087573383",
                 type: "debit" as any,
-                timestamp: `${new Date("2020-11-04T13:24:00").getTime()}`,
+                fee: 5,
+                feeType: "SMS",
+                timestamp: `${new Date("2020-11-04T13:26:00").getTime()}`,
             },
             {
-                id: "2",
+                // deposit
+                id: "3",
+                amount: 500,
+                between: "Deposit",
+                type: "credit" as any,
+                fee: 2.86,
+                feeType: "DEPOSIT",
+                timestamp: `${new Date("2020-10-04T15:24:00").getTime()}`,
+            },
+            {
+                // withdrawal
+                id: "4",
                 amount: 200,
-                between: "+2349087573383",
+                between: "Withdraw",
                 type: "debit" as any,
+                fee: 11,
+                feeType: "WITHDRAW",
                 timestamp: `${new Date("2020-10-04T15:24:00").getTime()}`,
             },
         ]
@@ -58,7 +104,21 @@ describe("TransactionHistory", () => {
             <TransactionHistoryScreen loading={false} data={data} refetch={jest.fn()} />,
         )
 
-        expect(queries.getAllByTestId("historyItem")).toHaveLength(3)
+        expect(queries.getAllByTestId("historyItem")).toHaveLength(5)
+
+        const recieveTransaction = within(queries.getAllByTestId("historyItem")[0])
+        expect(recieveTransaction.queryByText(/fee/)).toBeFalsy()
+
+        const smsTransaction = within(queries.getAllByTestId("historyItem")[2])
+        expect(smsTransaction.getByText("+NGN 5 - SMS fee")).toBeTruthy()
+
+        const depositTransaction = within(queries.getAllByTestId("historyItem")[3])
+        expect(depositTransaction.getByText("Deposit")).toBeTruthy()
+        expect(depositTransaction.getByText("+NGN 2.86")).toBeTruthy()
+
+        const withdrawTransaction = within(queries.getAllByTestId("historyItem")[4])
+        expect(withdrawTransaction.getByText("Withdraw")).toBeTruthy()
+        expect(withdrawTransaction.getByText("+NGN 11")).toBeTruthy()
     })
 
     test("<TransactionHistory />", async () => {
@@ -79,6 +139,10 @@ describe("TransactionHistory", () => {
                             between: {
                                 phoneNumber: "+2349087543383",
                             },
+                            fee: {
+                                amount: 0,
+                                type: null,
+                            },
                         },
                         {
                             id: "transactionId1",
@@ -88,6 +152,10 @@ describe("TransactionHistory", () => {
                             between: {
                                 phoneNumber: "+2349087543383",
                             },
+                            fee: {
+                                amount: 0,
+                                type: null,
+                            },
                         },
                         {
                             id: "transactionId2",
@@ -95,6 +163,10 @@ describe("TransactionHistory", () => {
                             amount: "500",
                             createdAt: new Date("2020-11-04T10:24:00").getTime(),
                             between: null,
+                            fee: {
+                                amount: 2.86,
+                                type: "DEPOSIT",
+                            },
                         },
                     ],
                 },

@@ -13,6 +13,8 @@ type IProps = {
         amount: number
         between: string
         type: "credit" | "debit"
+        fee: number
+        feeType?: string | null
         timestamp: string
     }[]
 }

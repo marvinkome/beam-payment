@@ -1,17 +1,26 @@
-import React from "react"
+import React, { useEffect } from "react"
 import BeamLogo from "assets/images/beam-logo-dark.svg"
 import { StyleSheet, ScrollView, View } from "react-native"
 import { Text, Button } from "react-native-elements"
 import { PhoneNumberInput } from "components/PhoneNumberInput"
 import { colorTheme } from "styles/theme"
+import { escapePhoneNumber, isPhoneNumber } from "libs/helpers"
 
 type IProps = {
     phoneNumber: string
     onChangePhoneNumber: (number: string) => void
-    onContinue: () => void
+    onContinue: (phoneNumber: string) => void
     loading: boolean
 }
 export function SignUpScreen(props: IProps) {
+    useEffect(() => {
+        const number = `+234${escapePhoneNumber(props.phoneNumber)}`
+
+        if (isPhoneNumber(number)) {
+            props.onContinue(number)
+        }
+    }, [props.phoneNumber])
+
     return (
         <ScrollView keyboardShouldPersistTaps="always" contentContainerStyle={styles.container}>
             {/* header */}
@@ -20,7 +29,6 @@ export function SignUpScreen(props: IProps) {
             </View>
 
             {/* main text */}
-            {/* TODO:: Add carousel */}
             <Text h1 style={styles.mainText}>
                 Send money to anyone with a phone number
             </Text>
@@ -37,7 +45,7 @@ export function SignUpScreen(props: IProps) {
 
             {/* continue button */}
             <Button
-                onPress={props.onContinue}
+                onPress={() => props.onContinue(`+234${escapePhoneNumber(props.phoneNumber)}`)}
                 disabled={!props.phoneNumber.length}
                 loading={props.loading}
                 title="Continue"

@@ -14,7 +14,6 @@ describe("SignUp page tests", () => {
         const queries = render(<SignUp />)
 
         fireEvent.changeText(queries.getByPlaceholderText("Your phone number"), "07037276587")
-        fireEvent.press(queries.getByText("Continue"))
 
         await waitFor(() => {
             expect(useNavigation().navigate).toBeCalledWith("VerifyPhone")
@@ -33,20 +32,39 @@ describe("SignUp page tests", () => {
 
         const queries = render(
             <SignUpScreen
-                phoneNumber="0703727658"
+                phoneNumber="070372765"
                 onChangePhoneNumber={onChange}
                 onContinue={onContinue}
                 loading={false}
             />,
         )
         expect(queries.getByText("Continue")).toBeTruthy()
+        expect(onContinue).not.toBeCalled()
 
         // test input change
         fireEvent.changeText(queries.getByPlaceholderText("Your phone number"), "07037276587")
-        expect(onChange).toHaveBeenCalled()
+        expect(onChange).toBeCalled()
 
-        // text submit
-        fireEvent.press(queries.getByText("Continue"))
-        expect(onContinue).toHaveBeenCalled()
+        // test auto submit
+        queries.update(
+            <SignUpScreen
+                phoneNumber="07037276587"
+                onChangePhoneNumber={onChange}
+                onContinue={onContinue}
+                loading={false}
+            />,
+        )
+        expect(onContinue).toBeCalledWith("+2347037276587")
+        onContinue.mockClear()
+
+        queries.update(
+            <SignUpScreen
+                phoneNumber="7037276587"
+                onChangePhoneNumber={onChange}
+                onContinue={onContinue}
+                loading={false}
+            />,
+        )
+        expect(onContinue).toBeCalledWith("+2347037276587")
     })
 })

@@ -3,7 +3,6 @@ import * as Sentry from "@sentry/react-native"
 import auth from "@react-native-firebase/auth"
 import { Alert } from "react-native"
 import { useNavigation } from "@react-navigation/native"
-import { escapePhoneNumber } from "libs/helpers"
 import { smsConfirmationObj } from "store/authStore"
 import { SignUpScreen } from "./SignUp"
 import { routes } from "libs/navigator"
@@ -14,17 +13,15 @@ export function SignUp() {
     const [sendingSms, setSendingSms] = useState(false)
     const [phoneNumber, setPhoneNumber] = useState("")
 
-    const signInWithPhoneNumber = async () => {
-        const escapedNumber = escapePhoneNumber(phoneNumber)
-
-        Sentry.addBreadcrumb({ message: `Escaped phone number ${escapedNumber}` })
-
+    const signInWithPhoneNumber = async (escapedNumber: string) => {
+        Sentry.addBreadcrumb({ message: `Start sms verification` })
         setSendingSms(true)
+
         try {
-            const confirmation = await auth().signInWithPhoneNumber(`+234${escapedNumber}`)
+            const confirmation = await auth().signInWithPhoneNumber(escapedNumber)
 
             // set confirmation in a global state
-            smsConfirmationObj({ confirmation, phoneNumber: `+234${escapedNumber}` })
+            smsConfirmationObj({ confirmation, phoneNumber: escapedNumber })
 
             // move to next screen
             setSendingSms(false)

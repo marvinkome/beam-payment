@@ -1,7 +1,8 @@
 import React from "react"
+import InviteImage from "assets/images/invite.svg"
 import { useNavigation } from "@react-navigation/native"
 import { ScrollView, View, StyleSheet } from "react-native"
-import { Button, Text } from "react-native-elements"
+import { Button, Icon, Text } from "react-native-elements"
 import { fonts } from "styles/fonts"
 import { colorTheme } from "styles/theme"
 import { routes } from "libs/navigator"
@@ -20,7 +21,7 @@ export function CashSettingsScreen(props: IProps) {
     const { navigate } = useNavigation()
 
     return (
-        <ScrollView style={styles.container}>
+        <ScrollView contentContainerStyle={styles.container}>
             <View style={styles.card}>
                 <Text h1 style={{ marginBottom: 15 }}>
                     Add money
@@ -36,6 +37,22 @@ export function CashSettingsScreen(props: IProps) {
             </View>
 
             {/* invite your friends */}
+            <View style={styles.inviteCard}>
+                {/* image */}
+                <InviteImage />
+
+                {/* text */}
+                <View style={{ flex: 1, marginLeft: 15 }}>
+                    <Text h3 style={{ color: colorTheme.darkGreen, marginBottom: 5 }}>
+                        Invite your friends
+                    </Text>
+
+                    <Text style={{ fontSize: 16 }}>Earn ₦100 for every friend you invite</Text>
+                </View>
+
+                {/* icon */}
+                <Icon name="chevron-right" type="feather" />
+            </View>
 
             {/* take out money card */}
             <View style={styles.card}>
@@ -43,10 +60,14 @@ export function CashSettingsScreen(props: IProps) {
                     Take out money
                 </Text>
 
-                <Text style={styles.cardText}>{props.bankDetails?.bankName}</Text>
-                <Text style={{ ...styles.cardText, marginBottom: 15 }}>
-                    {props.bankDetails?.accountNumber}
-                </Text>
+                {!!props.bankDetails?.bankName && (
+                    <Text style={styles.cardText}>{props.bankDetails?.bankName}</Text>
+                )}
+                {!!props.bankDetails?.accountNumber && (
+                    <Text style={{ ...styles.cardText, marginBottom: 15 }}>
+                        {props.bankDetails?.accountNumber}
+                    </Text>
+                )}
 
                 <Button
                     containerStyle={styles.buttonContainer}
@@ -92,9 +113,9 @@ export function CashSettingsScreen(props: IProps) {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         paddingHorizontal: 20,
         paddingVertical: 10,
+        paddingBottom: 20,
     },
 
     card: {
@@ -105,6 +126,16 @@ const styles = StyleSheet.create({
     cardText: {
         color: colorTheme.textLight,
         ...fonts.semiBold,
+    },
+
+    inviteCard: {
+        backgroundColor: colorTheme.lightGreen,
+        flexDirection: "row",
+        justifyContent: "space-evenly",
+        alignItems: "center",
+        borderRadius: 10,
+        padding: 18,
+        marginBottom: 20,
     },
 
     buttonContainer: {

@@ -5,11 +5,9 @@ import { Button, Text } from "react-native-elements"
 import { fonts } from "styles/fonts"
 import { colorTheme } from "styles/theme"
 import { routes } from "libs/navigator"
-import { formatCurrency, isFalsy } from "libs/helpers"
 import { EMAIL_URL } from "libs/keys"
 
 type IProps = {
-    accountBalance?: number
     bankDetails?: {
         accountNumber: string
         bankName: string
@@ -24,13 +22,9 @@ export function CashSettingsScreen(props: IProps) {
     return (
         <ScrollView style={styles.container}>
             <View style={styles.card}>
-                <Text h2 style={{ marginBottom: 15 }}>
+                <Text h1 style={{ marginBottom: 15 }}>
                     Add money
                 </Text>
-
-                {!isFalsy(props.accountBalance) && (
-                    <Text style={styles.cardText}>NGN {formatCurrency(props.accountBalance!)}</Text>
-                )}
 
                 <Button
                     containerStyle={styles.buttonContainer}
@@ -41,52 +35,57 @@ export function CashSettingsScreen(props: IProps) {
                 />
             </View>
 
+            {/* invite your friends */}
+
             {/* take out money card */}
             <View style={styles.card}>
-                <Text h2 style={{ marginBottom: 15 }}>
+                <Text h1 style={{ marginBottom: 15 }}>
                     Take out money
                 </Text>
 
                 <Text style={styles.cardText}>{props.bankDetails?.bankName}</Text>
-                <Text style={styles.cardText}>{props.bankDetails?.accountNumber}</Text>
+                <Text style={{ ...styles.cardText, marginBottom: 15 }}>
+                    {props.bankDetails?.accountNumber}
+                </Text>
 
-                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                    <Button
-                        containerStyle={styles.buttonContainer}
-                        buttonStyle={{ borderWidth: 2 }}
-                        titleStyle={styles.buttonText}
-                        icon={{
-                            name: "download",
-                            type: "feather",
-                            color: colorTheme.primary,
-                            size: 20,
-                            style: { marginRight: 10 },
-                        }}
-                        type="outline"
-                        title="Withdraw"
-                        onPress={props.onWithdraw}
-                        loading={props.withdrawing}
-                    />
+                <Button
+                    containerStyle={styles.buttonContainer}
+                    buttonStyle={{ borderWidth: 2 }}
+                    titleStyle={styles.buttonText}
+                    icon={{
+                        name: "download",
+                        type: "feather",
+                        color: colorTheme.primary,
+                        size: 20,
+                        style: { marginRight: 10 },
+                    }}
+                    type="outline"
+                    title="Withdraw"
+                    onPress={props.onWithdraw}
+                    loading={props.withdrawing}
+                />
 
-                    <Button
-                        containerStyle={styles.buttonContainer}
-                        buttonStyle={{ borderWidth: 2 }}
-                        titleStyle={styles.buttonText}
-                        icon={{
-                            name: "settings",
-                            type: "feather",
-                            color: colorTheme.primary,
-                            size: 20,
-                            style: { marginRight: 10 },
-                        }}
-                        type="outline"
-                        title="Change"
-                        onPress={() => navigate(routes.main.addAccount)}
-                    />
-                </View>
+                <Button
+                    containerStyle={styles.buttonContainer}
+                    buttonStyle={{ borderWidth: 2 }}
+                    titleStyle={styles.buttonText}
+                    icon={{
+                        name: "settings",
+                        type: "feather",
+                        color: colorTheme.primary,
+                        size: 20,
+                        style: { marginRight: 10 },
+                    }}
+                    type="outline"
+                    title="Change bank account"
+                    onPress={() => navigate(routes.main.addAccount)}
+                />
             </View>
 
-            <Text style={styles.footerText}>Need help? Send an email to {EMAIL_URL}</Text>
+            <Text style={styles.footerText}>
+                Need help? Send an email to{" "}
+                <Text style={{ ...fonts.bold, color: colorTheme.primary }}>{EMAIL_URL}</Text>
+            </Text>
         </ScrollView>
     )
 }
@@ -95,16 +94,12 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingHorizontal: 20,
-        paddingVertical: 25,
+        paddingVertical: 10,
     },
 
     card: {
-        backgroundColor: colorTheme.grey,
-        paddingHorizontal: 20,
+        paddingHorizontal: 5,
         paddingVertical: 25,
-        marginBottom: 30,
-        borderRadius: 20,
-        elevation: 3,
     },
 
     cardText: {
@@ -113,20 +108,20 @@ const styles = StyleSheet.create({
     },
 
     buttonContainer: {
-        width: 150,
         marginHorizontal: 0,
-        marginTop: 35,
+        marginTop: 15,
     },
 
     buttonText: {
         textTransform: "none",
-        letterSpacing: 0.7,
+        fontSize: 18,
+        letterSpacing: 0.5,
     },
 
     footerText: {
         color: colorTheme.primary,
-        fontSize: 16,
         marginTop: 15,
-        ...fonts.semiBold,
+        marginHorizontal: 40,
+        textAlign: "center",
     },
 })

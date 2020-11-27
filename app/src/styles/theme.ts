@@ -22,7 +22,7 @@ export const ElementsTheme: Theme = {
 
     Text: {
         style: {
-            fontSize: 16,
+            fontSize: 18,
             ...fonts.regular,
         },
 

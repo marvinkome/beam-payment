@@ -84,10 +84,7 @@ describe("CashSettings", () => {
             </MockedProvider>,
         )
 
-        expect(screen.queryByText("NGN 0")).toBeFalsy()
-
         await waitFor(() => {
-            expect(screen.getByText("NGN 5,000")).toBeTruthy()
             expect(screen.getByText("GTBank Plc")).toBeTruthy()
             expect(screen.getByText("0123456789")).toBeTruthy()
         })
@@ -115,13 +112,11 @@ describe("CashSettings", () => {
         const onWithdraw = jest.fn()
         const screen = render(
             <CashSettingsScreen
-                accountBalance={2000}
                 bankDetails={{ bankName: "GTBank Plc", accountNumber: "0123456789" }}
                 onWithdraw={onWithdraw}
             />,
         )
 
-        expect(screen.getByText("NGN 2,000")).toBeTruthy()
         expect(screen.getByText("GTBank Plc")).toBeTruthy()
         expect(screen.getByText("0123456789")).toBeTruthy()
 

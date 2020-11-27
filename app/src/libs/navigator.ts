@@ -20,6 +20,7 @@ export const routes = {
             transactionHistory: "TransactionHistory",
         },
         cashSettings: "CashSettings",
+        referral: "Referral",
         addMoney: "AddMoney__Settings",
         addAccount: "AddAccount",
     },

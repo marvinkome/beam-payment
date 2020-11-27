@@ -1,7 +1,7 @@
 import React from "react"
 import InviteImage from "assets/images/invite.svg"
 import { useNavigation } from "@react-navigation/native"
-import { ScrollView, View, StyleSheet } from "react-native"
+import { ScrollView, View, StyleSheet, TouchableOpacity } from "react-native"
 import { Button, Icon, Text } from "react-native-elements"
 import { fonts } from "styles/fonts"
 import { colorTheme } from "styles/theme"
@@ -37,22 +37,24 @@ export function CashSettingsScreen(props: IProps) {
             </View>
 
             {/* invite your friends */}
-            <View style={styles.inviteCard}>
-                {/* image */}
-                <InviteImage />
+            <TouchableOpacity onPress={() => navigate(routes.main.referral)}>
+                <View style={styles.inviteCard}>
+                    {/* image */}
+                    <InviteImage />
 
-                {/* text */}
-                <View style={{ flex: 1, marginLeft: 15 }}>
-                    <Text h3 style={{ color: colorTheme.darkGreen, marginBottom: 5 }}>
-                        Invite your friends
-                    </Text>
+                    {/* text */}
+                    <View style={{ flex: 1, marginLeft: 15 }}>
+                        <Text h3 style={{ color: colorTheme.darkGreen, marginBottom: 5 }}>
+                            Invite your friends
+                        </Text>
 
-                    <Text style={{ fontSize: 16 }}>Earn ₦100 for every friend you invite</Text>
+                        <Text style={{ fontSize: 16 }}>Earn ₦100 for every friend you invite</Text>
+                    </View>
+
+                    {/* icon */}
+                    <Icon name="chevron-right" type="feather" />
                 </View>
-
-                {/* icon */}
-                <Icon name="chevron-right" type="feather" />
-            </View>
+            </TouchableOpacity>
 
             {/* take out money card */}
             <View style={styles.card}>

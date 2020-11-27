@@ -21,6 +21,7 @@ import { Transfer } from "screens/Transfer"
 import { TransactionHistory } from "screens/TransactionHistory"
 import { CashSettings } from "screens/CashSettings"
 import { AddBankAccount } from "screens/AddBankAccount"
+import { Referral } from "screens/Referral"
 
 const TransferTab = createMaterialTopTabNavigator()
 function TransferTabNavigator() {
@@ -95,6 +96,7 @@ function MainStackNavigator() {
                             name={routes.main.cashSettings}
                             component={CashSettings}
                         />
+                        <MainStack.Screen name={routes.main.referral} component={Referral} />
                         <MainStack.Screen name={routes.main.addMoney} component={AddMoney} />
                         <MainStack.Screen
                             name={routes.main.addAccount}

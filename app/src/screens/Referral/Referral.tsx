@@ -6,7 +6,17 @@ import { colorTheme } from "styles/theme"
 import { SocialShare } from "components/SocialShare"
 import { ShareInput } from "components/ShareInput"
 
-export function ReferralScreen() {
+type IProps = {
+    link: string
+}
+
+export function ReferralScreen(props: IProps) {
+    const shareText: string =
+        "I’m inviting you to sign up for Beam: Pay anyone with a phone " +
+        "number in seconds. \n" +
+        `${props.link} \n` +
+        "Get ₦100 for every friend you invite."
+
     return (
         <ScrollView contentContainerStyle={styles.container}>
             <View style={styles.headerImage}>
@@ -26,29 +36,17 @@ export function ReferralScreen() {
                     Share through
                 </Text>
 
-                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
                     {/* whatsapp share */}
-                    <SocialShare
-                        platform="whatsapp"
-                        shareText="I'm inviting you to sign up for Beam;"
-                    />
-
-                    {/* messenger share */}
-                    <SocialShare
-                        platform="messenger"
-                        shareText="I'm inviting you to sign up for Beam;"
-                    />
+                    <SocialShare platform="whatsapp" shareText={shareText} />
 
                     {/* instagram share */}
-                    <SocialShare
-                        platform="instagram"
-                        shareText="I'm inviting you to sign up for Beam;"
-                    />
+                    <SocialShare platform="instagram" shareText={shareText} />
 
                     {/* twitter share */}
                     <SocialShare
                         platform="twitter"
-                        shareText="I'm inviting you to sign up for Beam;"
+                        shareText={shareText + "\n #PayWithBeam @usebeamapp"}
                     />
                 </View>
 
@@ -57,7 +55,7 @@ export function ReferralScreen() {
                 </Text>
 
                 <View>
-                    <ShareInput link="https://usebeam.app/m124085bi0bwi08ljs0" />
+                    <ShareInput link={props.link} />
                 </View>
             </View>
         </ScrollView>

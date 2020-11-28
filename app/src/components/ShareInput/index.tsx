@@ -1,5 +1,6 @@
 import React from "react"
-import { StyleSheet, View } from "react-native"
+import Clipboard from "@react-native-community/clipboard"
+import { StyleSheet, ToastAndroid, View } from "react-native"
 import { Button, Text } from "react-native-elements"
 import { colorTheme } from "styles/theme"
 
@@ -8,6 +9,11 @@ type IProps = {
 }
 
 export function ShareInput(props: IProps) {
+    const onPress = () => {
+        Clipboard.setString(props.link)
+        ToastAndroid.show("Copied!", ToastAndroid.SHORT)
+    }
+
     return (
         <View style={styles.container}>
             <Text style={styles.mainText} numberOfLines={1}>
@@ -18,6 +24,7 @@ export function ShareInput(props: IProps) {
                 containerStyle={{ marginTop: 10 }}
                 buttonStyle={{ paddingHorizontal: 25, paddingVertical: 10 }}
                 titleStyle={{ textTransform: "capitalize" }}
+                onPress={onPress}
                 title="Copy"
             />
         </View>

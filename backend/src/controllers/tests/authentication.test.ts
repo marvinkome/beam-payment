@@ -2,6 +2,7 @@ import config from "config"
 import mongoose from "mongoose"
 import User from "models/users"
 import { authenticateUser } from "controllers/authentication"
+import { findOrCreateUserAccount } from "services/authentication"
 
 jest.mock("services/authentication", () => ({
     findOrCreateUserAccount: jest.fn(() =>
@@ -35,6 +36,15 @@ describe("Auth controller test", () => {
     })
 
     test("authenticateUser - with referral", async () => {
+        // @ts-ignore
+        findOrCreateUserAccount.mockImplementationOnce(() =>
+            Promise.resolve({
+                user: { id: 0, phoneNumber: "+2349087573383" },
+                token: "token",
+                isCreated: true,
+            })
+        )
+
         await new User({ phoneNumber: "+2349087573389" }).save()
 
         const resp = await authenticateUser({ idToken: "token", referedBy: "+2349087573389" })

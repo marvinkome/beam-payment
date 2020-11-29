@@ -44,11 +44,11 @@ export function Header({ navigation, previous }: StackHeaderProps) {
                     </Text>
 
                     <Icon
-                        name="plus"
-                        type="feather"
-                        size={18}
+                        name="settings-sharp"
+                        type="ionicon"
+                        size={22}
                         containerStyle={styles.iconBg}
-                        color={colorTheme.white}
+                        color={colorTheme.primary}
                     />
                 </View>
             </TouchableOpacity>
@@ -83,7 +83,6 @@ const styles = StyleSheet.create({
     },
 
     iconBg: {
-        backgroundColor: colorTheme.primary,
         marginLeft: 10,
         borderRadius: 50,
         padding: 2,

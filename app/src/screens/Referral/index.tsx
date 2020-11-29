@@ -19,6 +19,9 @@ export async function buildReferralLink(number: string) {
             {
                 link: `https://usebeam.app/?referedBy=${number}`,
                 domainUriPrefix: "https://invites.usebeam.app",
+                android: {
+                    packageName: "com.usebeam",
+                },
             },
             dynamicLinks.ShortLinkType.UNGUESSABLE,
         )

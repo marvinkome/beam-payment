@@ -32,6 +32,7 @@ describe.only("helpers", () => {
     test("isPhoneNumber", () => {
         expect(isPhoneNumber("07097273784")).toBeTruthy()
         expect(isPhoneNumber("+2347087073784")).toBeTruthy()
+        expect(isPhoneNumber("+2348167238901")).toBeTruthy()
         expect(isPhoneNumber("+23939403930493")).toBeFalsy()
         expect(isPhoneNumber("01234567890")).toBeFalsy()
     })

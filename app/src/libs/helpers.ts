@@ -46,5 +46,5 @@ export function isFalsy(value: any) {
 }
 
 export function isPhoneNumber(value: string) {
-    return /^(\+234|[0])([7-9][0])\d{8}$/.test(value)
+    return /^(\+234|[0])([7-9][0-1])\d{8}$/.test(value)
 }

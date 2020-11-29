@@ -8,10 +8,11 @@ import { Alert } from "react-native"
 import { authToken } from "store/authStore"
 import { USER_PUB_DETAIL } from "libs/keys"
 import { useStoreNotification } from "./notifications"
+import { useReferral } from "./referrals"
 
 export const AUTH_USER_MUT = gql`
-    mutation AuthenticateUser($idToken: String!) {
-        authenticateUser(idToken: $idToken) {
+    mutation AuthenticateUser($idToken: String!, $referedBy: String) {
+        authenticateUser(idToken: $idToken, referedBy: $referedBy) {
             success
             responseMessage
             token
@@ -24,7 +25,9 @@ export const AUTH_USER_MUT = gql`
         }
     }
 `
+
 export function useAuthentication() {
+    const refUser = useReferral()
     const authContext = useContext(AuthContext)
     const [authenticateUserMutation] = useMutation(AUTH_USER_MUT)
     const storeNotification = useStoreNotification()
@@ -35,9 +38,12 @@ export function useAuthentication() {
         let loginResp = null
 
         try {
-            loginResp = await authenticateUserMutation({
-                variables: { idToken },
-            })
+            const variables: any = { idToken }
+            if (!!refUser.length) {
+                variables.referedBy = refUser
+            }
+
+            loginResp = await authenticateUserMutation({ variables })
         } catch (err) {
             Sentry.captureException(err)
             return Alert.alert("Error", "Failed to sign in")

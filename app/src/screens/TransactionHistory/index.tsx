@@ -11,6 +11,7 @@ export const TRANSACTION_HISTORY = gql`
             transactionType
             amount
             createdAt
+            details
             between {
                 phoneNumber
             }
@@ -44,15 +45,11 @@ export function TransactionHistory() {
         let item = {
             id: history.id,
             amount: history.amount,
-            between: history.between?.phoneNumber,
+            between: history.details,
             fee: history.fee?.amount,
             feeType: history.fee?.type,
             type: history.transactionType.toLowerCase(),
             timestamp: history.createdAt,
-        }
-
-        if (!item.between) {
-            item.between = item.type === "credit" ? "Deposit" : "Withdraw"
         }
 
         allHistory.push(item)

@@ -136,6 +136,7 @@ describe("TransactionHistory", () => {
                             transactionType: "CREDIT",
                             amount: "100",
                             createdAt: new Date("2020-11-02T10:24:00").getTime(),
+                            details: "+2349087543383",
                             between: {
                                 phoneNumber: "+2349087543383",
                             },
@@ -149,6 +150,7 @@ describe("TransactionHistory", () => {
                             transactionType: "DEBIT",
                             amount: "150",
                             createdAt: new Date("2020-11-03T09:24:00").getTime(),
+                            details: "+2349087543383",
                             between: {
                                 phoneNumber: "+2349087543383",
                             },
@@ -162,6 +164,7 @@ describe("TransactionHistory", () => {
                             transactionType: "CREDIT",
                             amount: "500",
                             createdAt: new Date("2020-11-04T10:24:00").getTime(),
+                            details: "Deposit",
                             between: null,
                             fee: {
                                 amount: 2.86,

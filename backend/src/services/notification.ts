@@ -46,6 +46,18 @@ export class NotificationService {
         })
     }
 
+    static async sendReferralNotification(to: IUser) {
+        const message = `Someone signed up with your invite link, here's NGN${config.referralFee} 🥳`
+
+        if (!to.notificationToken) return
+
+        return this.sendFirebaseNotification({
+            userToken: to.notificationToken,
+            title: "Someone signed up with your invite link",
+            body: message,
+        })
+    }
+
     private static async sendFirebaseNotification(data: BaseNotificationOptions) {
         try {
             await messaging().send({

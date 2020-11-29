@@ -3,6 +3,7 @@ import User from "models/users"
 import { auth } from "firebase-admin"
 import { findAndVerifyAccount, findOrCreateUserAccount } from "services/authentication"
 import { UserService } from "services/user"
+import { NotificationService } from "services/notification"
 
 export async function authenticateUser(data: { idToken: string; referedBy?: string }) {
     try {
@@ -17,6 +18,7 @@ export async function authenticateUser(data: { idToken: string; referedBy?: stri
             if (user) {
                 const userService = new UserService(user)
                 await userService.addReferralMoney()
+                await NotificationService.sendReferralNotification(user)
             }
         }
 

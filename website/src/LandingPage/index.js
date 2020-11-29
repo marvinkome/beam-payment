@@ -19,9 +19,13 @@ function App() {
       <div className="container">
         <div className="grid-1">
           <div className="grid-content">
-            <h1 className="text fade">
-              <span>Pay anyone with a phone number in seconds</span>
-            </h1>
+            <div className="header-text">
+              <h1 className="text fade">
+                Pay anyone with a phone number in seconds
+              </h1>
+
+              <p>Free transfers between users. Withdraw to your bank</p>
+            </div>
 
             <div className="button-container">
               <ReactGA.OutboundLink

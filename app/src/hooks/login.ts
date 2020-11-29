@@ -64,7 +64,10 @@ export function useAuthentication() {
         await storeNotification()
 
         analytics.setUser(user.id, { phone: user.phoneNumber })
-        analytics.trackEvent("Login successful")
+        analytics.trackEvent("Authentication successful", {
+            isReffered: !!refUser.length,
+            ...(!!refUser.length && { referedBy: refUser }),
+        })
 
         // finish auth here
         return authContext?.signIn()

@@ -8,13 +8,13 @@ import { VerifyPhoneScreen } from "./VerifyPhone"
 
 export function VerifyPhone() {
     const [code, setCode] = useState("")
-    const [verifingCode, setVerifingCode] = useState(false)
+    const [verifyingCode, setVerifyingCode] = useState(false)
     const { signIn } = useAuthentication()
 
     const { confirmation, phoneNumber } = smsConfirmationObj()
 
     const onVerify = async () => {
-        setVerifingCode(true)
+        setVerifyingCode(true)
 
         try {
             // first try to get the user idToken for auto verification
@@ -26,31 +26,30 @@ export function VerifyPhone() {
             }
 
             await signIn(idToken!, phoneNumber!)
-            setVerifingCode(false)
         } catch (e) {
             Sentry.captureException(e)
-            setVerifingCode(false)
+            setVerifyingCode(false)
             Alert.alert("Error", "Invalid code")
         }
     }
 
     const onResendCode = async () => {
-        setVerifingCode(true)
+        setVerifyingCode(true)
         const confirmation = await auth().signInWithPhoneNumber(phoneNumber!)
         smsConfirmationObj({ confirmation, phoneNumber })
-        setVerifingCode(false)
+        setVerifyingCode(false)
     }
 
     useEffect(() => {
-        if (code.length === 6) {
+        if (code.length === 6 && !verifyingCode) {
             onVerify()
         }
     }, [code])
 
     useEffect(() => {
         const unsubscribe = auth().onAuthStateChanged(async (user) => {
-            if (user) {
-                setVerifingCode(true)
+            if (user && !verifyingCode) {
+                setVerifyingCode(true)
                 const idToken = await user.getIdToken()
                 await signIn(idToken!, phoneNumber!)
             }
@@ -65,7 +64,7 @@ export function VerifyPhone() {
             onVerify={onVerify}
             code={code}
             setCode={setCode}
-            loading={verifingCode}
+            loading={verifyingCode}
             resendCode={onResendCode}
         />
     )

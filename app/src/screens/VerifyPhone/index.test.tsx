@@ -32,6 +32,7 @@ describe("Verify phone page tests", () => {
         })
 
         test("registration success case", async () => {
+            let mutationCalled = 0
             const mock = {
                 request: {
                     query: AUTH_USER_MUT,
@@ -39,19 +40,23 @@ describe("Verify phone page tests", () => {
                         idToken: "id-token",
                     },
                 },
-                result: {
-                    data: {
-                        authenticateUser: {
-                            success: true,
-                            responseMessage: null,
-                            token: "token",
-                            user: {
-                                id: "user_id",
-                                isNewAccount: true,
-                                accountSetupState: "SET_PIN",
+                result: () => {
+                    mutationCalled++
+
+                    return {
+                        data: {
+                            authenticateUser: {
+                                success: true,
+                                responseMessage: null,
+                                token: "token",
+                                user: {
+                                    id: "user_id",
+                                    isNewAccount: true,
+                                    accountSetupState: "SET_PIN",
+                                },
                             },
                         },
-                    },
+                    }
                 },
             }
 
@@ -85,6 +90,7 @@ describe("Verify phone page tests", () => {
             expect(authToken).toHaveBeenCalledWith("token")
             expect(AsyncStorage.setItem).toHaveBeenCalledWith(USER_PUB_DETAIL, "+234913498619")
             expect(Alert.alert).not.toHaveBeenCalled()
+            expect(mutationCalled).toBe(1)
         })
 
         test("registration error case", async () => {

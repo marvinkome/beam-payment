@@ -9,9 +9,9 @@ export async function authenticateUser(data: { idToken: string; referedBy?: stri
         const { phone_number, uid } = await auth().verifyIdToken(data.idToken)
 
         // create user and return jwt token
-        const { user, token } = await findOrCreateUserAccount(phone_number!, uid)
+        const { user, token, isCreated } = await findOrCreateUserAccount(phone_number!, uid)
 
-        if (data.referedBy) {
+        if (data.referedBy && isCreated) {
             // add money to refered user
             const user = await User.findOne({ phoneNumber: data.referedBy })
             if (user) {

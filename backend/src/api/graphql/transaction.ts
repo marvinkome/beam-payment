@@ -15,6 +15,7 @@ export const transactionTypeDef = gql`
         DEPOSIT
         WITHDRAWAL
         REVERSAL
+        REFERRAL
     }
 
     type TransactionFee {

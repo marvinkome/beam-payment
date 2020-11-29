@@ -12,6 +12,7 @@ export const routes = {
         onboarding: {
             index: "OnboardingStack",
             setPin: "SetPin",
+            referral: "Referral__Onboarding",
             addMoney: "AddMoney__Onboarding",
         },
         transferTab: {

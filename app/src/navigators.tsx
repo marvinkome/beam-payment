@@ -61,12 +61,13 @@ function OnboardingStackNavigator() {
 
     let initalRoute: string = routes.main.onboarding.setPin
     if (onboardingStep === "ADD_MONEY") {
-        initalRoute = routes.main.onboarding.addMoney
+        initalRoute = routes.main.onboarding.referral
     }
 
     return (
         <OnboardingStack.Navigator headerMode="none" initialRouteName={initalRoute}>
             <OnboardingStack.Screen name={routes.main.onboarding.setPin} component={SetPin} />
+            <OnboardingStack.Screen name={routes.main.onboarding.referral} component={Referral} />
             <OnboardingStack.Screen name={routes.main.onboarding.addMoney} component={AddMoney} />
         </OnboardingStack.Navigator>
     )

@@ -47,7 +47,7 @@ describe("SetPin page tests", () => {
             fireEvent.press(queries.getByText("Continue"))
 
             await waitFor(() => {
-                expect(useNavigation().navigate).toBeCalledWith("AddMoney__Onboarding")
+                expect(useNavigation().navigate).toBeCalledWith("Referral__Onboarding")
             })
         })
 

@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react"
 import { gql, useQuery } from "@apollo/client"
 import { Loader } from "components/Loader"
 import { ReferralScreen } from "./Referral"
+import { useNavigation, useRoute } from "@react-navigation/native"
+import { routes } from "libs/navigator"
 
 export const GET_PHONE_NUMBER = gql`
     query GET_PHONE_NUMBER {
@@ -33,8 +35,10 @@ export async function buildReferralLink(number: string) {
 }
 
 export function Referral() {
+    const route = useRoute()
     const [link, setLink] = useState("")
     const { data } = useQuery(GET_PHONE_NUMBER)
+    const { navigate } = useNavigation()
 
     useEffect(() => {
         if (data?.me?.phoneNumber) {
@@ -44,9 +48,15 @@ export function Referral() {
         }
     }, [data?.me?.phoneNumber])
 
-    if (!link.length) {
+    if (!link?.length) {
         return <Loader text="Generating referral link" />
     }
 
-    return <ReferralScreen link={link} />
+    return (
+        <ReferralScreen
+            link={link}
+            isOnboarding={route.name === routes.main.onboarding.referral}
+            onContinueOnboarding={() => navigate(routes.main.onboarding.addMoney)}
+        />
+    )
 }

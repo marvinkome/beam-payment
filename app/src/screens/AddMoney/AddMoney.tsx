@@ -28,16 +28,19 @@ export function AddMoneyScreen(props: IProps) {
                     selectedAmount={props.selectedAmount}
                     onSelectAmount={props.onSelectAmount}
                 />
-
-                {props.isOnboarding && (
-                    <TextLink onPress={props.skipOnboarding} style={{ paddingHorizontal: 20 }}>
-                        Skip for now
-                    </TextLink>
-                )}
             </View>
 
             <View style={{ flex: 1, justifyContent: "flex-end" }}>
-                <Text style={{ textAlign: "center", marginBottom: 15 }}>+2% deposit fee </Text>
+                <Text style={{ textAlign: "center", marginBottom: 20 }}>+2% deposit fee </Text>
+
+                {props.isOnboarding && (
+                    <Button
+                        buttonStyle={{ borderWidth: 2 }}
+                        onPress={props.skipOnboarding}
+                        title="Skip for now"
+                        type="outline"
+                    />
+                )}
 
                 {props.renderContinueBtn((btnProps) => (
                     <Button

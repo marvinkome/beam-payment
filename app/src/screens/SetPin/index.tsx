@@ -39,7 +39,7 @@ function useSavePin() {
                 }
 
                 trackEvent("Set pin")
-                navigate(routes.main.onboarding.addMoney)
+                navigate(routes.main.onboarding.referral)
             } catch (e) {
                 Sentry.captureException(e)
                 Alert.alert("Error!", "Error saving pin. Try again")

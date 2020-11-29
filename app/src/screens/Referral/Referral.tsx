@@ -1,13 +1,15 @@
 import React from "react"
 import InviteSmallIcon from "assets/images/invite-small.svg"
 import { ScrollView, View, StyleSheet } from "react-native"
-import { Text } from "react-native-elements"
+import { Button, Text } from "react-native-elements"
 import { colorTheme } from "styles/theme"
 import { SocialShare } from "components/SocialShare"
 import { ShareInput } from "components/ShareInput"
 
 type IProps = {
     link: string
+    isOnboarding?: boolean
+    onContinueOnboarding?: () => void
 }
 
 export function ReferralScreen(props: IProps) {
@@ -58,6 +60,14 @@ export function ReferralScreen(props: IProps) {
                     <ShareInput link={props.link} />
                 </View>
             </View>
+
+            {props.isOnboarding && (
+                <Button
+                    containerStyle={{ marginHorizontal: 0, marginTop: 30 }}
+                    onPress={props.onContinueOnboarding}
+                    title="Continue"
+                />
+            )}
         </ScrollView>
     )
 }
@@ -65,7 +75,7 @@ export function ReferralScreen(props: IProps) {
 const styles = StyleSheet.create({
     container: {
         paddingHorizontal: 20,
-        paddingVertical: 25,
+        paddingVertical: 20,
     },
 
     headerImage: {
@@ -86,6 +96,6 @@ const styles = StyleSheet.create({
     shareHeader: {
         color: colorTheme.textLight,
         textAlign: "center",
-        marginVertical: 35,
+        marginVertical: 30,
     },
 })

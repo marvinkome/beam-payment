@@ -53,7 +53,7 @@ export class NotificationService {
 
         return this.sendFirebaseNotification({
             userToken: to.notificationToken,
-            title: "Someone signed up with your invite link",
+            title: `Someone signed up with your invite link +NGN${config.referralFee}`,
             body: message,
         })
     }

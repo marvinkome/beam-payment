@@ -29,7 +29,7 @@ export function ReferralScreen(props: IProps) {
                 <Text h1>Get ₦100 for every invite</Text>
 
                 <Text style={styles.headerSmallText}>
-                    Invite friends to Beam and get paid ₦100 per invite
+                    Invite friends to Beam with your link and get paid ₦100 per sign up
                 </Text>
             </View>
 

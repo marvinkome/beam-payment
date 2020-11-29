@@ -3,6 +3,7 @@ import Clipboard from "@react-native-community/clipboard"
 import { StyleSheet, ToastAndroid, View } from "react-native"
 import { Button, Text } from "react-native-elements"
 import { colorTheme } from "styles/theme"
+import { trackEvent } from "libs/analytics"
 
 type IProps = {
     link: string
@@ -12,6 +13,10 @@ export function ShareInput(props: IProps) {
     const onPress = () => {
         Clipboard.setString(props.link)
         ToastAndroid.show("Copied!", ToastAndroid.SHORT)
+        trackEvent(`Copy share link`, {
+            category: "Share",
+            shareText: props.link,
+        })
     }
 
     return (

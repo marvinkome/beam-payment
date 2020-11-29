@@ -6,6 +6,7 @@ import TwitterIcon from "assets/icons/twitter.svg"
 import Share, { Options } from "react-native-share"
 import { TouchableOpacity, View, StyleSheet } from "react-native"
 import { Text } from "react-native-elements"
+import { trackEvent } from "libs/analytics"
 
 type IProps = {
     platform: "whatsapp" | "messenger" | "instagram" | "twitter"
@@ -43,6 +44,10 @@ export function SocialShare(props: IProps) {
     const onPress = async () => {
         try {
             await Share.shareSingle(shareOptions)
+            trackEvent(`Share via ${props.platform}`, {
+                category: "Share",
+                shareText: props.shareText,
+            })
         } catch (err) {
             console.log(err)
             Sentry.captureException(err)

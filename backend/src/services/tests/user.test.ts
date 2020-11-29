@@ -171,6 +171,11 @@ describe("User service tests", () => {
         expect(user?.accountBalance).toBe(3000)
     })
 
+    test("addReferralMoney", async () => {
+        const user = await userService?.addReferralMoney()
+        expect(user?.accountBalance).toBe(700)
+    })
+
     afterEach(async () => {
         await mongoose.connection.db.dropDatabase()
     })

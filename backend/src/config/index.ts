@@ -45,6 +45,8 @@ export default {
         smsFee: 5,
     },
 
+    referralFee: 100,
+
     // logs
     logs: {
         level: process.env.LOG_LEVEL || "silly",

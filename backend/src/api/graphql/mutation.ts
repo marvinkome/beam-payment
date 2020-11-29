@@ -34,7 +34,7 @@ export const mutationTypeDef = gql`
 
     type Mutation {
         # AUTH
-        authenticateUser(idToken: String!): AuthenticationMutationResponse
+        authenticateUser(idToken: String!, referedBy: String): AuthenticationMutationResponse
         loginUser(phoneNumber: String!, pin: String!): AuthenticationMutationResponse
         forgetPin(phoneNumber: String!): Boolean
 
@@ -51,7 +51,7 @@ export const mutationTypeDef = gql`
 export const mutationResolver = {
     Mutation: {
         /* AUTHENTICATION */
-        authenticateUser: async (_: any, data: { idToken: string }) => {
+        authenticateUser: async (_: any, data: { idToken: string; referedBy: string }) => {
             return authenticateUser(data)
         },
 

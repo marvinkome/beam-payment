@@ -6,6 +6,7 @@ export enum TransactionFeeType {
     DEPOSIT = "DEPOSIT",
     WITHDRAWAL = "WITHDRAWAL",
     REVERSAL = "REVERSAL",
+    REFERRAL = "REFERRAL",
 }
 
 export interface ITransaction extends Document {
@@ -41,7 +42,6 @@ const transactionSchema: Schema<ITransaction> = new Schema(
 
         feeType: {
             type: String,
-            enum: ["SMS", "DEPOSIT", "WITHDRAWAL", "REVERSAL"],
         },
 
         // either from user or flutterwave

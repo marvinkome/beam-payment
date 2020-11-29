@@ -105,6 +105,7 @@ describe("Query", () => {
                         between {
                             phoneNumber
                         }
+                        details
                         fee {
                             amount
                             type
@@ -126,6 +127,7 @@ describe("Query", () => {
         expect(response.data?.transactionHistory[1].transactionType).toBe("DEBIT")
 
         expect(response.data?.transactionHistory[2].between).toBe(null)
+        expect(response.data?.transactionHistory[2].details).toBe("Deposit")
         expect(response.data?.transactionHistory[2].fee).toMatchObject({
             amount: 17.16,
             type: "DEPOSIT",

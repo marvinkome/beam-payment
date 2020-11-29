@@ -1,4 +1,4 @@
-import { getAmountToWithdraw } from "../helpers"
+import { capitalize, getAmountToWithdraw } from "../helpers"
 
 describe("Helpers lib tests", () => {
     test("getAmountToWithdraw", () => {
@@ -10,5 +10,11 @@ describe("Helpers lib tests", () => {
         expect(getAmountToWithdraw(50000)).toBe(49973)
         expect(getAmountToWithdraw(55000)).toBe(54946)
         expect(getAmountToWithdraw(150000)).toBe(149946)
+    })
+
+    test("capitalize", () => {
+        expect(capitalize("DEPOSIT")).toBe("Deposit")
+        expect(capitalize("WITHDRAWAL")).toBe("Withdrawal")
+        expect(capitalize("deposit")).toBe("Deposit")
     })
 })

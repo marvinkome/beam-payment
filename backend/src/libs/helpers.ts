@@ -19,3 +19,11 @@ export function getAmountToWithdraw(amount: number) {
 export function formatCurrency(number: number) {
     return new Intl.NumberFormat().format(number)
 }
+
+export function capitalize(str: string) {
+    return str
+        .toLowerCase()
+        .split("")
+        .map((i, idx) => (idx === 0 ? i.toUpperCase() : i))
+        .join("")
+}

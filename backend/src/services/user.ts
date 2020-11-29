@@ -184,4 +184,22 @@ export class UserService {
 
         return this.user.save()
     }
+
+    async addReferralMoney() {
+        try {
+            this.user.accountBalance = (this.user.accountBalance || 0) + config.referralFee
+            await storeTransaction({
+                transaction_id: nanoid(),
+                amountPaid: config.referralFee,
+                amountRecieved: config.referralFee,
+                to: this.user,
+                feeType: TransactionFeeType.REFERRAL,
+            })
+
+            return this.user.save()
+        } catch (err) {
+            Sentry.captureException(err)
+            throw new Error(err.message)
+        }
+    }
 }

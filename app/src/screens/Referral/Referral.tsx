@@ -14,8 +14,7 @@ type IProps = {
 
 export function ReferralScreen(props: IProps) {
     const shareText: string =
-        "I’m inviting you to sign up for Beam: Pay anyone with a phone " +
-        "number in seconds. \n" +
+        "I’m inviting you to sign up for Beam: Pay anyone without cash. \n" +
         `${props.link} \n` +
         "Get ₦100 for every friend you invite."
 

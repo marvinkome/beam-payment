@@ -46,8 +46,8 @@ describe("Referral", () => {
         expect(Share.shareSingle).toBeCalledWith({
             title: "Share via",
             message:
-                "I’m inviting you to sign up for Beam: Pay anyone with a phone number in" +
-                " seconds. \nhttps://link.com \nGet ₦100 for every friend you invite.",
+                "I’m inviting you to sign up for Beam: Pay anyone without cash. \n" +
+                "https://link.com \nGet ₦100 for every friend you invite.",
             social: "WHATSAPP",
         })
 
@@ -59,8 +59,8 @@ describe("Referral", () => {
         expect(Share.shareSingle).toBeCalledWith({
             title: "Share via",
             message:
-                "I’m inviting you to sign up for Beam: Pay anyone with a phone number in" +
-                " seconds. \nhttps://link.com \nGet ₦100 for every friend you invite.",
+                "I’m inviting you to sign up for Beam: Pay anyone without cash. \n" +
+                "https://link.com \nGet ₦100 for every friend you invite.",
             social: "INSTAGRAM",
         })
 
@@ -72,8 +72,8 @@ describe("Referral", () => {
         expect(Share.shareSingle).toBeCalledWith({
             title: "Share via",
             message:
-                "I’m inviting you to sign up for Beam: Pay anyone with a phone number in" +
-                " seconds. \nhttps://link.com \nGet ₦100 for every friend you invite.\n #PayWithBeam @usebeamapp",
+                "I’m inviting you to sign up for Beam: Pay anyone without cash. \n" +
+                "https://link.com \nGet ₦100 for every friend you invite.\n #PayWithBeam @usebeamapp",
             social: "TWITTER",
         })
     })

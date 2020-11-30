@@ -30,7 +30,7 @@ export function SignUpScreen(props: IProps) {
 
             {/* main text */}
             <Text h1 style={styles.mainText}>
-                Send money to anyone with a phone number
+                Pay anyone without cash
             </Text>
 
             {/* phone number input */}

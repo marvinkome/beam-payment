@@ -61,7 +61,12 @@ $primary: #9175db;
           font-weight: 600;
           padding: 0 40px;
           transition: background-color 0.6s ease;
-          margin-bottom: 1.5em;
+          margin-bottom: 1em;
+
+          span {
+            display: block;
+            padding-bottom: 0.3em;
+          }
 
           @media only screen and (max-width: 480px) {
             font-size: 35px;

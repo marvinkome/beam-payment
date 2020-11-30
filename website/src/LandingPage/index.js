@@ -21,10 +21,11 @@ function App() {
           <div className="grid-content">
             <div className="header-text">
               <h1 className="text fade">
-                Pay anyone with a phone number in seconds
+                <span>Pay anyone without cash.</span>
+                <span>Never go to an ATM again.</span>
               </h1>
 
-              <p>Free transfers between users. Withdraw to your bank</p>
+              <p>Free transfers in seconds to any user</p>
             </div>
 
             <div className="button-container">

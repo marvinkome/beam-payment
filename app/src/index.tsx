@@ -19,12 +19,11 @@ import { LogBox } from "react-native"
 LogBox.ignoreLogs(["Setting"])
 
 if (!__DEV__) {
+    initAnalytics()
     Sentry.init({
         dsn: SENTRY_KEY,
     })
 }
-
-initAnalytics()
 
 function BeamApp() {
     const appData = useAppSetup()

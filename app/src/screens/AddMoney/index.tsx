@@ -37,6 +37,8 @@ export function useAddMoneyToUserAccount() {
     return {
         addingMoney,
         addMoney: async (params: RedirectParams, amount: string) => {
+            if (addingMoney) return
+
             if (params.status !== "successful") {
                 Sentry.captureMessage("Transaction failed. Please try again")
                 return Alert.alert("Error!", "Transaction failed. Please try again")
@@ -63,8 +65,8 @@ export function useAddMoneyToUserAccount() {
                     return Alert.alert("Error!", responseMessage)
                 }
 
-                setAddingMoney(false)
                 trackEvent("Added money to account")
+                setAddingMoney(false)
 
                 // handle redirect
                 // if it's onboarding

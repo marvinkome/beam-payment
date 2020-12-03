@@ -129,7 +129,7 @@ describe("AddMoney", () => {
         })
     })
 
-    test("<AddMoney /> - main screen", async () => {
+    test.only("<AddMoney /> - main screen", async () => {
         // @ts-ignore
         useRoute.mockImplementation(() => ({
             name: routes.main.addMoney,

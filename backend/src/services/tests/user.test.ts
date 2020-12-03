@@ -169,7 +169,7 @@ describe("User service tests", () => {
 
         const user = await userService?.revertTransaction(transaction)
 
-        const reversalTransaction = await Transaction.findOne({ to: user?.id, reverse: true })
+        const reversalTransaction = await Transaction.findOne({ to: user?.id, reversed: true })
 
         expect(user?.accountBalance).toBe(3600)
         expect(reversalTransaction?.feeType).toBe("REVERSAL")

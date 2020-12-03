@@ -79,13 +79,11 @@ describe("User controller test", () => {
         expect(resp?.user?.accountBalance).toBe(45)
 
         // @ts-ignore
-        expect(transferEvent.emit.mock.calls[0][1].phoneNumber).toBe("+2349087573381")
+        const eventArgs = transferEvent.emit.mock.calls[0][1]
 
-        // @ts-ignore
-        expect(transferEvent.emit.mock.calls[0][2].phoneNumber).toBe("+2349087573383")
-
-        // @ts-ignore
-        expect(transferEvent.emit.mock.calls[0][3]).toBe(data.amount)
+        expect(eventArgs.sender.phoneNumber).toBe("+2349087573381")
+        expect(eventArgs.receiver.phoneNumber).toBe("+2349087573383")
+        expect(eventArgs.amount).toBe(data.amount)
     })
 
     test("transferMoney - error", async () => {

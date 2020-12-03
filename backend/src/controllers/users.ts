@@ -82,10 +82,18 @@ export async function transferMoney(
 
     // transfer money to receiver
     try {
-        const updatedUser = await userService.transferMoneyToAccount(data.amount, receiver)
+        const { transaction, user: updatedUser } = await userService.transferMoneyToAccount(
+            data.amount,
+            receiver
+        )
 
         // handle all after transaction events
-        transferEvent.emit("transfer", updatedUser, receiver, data.amount)
+        transferEvent.emit("transfer", {
+            sender: updatedUser,
+            receiver,
+            amount: data.amount,
+            transaction: transaction,
+        })
 
         return {
             success: true,

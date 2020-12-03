@@ -88,16 +88,16 @@ describe("User service tests", () => {
     test("transferMoneyToAccount - with sms", async () => {
         const receiver = new User({ phoneNumber: "+2349087573383" })
 
-        const user = await userService?.transferMoneyToAccount(500, receiver)
-        expect(user?.accountBalance).toBe(95)
+        const data = await userService?.transferMoneyToAccount(500, receiver)
+        expect(data?.user?.accountBalance).toBe(95)
         expect(receiver.accountBalance).toBe(500)
     })
 
     test("transferMoneyToAccount - small amount - with sms", async () => {
         const receiver = new User({ phoneNumber: "+2349087573383" })
 
-        const user = await userService?.transferMoneyToAccount(0.3, receiver)
-        expect(user?.accountBalance).toBe(594.7)
+        const data = await userService?.transferMoneyToAccount(0.3, receiver)
+        expect(data?.user?.accountBalance).toBe(594.7)
         expect(receiver.accountBalance).toBe(0.3)
     })
 
@@ -107,9 +107,9 @@ describe("User service tests", () => {
             notificationToken: "notif-token",
         })
 
-        const user = await userService?.transferMoneyToAccount(500, receiver)
+        const data = await userService?.transferMoneyToAccount(500, receiver)
 
-        expect(user?.accountBalance).toBe(100)
+        expect(data?.user?.accountBalance).toBe(100)
         expect(receiver.accountBalance).toBe(500)
     })
 
@@ -119,9 +119,9 @@ describe("User service tests", () => {
             notificationToken: "notif-token",
         })
 
-        const user = await userService?.transferMoneyToAccount(0.3, receiver)
+        const data = await userService?.transferMoneyToAccount(0.3, receiver)
 
-        expect(user?.accountBalance).toBe(599.7)
+        expect(data?.user?.accountBalance).toBe(599.7)
         expect(receiver.accountBalance).toBe(0.3)
     })
 
@@ -168,7 +168,11 @@ describe("User service tests", () => {
         })
 
         const user = await userService?.revertTransaction(transaction)
-        expect(user?.accountBalance).toBe(3000)
+
+        const reversalTransaction = await Transaction.findOne({ to: user?.id, reverse: true })
+
+        expect(user?.accountBalance).toBe(3600)
+        expect(reversalTransaction?.feeType).toBe("REVERSAL")
     })
 
     test("addReferralMoney", async () => {

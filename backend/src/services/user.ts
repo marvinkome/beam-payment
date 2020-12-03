@@ -5,7 +5,7 @@ import Logger from "loaders/logger"
 import Flutterwave from "loaders/flutterwave"
 import { IUser } from "models/users"
 import { nanoid } from "nanoid"
-import { storeTransaction } from "./transactions"
+import { deleteTransaction, storeTransaction } from "./transactions"
 import { ITransaction, TransactionFeeType } from "models/transactions"
 import { getAmountToWithdraw } from "libs/helpers"
 
@@ -91,7 +91,7 @@ export class UserService {
         receiver.accountBalance = (receiver.accountBalance || 0) + amount
         await receiver.save()
 
-        await storeTransaction({
+        const transaction = await storeTransaction({
             transaction_id: nanoid(),
             amountPaid: amount,
             amountRecieved,
@@ -100,7 +100,9 @@ export class UserService {
             ...(feeType && { feeType }),
         })
 
-        return this.user.save()
+        await this.user.save()
+
+        return { transaction, user: this.user }
     }
 
     async storeAccountDetails(details: {
@@ -168,11 +170,11 @@ export class UserService {
 
     async revertTransaction(transaction: ITransaction) {
         const amountToCredit = transaction.amount
-        this.user.accountBalance = amountToCredit
+        this.user.accountBalance = (this.user.accountBalance || 0) + amountToCredit
 
         await storeTransaction({
             transaction_id: nanoid(),
-            feeType: TransactionFeeType.WITHDRAWAL,
+            feeType: TransactionFeeType.REVERSAL,
             amountPaid: amountToCredit,
             amountRecieved: amountToCredit,
             to: this.user,
@@ -181,6 +183,15 @@ export class UserService {
 
         mixpanel.people.set(this.user.id, { phone: this.user.phoneNumber })
         mixpanel.track("Revert transaction")
+
+        return this.user.save()
+    }
+
+    async undoTransaction(transaction: ITransaction) {
+        const amountToCredit = transaction.amount
+        this.user.accountBalance = (this.user.accountBalance || 0) + amountToCredit
+
+        await deleteTransaction(transaction.transactionId)
 
         return this.user.save()
     }

@@ -36,3 +36,7 @@ export function storeTransaction(data: TransactionDataType) {
 
     return tx.save()
 }
+
+export function deleteTransaction(transactionId: string) {
+    return Transaction.deleteOne({ transactionId })
+}

@@ -62,18 +62,22 @@ export const transactionResolver = {
         },
 
         details: async (transaction: ITransaction, _: any, ctx: IContext) => {
-            if (transaction.feeType) {
-                return capitalize(transaction.feeType)
-            }
-
             if (ctx.currentUser?.id === `${transaction.to}`) {
                 const t = await transaction.populate("from").execPopulate()
-                return (t.from as IUser)?.phoneNumber || "Deposit"
+                return (
+                    (t.from as IUser)?.phoneNumber ||
+                    capitalize(transaction?.feeType || "") ||
+                    "Deposit"
+                )
             }
 
             if (ctx.currentUser?.id === `${transaction.from}`) {
                 const t = await transaction.populate("to").execPopulate()
-                return (t.to as IUser)?.phoneNumber || "Withdraw"
+                return (
+                    (t.to as IUser)?.phoneNumber ||
+                    capitalize(transaction?.feeType || "") ||
+                    "Withdraw"
+                )
             }
 
             return null

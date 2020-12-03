@@ -130,6 +130,10 @@ describe("TransactionHistory", () => {
             },
             result: {
                 data: {
+                    me: {
+                        id: "user_id",
+                        accountBalance: 300,
+                    },
                     transactionHistory: [
                         {
                             id: "transactionId0",

@@ -6,6 +6,11 @@ import { useFocusEffect } from "@react-navigation/native"
 
 export const TRANSACTION_HISTORY = gql`
     query TransactionHistory {
+        me {
+            id
+            accountBalance
+        }
+
         transactionHistory {
             id
             transactionType

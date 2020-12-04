@@ -5,6 +5,10 @@ import { gql } from "apollo-server-express"
 import { createTestClient } from "apollo-server-testing"
 import { constructTestServer } from "./__utils"
 
+jest.mock("app-events/transfer", () => ({
+    transferEvent: { emit: jest.fn() },
+}))
+
 describe("Mutation", () => {
     beforeAll(async () => {
         await mongoose.connect(

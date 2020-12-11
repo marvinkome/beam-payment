@@ -100,7 +100,7 @@ describe("CashSettings", () => {
             // @ts-ignore
             await Alert.alert.mock.calls[0][2][1].onPress()
             expect(Alert.alert).toBeCalledWith(
-                "Success!",
+                "Success",
                 "Money has been sent to your bank account",
             )
         })

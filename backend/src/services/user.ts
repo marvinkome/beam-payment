@@ -7,7 +7,7 @@ import { IUser } from "models/users"
 import { nanoid } from "nanoid"
 import { deleteTransaction, storeTransaction } from "./transactions"
 import { ITransaction, TransactionFeeType } from "models/transactions"
-import { getAmountToWithdraw } from "libs/helpers"
+// import { getAmountToWithdraw } from "libs/helpers"
 
 export class UserService {
     user: IUser
@@ -68,41 +68,43 @@ export class UserService {
     }
 
     async transferMoneyToAccount(amount: number, receiver: IUser) {
-        // calculate fees if using SMS
-        let amountRecieved = amount
-        let feeType
+        return { transaction: null, user: this.user }
 
-        if (!receiver.notificationToken) {
-            amountRecieved = amount + config.transactionFees.smsFee
-            feeType = TransactionFeeType.SMS
-        }
+        // // calculate fees if using SMS
+        // let amountRecieved = amount
+        // let feeType
 
-        // remove money from user account
-        const currentBalance = this.user.accountBalance
-        const newAccountBalance = (currentBalance || 0) - amountRecieved
+        // if (!receiver.notificationToken) {
+        //     amountRecieved = amount + config.transactionFees.smsFee
+        //     feeType = TransactionFeeType.SMS
+        // }
 
-        if (newAccountBalance < 0) {
-            throw new Error("Insufficient funds")
-        }
+        // // remove money from user account
+        // const currentBalance = this.user.accountBalance
+        // const newAccountBalance = (currentBalance || 0) - amountRecieved
 
-        this.user.accountBalance = newAccountBalance
+        // if (newAccountBalance < 0) {
+        //     throw new Error("Insufficient funds")
+        // }
 
-        // add money to receiver
-        receiver.accountBalance = (receiver.accountBalance || 0) + amount
-        await receiver.save()
+        // this.user.accountBalance = newAccountBalance
 
-        const transaction = await storeTransaction({
-            transaction_id: nanoid(),
-            amountPaid: amount,
-            amountRecieved,
-            from: this.user,
-            to: receiver,
-            ...(feeType && { feeType }),
-        })
+        // // add money to receiver
+        // receiver.accountBalance = (receiver.accountBalance || 0) + amount
+        // await receiver.save()
 
-        await this.user.save()
+        // const transaction = await storeTransaction({
+        //     transaction_id: nanoid(),
+        //     amountPaid: amount,
+        //     amountRecieved,
+        //     from: this.user,
+        //     to: receiver,
+        //     ...(feeType && { feeType }),
+        // })
 
-        return { transaction, user: this.user }
+        // await this.user.save()
+
+        // return { transaction, user: this.user }
     }
 
     async storeAccountDetails(details: {
@@ -126,46 +128,48 @@ export class UserService {
     }
 
     async withdrawMoney() {
-        const userBalance = this.user.accountBalance || 0
+        return this.user
 
-        // calculate money to send
-        const amountToSend = getAmountToWithdraw(userBalance)
-        if (!amountToSend || amountToSend <= 100) {
-            throw new Error("You must have more than NGN100 to withdraw")
-        }
+        // const userBalance = this.user.accountBalance || 0
 
-        // intialize transfer through flutterwave
-        const reference = nanoid()
-        let response = null
+        // // calculate money to send
+        // const amountToSend = getAmountToWithdraw(userBalance)
+        // if (!amountToSend || amountToSend <= 100) {
+        //     throw new Error("You must have more than NGN100 to withdraw")
+        // }
 
-        try {
-            response = await Flutterwave.Transfer.initiate({
-                account_bank: this.user.bankDetails?.bankCode,
-                account_number: this.user.bankDetails?.accountNumber,
-                amount: amountToSend,
-                currency: "NGN",
-                reference,
-                debit_currency: "NGN",
-                callback_url: `${config.serverUrl}/hooks/transfer`,
-            })
+        // // intialize transfer through flutterwave
+        // const reference = nanoid()
+        // let response = null
 
-            await storeTransaction({
-                transaction_id: reference,
-                feeType: TransactionFeeType.WITHDRAWAL,
-                amountPaid: amountToSend,
-                amountRecieved: userBalance,
-                toBank: `${this.user.bankDetails?.bankName} - ${this.user.bankDetails?.accountNumber}`,
-                from: this.user,
-            })
-        } catch (err) {
-            Sentry.captureException(err)
-            Logger.error("🔥 error: %o", response)
-            throw new Error(err.message)
-        }
+        // try {
+        //     response = await Flutterwave.Transfer.initiate({
+        //         account_bank: this.user.bankDetails?.bankCode,
+        //         account_number: this.user.bankDetails?.accountNumber,
+        //         amount: amountToSend,
+        //         currency: "NGN",
+        //         reference,
+        //         debit_currency: "NGN",
+        //         callback_url: `${config.serverUrl}/hooks/transfer`,
+        //     })
 
-        // debit user
-        this.user.accountBalance = 0
-        return this.user.save()
+        //     await storeTransaction({
+        //         transaction_id: reference,
+        //         feeType: TransactionFeeType.WITHDRAWAL,
+        //         amountPaid: amountToSend,
+        //         amountRecieved: userBalance,
+        //         toBank: `${this.user.bankDetails?.bankName} - ${this.user.bankDetails?.accountNumber}`,
+        //         from: this.user,
+        //     })
+        // } catch (err) {
+        //     Sentry.captureException(err)
+        //     Logger.error("🔥 error: %o", response)
+        //     throw new Error(err.message)
+        // }
+
+        // // debit user
+        // this.user.accountBalance = 0
+        // return this.user.save()
     }
 
     async revertTransaction(transaction: ITransaction) {

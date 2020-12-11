@@ -42,7 +42,7 @@ describe("ussd tests", () => {
         expect(mockRes.send.mock.calls[0][0]).toMatch(/CON You have 1,245 naira in your account*/)
     })
 
-    test("withdraw flow - without pin", async () => {
+    test.skip("withdraw flow - without pin", async () => {
         await createDemoUser({ accountBalance: 1245 })
 
         const mockReq: any = {
@@ -93,7 +93,7 @@ describe("ussd tests", () => {
         expect(newUser?.accountBalance).toBe(0)
     })
 
-    test("withdraw flow - with pin but without account details", async () => {
+    test.skip("withdraw flow - with pin but without account details", async () => {
         await createDemoUser({ accountBalance: 1245, pin: "a-pin" })
 
         const mockReq: any = {
@@ -139,7 +139,7 @@ describe("ussd tests", () => {
         expect(newUser?.accountBalance).toBe(0)
     })
 
-    test("withdraw flow - as a current user", async () => {
+    test.skip("withdraw flow - as a current user", async () => {
         await createDemoUser({
             accountBalance: 1245,
             pin: "2020",

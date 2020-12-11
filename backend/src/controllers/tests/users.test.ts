@@ -66,7 +66,7 @@ describe("User controller test", () => {
         })
     })
 
-    test("transferMoney", async () => {
+    test.skip("transferMoney", async () => {
         expect.assertions(5)
 
         // with no user
@@ -86,7 +86,7 @@ describe("User controller test", () => {
         expect(eventArgs.amount).toBe(data.amount)
     })
 
-    test("transferMoney - error", async () => {
+    test.skip("transferMoney - error", async () => {
         expect.assertions(2)
 
         // with no user
@@ -114,7 +114,7 @@ describe("User controller test", () => {
         })
     })
 
-    test("withdrawMoney", async () => {
+    test.skip("withdrawMoney", async () => {
         const currentUser = new User({ phoneNumber: "+2349087573381", accountBalance: 200 })
         const resp = await withdrawMoney(currentUser)
 

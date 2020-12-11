@@ -218,7 +218,7 @@ describe("Mutation", () => {
         })
     })
 
-    describe("transferMoney", () => {
+    describe.skip("transferMoney", () => {
         test("success", async () => {
             const server = constructTestServer({
                 context: () => ({
@@ -367,7 +367,7 @@ describe("Mutation", () => {
         })
     })
 
-    describe("withdrawMoney", () => {
+    describe.skip("withdrawMoney", () => {
         test("success", async () => {
             const server = constructTestServer({
                 context: () => ({

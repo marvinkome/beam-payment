@@ -1,5 +1,6 @@
-import React, { useCallback, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import * as Sentry from "@sentry/react-native"
+import InAppReview from "react-native-in-app-review"
 import { Alert } from "react-native"
 import { gql, useMutation, useQuery } from "@apollo/client"
 import { CashSettingsScreen } from "./CashSettings"
@@ -33,6 +34,14 @@ export const WITHDRAW_MONEY = gql`
     }
 `
 
+function requestReview() {
+    if (!InAppReview.isAvailable()) {
+        return
+    }
+
+    InAppReview.RequestInAppReview()
+}
+
 function useWithdraw() {
     const [withdrawingMoney, setWithdrawingMoney] = useState(false)
     const [withdrawMoney] = useMutation(WITHDRAW_MONEY)
@@ -50,15 +59,15 @@ function useWithdraw() {
 
                 if (!success) {
                     Sentry.captureMessage(responseMessage)
-                    return Alert.alert("Error!", responseMessage)
+                    return Alert.alert("Error", responseMessage)
                 }
 
                 trackEvent("Withdraw money from account")
-                Alert.alert("Success!", "Money has been sent to your bank account")
+                Alert.alert("Success", "Money has been sent to your bank account")
             } catch (err) {
                 Sentry.captureException(err)
                 setWithdrawingMoney(false)
-                return Alert.alert("Error!", "Failed to withdraw money")
+                return Alert.alert("Error", "Failed to withdraw money")
             }
         },
     }
@@ -70,9 +79,11 @@ export function CashSettings() {
 
     useFocusEffect(
         useCallback(() => {
-            refetch()
+            // refetch()
         }, []),
     )
+
+    useEffect(() => requestReview())
 
     const onWithdraw = () => {
         if (!data?.me?.bankDetails.accountNumber || !data?.me?.bankDetails.bankName) {

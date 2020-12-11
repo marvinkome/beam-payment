@@ -72,7 +72,7 @@ describe("User service tests", () => {
         expect(user?.accountBalance).toBe(3543)
     })
 
-    test("transferMoneyToAccount - with error", async () => {
+    test.skip("transferMoneyToAccount - with error", async () => {
         expect.assertions(2)
         const service = new UserService(new User({ phoneNumber: "+2349087574483" }))
         const receiver = new User({ phoneNumber: "+2349087573383" })
@@ -85,7 +85,7 @@ describe("User service tests", () => {
         }
     })
 
-    test("transferMoneyToAccount - with sms", async () => {
+    test.skip("transferMoneyToAccount - with sms", async () => {
         const receiver = new User({ phoneNumber: "+2349087573383" })
 
         const data = await userService?.transferMoneyToAccount(500, receiver)
@@ -93,7 +93,7 @@ describe("User service tests", () => {
         expect(receiver.accountBalance).toBe(500)
     })
 
-    test("transferMoneyToAccount - small amount - with sms", async () => {
+    test.skip("transferMoneyToAccount - small amount - with sms", async () => {
         const receiver = new User({ phoneNumber: "+2349087573383" })
 
         const data = await userService?.transferMoneyToAccount(0.3, receiver)
@@ -101,7 +101,7 @@ describe("User service tests", () => {
         expect(receiver.accountBalance).toBe(0.3)
     })
 
-    test("transferMoneyToAccount - with token", async () => {
+    test.skip("transferMoneyToAccount - with token", async () => {
         const receiver = new User({
             phoneNumber: "+2349087573383",
             notificationToken: "notif-token",
@@ -113,7 +113,7 @@ describe("User service tests", () => {
         expect(receiver.accountBalance).toBe(500)
     })
 
-    test("transferMoneyToAccount - with small amount - with token", async () => {
+    test.skip("transferMoneyToAccount - with small amount - with token", async () => {
         const receiver = new User({
             phoneNumber: "+2349087573383",
             notificationToken: "notif-token",
@@ -125,7 +125,7 @@ describe("User service tests", () => {
         expect(receiver.accountBalance).toBe(0.3)
     })
 
-    test("storeAccountDetails", async () => {
+    test.skip("storeAccountDetails", async () => {
         const user = await userService?.storeAccountDetails({
             accNumber: "1234567890",
             bankName: "GTBank Plc",
@@ -139,7 +139,7 @@ describe("User service tests", () => {
         })
     })
 
-    test("withdrawMoney", async () => {
+    test.skip("withdrawMoney", async () => {
         const user = await userService?.withdrawMoney()
         const transaction = await Transaction.findOne({ from: user?.id })
 
@@ -148,7 +148,7 @@ describe("User service tests", () => {
         expect(user?.accountBalance).toBe(0)
     })
 
-    test("withdrawMoney - small amount", async () => {
+    test.skip("withdrawMoney - small amount", async () => {
         userService = new UserService(
             new User({ phoneNumber: "+2349087573383", accountBalance: 10 })
         )
